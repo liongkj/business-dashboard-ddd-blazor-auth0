@@ -12688,11 +12688,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
+      "projectUniqueName": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
       "projectName": "JomMalaysia.Presentation",
-      "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
+      "projectPath": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
       "packagesPath": "C:\\Users\\khaij\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\obj\\",
+      "outputPath": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -12711,8 +12711,8 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
-            "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
-              "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj"
+            "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
+              "projectPath": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj"
             }
           }
         }

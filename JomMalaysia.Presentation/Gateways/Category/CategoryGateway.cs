@@ -88,7 +88,7 @@ namespace JomMalaysia.Presentation.Gateways.Category
             IWebServiceResponse<CategoryViewModel> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Category), new string[] { categoryName });
+                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryName}";
 
                 var method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, auth);

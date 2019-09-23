@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {}
+    "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {}
   },
   "projects": {
-    "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
+    "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
+        "projectUniqueName": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
         "projectName": "JomMalaysia.Framework",
-        "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
+        "projectPath": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
         "packagesPath": "C:\\Users\\khaij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\obj\\",
+        "outputPath": "c:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

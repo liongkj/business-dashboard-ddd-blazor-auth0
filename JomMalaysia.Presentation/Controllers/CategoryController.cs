@@ -103,9 +103,12 @@ namespace JomMalaysia.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpDelete]
+
+
+        [HttpGet("{categoryName}")]
         public async Task<IActionResult> Delete(string categoryName)
         {
+            if (categoryName == null) return NotFound();
             IWebServiceResponse response;
 
             try
@@ -116,8 +119,11 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 throw e;
             }
-
-            return View("Index");
+            if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                //return message with still has subcategory
+            }
+            return RedirectToAction(nameof(Index));
 
         }
 

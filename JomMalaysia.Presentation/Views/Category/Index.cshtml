@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<JomMalaysia.Presentation.Models.CategoryViewModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     ViewData["Title"] = "Index";
@@ -7,28 +8,13 @@
 
 <!--HEADER-->
 
-@*<div class="form-group col-md-12 no-padding d-sm-block d-md-none">
-    <div class="btn-group col-sm-12 no-padding" role="group">
-        <button type="button" class="btn btn-primary">Action</button>
-        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
-            <a class="dropdown-item" onclick="window.location.href = '@Url.Action("Create","Category")'">New</a>
-            <a class="dropdown-item" onclick="window.location.href = '@Url.Action("Edit","Category")'">Edit</a>
-            <a class="dropdown-item" onclick="window.location.href = '@Url.Action("Delete","Category")'">Delete</a>
-            <a class="dropdown-item" onclick="window.location.href = '@Url.Action("Publish","Category")'">Publish</a>
-        </div>
-        <div id="action-button" class="btn-group" role="group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-        </div>
-    </div>
-</div>*@
-<!--END OF HEADER-->
 
 <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important" ;">
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
                 <th scope="col"></th>
-                <th scope="col">Code</th>
+                <th scope="col">Category</th>
                 <th scope="col">Company Name</th>
                 <th scope="col">Company Address</th>
                 <th scope="col">Category Name</th>
@@ -50,9 +36,14 @@
                     <td>@item.CategoryName</td>
                     <td>@item.CategoryNameMs</td>
                     <td>@item.CategoryNameZh</td>
+                    
                     <td>
+                        <a asp-controller="category" asp-action="delete" asp-route-id="@item.CategoryName">Del</a>
+                        <a href="@Url.Action("Delete","Category",new { CategoryName = item.CategoryName })" >Delete</a>
+                        @Html.ActionLink("Delete","Delete","Category",new {CategoryName = item.CategoryName})
                        <div class="form-group col-md-12 no-padding d-none d-md-block">
-                            <button type="button" class="btn btn-danger col-md-2" onclick="window.location.href = '@Url.Action("Delete","Category",new {id = @item.CategoryName})'">Delete</button>
+                            <a class="btn btn-danger col-md-2" asp-action="Delete" 
+                            asp-controller="Category" asp-route-id = "@item.CategoryName"Delete></a>
                        </div>
         </td>
                 </tr>
