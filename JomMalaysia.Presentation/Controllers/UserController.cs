@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JomMalaysia.Framework.Configuration;
+using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Presentation.Gateways.User;
 using JomMalaysia.Presentation.Manager;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
@@ -12,22 +16,21 @@ namespace JomMalaysia.Presentation.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IAuthorizationManagers _authorizationManagers;
 
-        public UserController(IAuthorizationManagers authorizationManagers)
+        private readonly IUserGateway userGateway;
+
+        public UserController(IUserGateway userGateway)
         {
-            _authorizationManagers = authorizationManagers;
+            this.userGateway = userGateway;
+
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var client = new RestClient("https://localhost:44368/api/User");
-            var request = new RestRequest(Method.GET);
-            request.AddHeader("content-type", "application/json");
-            request.AddHeader("authorization", "Bearer " + _authorizationManagers.accessToken);
-            IRestResponse response = client.Execute(request);
-            
+
+            await userGateway.GetAll();
+
             return View();
         }
     }

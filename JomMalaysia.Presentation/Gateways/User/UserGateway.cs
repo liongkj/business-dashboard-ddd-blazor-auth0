@@ -13,16 +13,16 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace JomMalaysia.Presentation.Gateways.Category
+namespace JomMalaysia.Presentation.Gateways.User
 {
-    public class CategoryGateway : ICategoryGateway
+    public class UserGateway : IUserGateway
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
         private readonly IMapper _mapper;
 
-        public CategoryGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder, IMapper mapper)
+        public UserGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder, IMapper mapper)
         {
             _webServiceExecutor = webServiceExecutor;
             _authorizationManagers = authorizationManagers;
@@ -31,12 +31,12 @@ namespace JomMalaysia.Presentation.Gateways.Category
 
         }
 
-        public async Task<IWebServiceResponse> CreateCategory(CategoryViewModel vm)
+        public async Task<IWebServiceResponse> Add(UserInfoViewModel vm)
         {
             IWebServiceResponse<CategoryViewModel> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
+                var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
 
                 var method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);
@@ -52,16 +52,16 @@ namespace JomMalaysia.Presentation.Gateways.Category
 
         }
 
-        public async Task<List<CategoryViewModel>> GetCategories()
+        public async Task<List<UserInfoViewModel>> GetAll()
         {
-            List<CategoryViewModel> result = new List<CategoryViewModel>();
-            IWebServiceResponse<CategoryListViewModel> response = default;
+            List<UserInfoViewModel> result = new List<UserInfoViewModel>();
+            IWebServiceResponse<UserListViewModel> response = default;
 
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryListViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<UserListViewModel>(req, method, _authorizationManagers.accessToken);
 
             }
             catch (GatewayException ex)
@@ -70,24 +70,22 @@ namespace JomMalaysia.Presentation.Gateways.Category
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var categories = response.Data.Categories;
-                foreach (var cat in categories)
+                var users = response.Data.Users;
+                foreach (var u in users)
                 {
-                    result.Add(cat);
+                    result.Add(u);
                 }
-
-
             }
             //handle exception
             return result;
         }
 
-        public async Task<IWebServiceResponse> Delete(string categoryName)
+        public async Task<IWebServiceResponse> Delete(string userId)
         {
             IWebServiceResponse<CategoryViewModel> response;
             try
             {
-                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryName}";
+                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.User))}/{userId}";
 
                 var method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);

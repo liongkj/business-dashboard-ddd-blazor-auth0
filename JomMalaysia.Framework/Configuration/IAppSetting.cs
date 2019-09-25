@@ -19,5 +19,7 @@ namespace JomMalaysia.Framework.Configuration
         string DBConnection { get; }
 
         string Scope { get; }
+        string Audience { get; }
+        string AdditionalClaimsRoles { get; }
     }
 }

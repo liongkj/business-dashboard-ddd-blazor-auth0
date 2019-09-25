@@ -6,7 +6,6 @@ namespace JomMalaysia.Framework.WebServices
 {
     public class WebServiceExecutor : IWebServiceExecutor
     {
-
         public virtual IWebServiceResponse ExecuteRequest(string url, Method method, string auth, params object[] objects)
         {
             //Create Client
@@ -49,7 +48,7 @@ namespace JomMalaysia.Framework.WebServices
 
         }
 
-      
+
 
         public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, string auth, params object[] objects) where T : new()
         {
@@ -58,7 +57,7 @@ namespace JomMalaysia.Framework.WebServices
             client.AddDefaultHeader($"Authorization", $"Bearer {auth}");
             //Create Request
             IRestRequest request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
-            
+
             //wait response
             IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
 
@@ -73,4 +72,3 @@ namespace JomMalaysia.Framework.WebServices
         }
     }
 }
-

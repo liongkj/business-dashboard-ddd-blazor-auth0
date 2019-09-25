@@ -57,18 +57,24 @@ namespace JomMalaysia.Presentation.Controllers
                         Realm = _appSetting.DBConnection,
                         Username = vm.email,
                         Password = vm.password,
-                        Audience = _appSetting.WebApiUrl
+                        Audience = _appSetting.Audience
                     });
 
                     // Get user info from token
                     var user = await client.GetUserInfoAsync(result.AccessToken);
-                    var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
+                    //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
+
+
                     var handler = new JwtSecurityTokenHandler();
                     var jsonToken = handler.ReadToken(result.AccessToken);
+
                     var tokenS = handler.ReadToken(result.AccessToken) as JwtSecurityToken;
+                    var role = tokenS.Claims.Where(c => c.Type == _appSetting.AdditionalClaimsRoles).FirstOrDefault().ToString();
                     var permission = tokenS.Claims.Where(c => c.Type == "permissions").ToList();
+                    //var role = tokenS.Payload.Values[_appSetting.AdditionalClaimsRoles].Values<String>().ToList();
                     String permissionClaim = String.Empty;
-                    permission.ForEach(c => {
+                    permission.ForEach(c =>
+                    {
                         permissionClaim = permissionClaim + " " + c.Value;
                     });
 
@@ -81,11 +87,11 @@ namespace JomMalaysia.Presentation.Controllers
                         new Claim(ConstantHelper.Claims.userId, user.UserId),
                         new Claim(ConstantHelper.Claims.name, user.FullName),
                         new Claim(ConstantHelper.Claims.scope, permissionClaim, "string", tokenS.Issuer),
-                        
+
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role[0]));
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
                     // Sign user into cookie middleware
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
