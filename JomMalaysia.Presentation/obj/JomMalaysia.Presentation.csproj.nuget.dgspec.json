@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj": {}
+    "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
+    "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
+        "projectUniqueName": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
         "projectName": "JomMalaysia.Framework",
-        "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
-        "packagesPath": "C:\\Users\\khaij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\obj\\",
+        "projectPath": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj",
+        "packagesPath": "C:\\Users\\Chee Chuen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\khaij\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Chee Chuen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -76,20 +76,20 @@
         }
       }
     },
-    "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj": {
+    "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
+        "projectUniqueName": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
         "projectName": "JomMalaysia.Presentation",
-        "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
-        "packagesPath": "C:\\Users\\khaij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Presentation\\obj\\",
+        "projectPath": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Presentation\\JomMalaysia.Presentation.csproj",
+        "packagesPath": "C:\\Users\\Chee Chuen\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Presentation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\khaij\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Chee Chuen\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -102,8 +102,8 @@
         "frameworks": {
           "netcoreapp2.2": {
             "projectReferences": {
-              "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
-                "projectPath": "C:\\Users\\khaij\\source\\repos\\liongkj\\jommalaysia-frontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj"
+              "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj": {
+                "projectPath": "C:\\Users\\Chee Chuen\\Desktop\\Jom\\FrontEnd-v1\\JomMalaysiaWebFrontend\\JomMalaysia.Framework\\JomMalaysia.Framework.csproj"
               }
             }
           }

@@ -87,11 +87,12 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    RedirectToAction("Index");
+                   
+                    // print message
                 }
             }
 
-            return View();
+           return RedirectToAction("Index");
 
             // update student to the database
         }

@@ -40,3 +40,46 @@ C:\Users\khaij\source\repos\liongkj\jommalaysiaportal\JomMalaysia.Presentation\o
 C:\Users\khaij\source\repos\liongkj\jommalaysiaportal\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Listing\Index.g.cshtml.cs
 C:\Users\khaij\source\repos\liongkj\jommalaysiaportal\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_LayoutModal.g.cshtml.cs
 C:\Users\khaij\source\repos\liongkj\jommalaysiaportal\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Listing\Create.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.deps.json
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.runtimeconfig.json
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.runtimeconfig.dev.json
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.dll
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.pdb
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.Views.dll
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Presentation.Views.pdb
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Framework.dll
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\bin\Debug\netcoreapp2.2\JomMalaysia.Framework.pdb
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.csprojAssemblyReference.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.csproj.CoreCompileInputs.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.RazorAssemblyInfo.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.RazorAssemblyInfo.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.AssemblyInfoInputs.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.AssemblyInfo.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.TagHelpers.input.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.TagHelpers.output.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.RazorCoreGenerate.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Account\Login.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Category\Create.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Category\Index.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Error\AccessDeniedError.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Home\Index.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Home\Privacy.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Listing\Create.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Listing\Index.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Merchant\Create.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Merchant\Index.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\Error.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_CookieConsentPartial.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_Layout.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_LayoutIndex.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_LayoutModal.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_ValidationScriptsPartial.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\_ViewImports.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\_ViewStart.g.cshtml.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.RazorTargetAssemblyInfo.cache
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.RazorTargetAssemblyInfo.cs
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.Views.pdb
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.csproj.CopyComplete
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.dll
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\JomMalaysia.Presentation.pdb
+C:\Users\Chee Chuen\Desktop\Jom\FrontEnd-v1\JomMalaysiaWebFrontend\JomMalaysia.Presentation\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_LayoutAction.g.cshtml.cs

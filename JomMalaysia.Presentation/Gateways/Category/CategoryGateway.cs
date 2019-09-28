@@ -38,8 +38,8 @@ namespace JomMalaysia.Presentation.Gateways.Category
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
 
-                var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);
+                var method = Method.POST;
+                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken, vm);
             }
             catch (GatewayException ex)
             {

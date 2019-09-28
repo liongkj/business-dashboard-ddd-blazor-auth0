@@ -3,11 +3,50 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
 }
-    <div class="form-group col-md-12 no-padding d-none d-md-block">
-        <button type="button" class="btn btn-success col-md-2" onclick="window.location.href = '@Url.Action("Create",controller)'">New</button>
-        <button type="button" class="btn btn-primary col-md-2" onclick="window.location.href = '@Url.Action("Edit",controller)'">Edit</button>
-        <button type="button" class="btn btn-danger col-md-2" onclick="window.location.href = '@Url.Action("Delete",controller)'">Delete</button>
-        <button type="button" class="btn btn-secondary col-md-2" onclick="window.location.href = '@Url.Action("Save",controller)'">Save</button>
+<h2>ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success form-control" onclick="window.location.href = '@Url.Action("Create", controller)'">New</button>
     </div>
+    <div class="col-md-3 offset-md-5">
+        @Html.TextBox("keyword", null, new { @placeholder = "Filter keyword", @id = "txtKeyword", @class = "form-control" })
+    </div>
+    <div class="col-md-2">
+        <button id="btnClear" type="button" class="btn btn-secondary form-control">Clear</button>
+    </div>
+</div>
 <br />
+
 @RenderBody()
+@section Scripts{
+    @RenderSection("SpecificScripts", required: true)
+    <script type="text/javascript">
+
+        // #region Common Scripts in Filter
+        $(document).ready(function () {
+            //filter
+            $("#txtKeyword").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#tableData tbody tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+
+            //clear filter
+            $('#btnClear').click(function () {
+                debugger;
+                $('#txtKeyword').val("");
+                $('#txtKeyword').keyup();
+            });
+        });
+        // #endregion
+
+        // #region Common Scripts in Delete
+
+
+        // #endregion
+
+    </script>
+}
+
