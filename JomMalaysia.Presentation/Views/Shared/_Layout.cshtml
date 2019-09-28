@@ -10,6 +10,7 @@
     <title>@ViewData["Title"] - WebApplication4</title>
 
     <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/fontawesome.min.css">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-flatly.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
@@ -128,15 +129,6 @@
             <!--END OF SIDE MENU BAR-->
             @*<partial name="_CookieConsentPartial" />*@
             <div class="container body-content" role="main">
-                <h2>Index</h2>
-                <div>
-                    <ol class="breadcrumb">
-                        @*<li class="breadcrumb-item"><a href="https://bootswatch.com/flatly/#">@Model.BreadCrumbMainPath</a></li>
-                            <li class="breadcrumb-item"><a href="https://bootswatch.com/flatly/#">@Model.BreadCrumbSubPath</a></li>
-                            <li class="breadcrumb-item active">@Model.BreadCrumbSubSubPath</li>*@
-                    </ol>
-                </div>
-
                 @RenderBody()
                 <hr />
                 <footer>
