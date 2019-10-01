@@ -98,7 +98,6 @@ namespace JomMalaysia.Presentation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
             app.UseAuthentication();
 
             app.UseMvc(routes =>
@@ -107,6 +106,7 @@ namespace JomMalaysia.Presentation
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseCookiePolicy();
         }
     }
 }

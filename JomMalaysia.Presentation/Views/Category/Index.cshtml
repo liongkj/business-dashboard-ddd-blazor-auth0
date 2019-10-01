@@ -2,12 +2,21 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Category List";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+
+    if (TempData["Message"] != null)
+    {
+        <div class="alert alert-dismissible alert-success alert-top col-md-6 offset-md-4">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["Message"]
+        </div>
+    }
 }
 
 <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
     <table id="tableData" class="table table-hover">
+        <!--remain id as this, else change name in _LayoutIndex too-->
         <thead class="table-primary">
             <tr class="text-center">
                 <th scope="col">Category Code</th>
@@ -22,18 +31,18 @@
             {
                 <tr>
                     <td>@item.CategoryCode</td>
-                    <td>@item.CategoryName</td>
+                    <td>@item.CategoryName <span class="badge badge-dark">@(item.LstSubCategory == null ? 0 : item.LstSubCategory.Count) Subcategory</span></td>
                     <td>@item.CategoryNameMs</td>
                     <td>@item.CategoryNameZh</td>
                     <td>
-                        <a href='@Url.Action("Index","Home")' class=''></a>
+                        <a href='@Url.Action("Index", "Home")' class=''></a>
 
-                        <a href="@Url.Action("Edit", "Category", new { CategoryName = item.CategoryName })" class="btn btn-info col-md-5">                 
+                        <a href="@Url.Action("Edit", "Category", new { CategoryName = item.CategoryName })" class="btn btn-info col-md-5">
                             <span>
                                 <strong>Edit</strong>
                             </span>
                         </a>
-                        <a href="@Url.Action("Delete", "Category", new { CategoryName = item.CategoryName })" class="btn btn-danger col-md-5 offset-md-1">
+                        <a href="@Url.Action("Delete", "Category", new { CategoryName = item.CategoryName })" id="btnDelete" class="btn btn-danger col-md-5 offset-md-1">
                             <span>
                                 <strong>Delete</strong>
                             </span>
@@ -45,8 +54,9 @@
     </table>
 </div>
 
+
 <!--Confirm Delete Modal-->
-<div class="modal">
+<div id="modal-delete" class="modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -65,29 +75,11 @@
         </div>
     </div>
 </div>
+<!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
+
 @section SpecificScripts{
 
     <script type="text/javascript">
 
-
-    // #region Common Scripts in Filter
-
-        //https:/ / www.jqueryscript.net / table / filter - form - Controls - filtable.html
-            @*< script src = "https://code.jquery.com/jquery-1.12.4.min.js" integrity = "sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin = "anonymous" ></script>
-
-    <script src="~/lib/bootstrap/dist/js/filtable.js"></script>*@
-        $('#btnClear2').click(function () {
-        debugger;
-        $('#txtKeyword2').val("1234567");
-        });
-    // #endregion
-
-    // #region Common Scripts in Delete
-
-
-    // #endregion
-
     </script>
 }
- }
-<!--Scripts in _LayoutIndex.cshtml-->

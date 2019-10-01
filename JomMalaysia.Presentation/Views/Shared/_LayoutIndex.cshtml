@@ -1,10 +1,11 @@
 ﻿@{
-    ViewBag.Title = ViewBag.LayoutViewModel;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
-}
-<h2>ViewBag.Title</h2>
 
+}
+
+<h3>@ViewBag.Title</h3>
+<br />
 <div class="row">
     <div class="col-md-2">
         <button type="button" class="btn btn-success form-control" onclick="window.location.href = '@Url.Action("Create", controller)'">New</button>
@@ -23,8 +24,9 @@
     @RenderSection("SpecificScripts", required: true)
     <script type="text/javascript">
 
-        // #region Common Scripts in Filter
+
         $(document).ready(function () {
+            // #region Common Scripts in Filter
             //filter
             $("#txtKeyword").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
@@ -35,18 +37,20 @@
 
             //clear filter
             $('#btnClear').click(function () {
-                debugger;
                 $('#txtKeyword').val("");
                 $('#txtKeyword').keyup();
             });
+
+            // #endregion
+
+            // #region Common Scripts in Delete
+            $('#btnDelete').click(function () {
+                debugger;
+                $('#modal-delete').modal("show");
+            });
+
+            // #endregion
         });
-        // #endregion
-
-        // #region Common Scripts in Delete
-
-
-        // #endregion
-
     </script>
 }
 

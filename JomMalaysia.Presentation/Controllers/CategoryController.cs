@@ -45,6 +45,7 @@ namespace JomMalaysia.Presentation.Controllers
             try
             {
                 CategoryList = await _gateway.GetCategories().ConfigureAwait(false);
+
                 return CategoryList;
             }
             catch (Exception e)
@@ -59,9 +60,9 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var cat = await GetCategories();
-            var filtered = cat.AsQueryable().Where(c => c.CategoryPath.Subcategory == null);
+            //var filtered = cat.AsQueryable().Where(c => c.CategoryPath.Subcategory == null);
 
-            return View(filtered);
+            return View(cat);
         }
 
         [HttpGet]
@@ -73,6 +74,7 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryViewModel vm)
         {
+            //handle statuscode = 0; handle bad request
             IWebServiceResponse response;
             if (ModelState.IsValid)
             {
@@ -87,12 +89,15 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                   
-                    // print message
+                    TempData["Message"] = "Category is created successfully";
+                }
+                else
+                {
+                    TempData["Message"] = "Failed to create category. Category name may be duplicated.";
                 }
             }
 
-           return RedirectToAction("Index");
+            return RedirectToAction("Index");
 
             // update student to the database
         }
@@ -120,7 +125,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 throw e;
             }
-            if(response.StatusCode == HttpStatusCode.BadRequest)
+            if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 //return message with still has subcategory
             }
