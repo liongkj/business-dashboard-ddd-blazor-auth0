@@ -1,10 +1,10 @@
 ﻿@{
-    ViewBag.Title = ViewBag.LayoutViewModel;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
 }
-<h2>ViewBag.Title</h2>
 
+<h3>@ViewBag.Title</h3>
+<br />
 <!--Buttons-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
     <button type="button" class="btn btn-success col-md-2" onclick="$('#btnSubmit').click()">Save</button>
@@ -30,7 +30,6 @@
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/form-validation.js"></script>
     <script type="text/javascript">
 
         // #region Common Scripts in Create
@@ -39,12 +38,12 @@
             debugger;
             $("#FormCreate").valid();
         });
-        // #endregion
+                // #endregion
 
 
-        // #region Common Scripts in Edit
+                // #region Common Scripts in Edit
 
-        // #endregion
+                // #endregion
 
     </script>
 }

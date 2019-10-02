@@ -299,3 +299,11 @@ a:not([href]):not([tabindex]) {
 .validation-summary-valid {
     display: none;
 }
+
+.alert-top {
+    z-index: 1;
+    position: fixed;
+    top: 8%;
+    left: 2%;
+    width: 30%;
+}
