@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using JomMalaysia.Framework;
-using JomMalaysia.Framework.Configuration;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Mapping;
 using JomMalaysia.Presentation.Scope;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -46,9 +38,11 @@ namespace JomMalaysia.Presentation
             {
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options => {
+            }).AddCookie(options =>
+            {
                 options.AccessDeniedPath = "/Error/AccessDeniedError";
-            }).AddJwtBearer(options => {
+            }).AddJwtBearer(options =>
+            {
                 options.Authority = "https://jomn9.auth0.com/";
                 options.Audience = "https://localhost:44368/";
             });
