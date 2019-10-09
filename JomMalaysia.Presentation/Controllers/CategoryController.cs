@@ -17,7 +17,7 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly ICategoryGateway _gateway;
 
-        private List<CategoryViewModel> CategoryList { get; set; }
+        private static List<CategoryViewModel> CategoryList { get; set; }
         public CategoryController(ICategoryGateway gateway)
         {
             _gateway = gateway;
@@ -55,7 +55,6 @@ namespace JomMalaysia.Presentation.Controllers
             }
         }
 
-
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
@@ -75,6 +74,7 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Create(CategoryViewModel vm)
         {
             //handle statuscode = 0; handle bad request
+            var message = "";
             IWebServiceResponse response;
             if (ModelState.IsValid)
             {
@@ -89,7 +89,8 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    TempData["Message"] = "Category is created successfully";
+                    message = "swal('Good job!', 'You clicked the button!', 'success');";
+                    TempData["Message"] = message;
                 }
                 else
                 {
@@ -101,10 +102,18 @@ namespace JomMalaysia.Presentation.Controllers
 
             // update student to the database
         }
+
+        [HttpGet]
+        public ViewResult Edit(String categoryName)
+        {
+            CategoryViewModel categoryViewModel = new CategoryViewModel();
+
+            categoryViewModel = CategoryList.FirstOrDefault(m => m.CategoryName == categoryName);
+
+            return View(categoryViewModel);
+        }
         public ActionResult Edit(CategoryViewModel std)
         {
-
-            // update student to the database
 
             return RedirectToAction("Index");
         }

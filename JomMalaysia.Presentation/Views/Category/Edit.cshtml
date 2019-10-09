@@ -1,0 +1,48 @@
+﻿@model JomMalaysia.Presentation.Models.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+    Layout = "~/Views/Shared/_LayoutAction.cshtml";
+}
+
+<form asp-action="Edit" id="FormEdit" class="form-m-gap-top">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.CategoryCode, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryCode)
+            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryName)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryName)
+            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameMs)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.CategoryNameMs, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryNameMs)
+            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameZh)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.CategoryNameZh, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryNameZh)
+            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+        </div>
+    </div>
+
+    <button id="btnSubmit" type="submit" class="d-none"></button>
+</form>
+
+<div>
+    <a class="d-flex justify-content-end" asp-action="Index">Back to List</a>
+</div>

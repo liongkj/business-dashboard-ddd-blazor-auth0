@@ -13,47 +13,47 @@
         </div>
     }
 }
-
-<div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
-    <table id="tableData" class="table table-hover">
-        <!--remain id as this, else change name in _LayoutIndex too-->
-        <thead class="table-primary">
-            <tr class="text-center">
-                <th scope="col">Category Code</th>
-                <th scope="col">Category Name</th>
-                <th scope="col">Category Name Ms</th>
-                <th scope="col">Category Name Zh</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.CategoryCode</td>
-                    <td>@item.CategoryName <span class="badge badge-dark">@(item.LstSubCategory == null ? 0 : item.LstSubCategory.Count) Subcategory</span></td>
-                    <td>@item.CategoryNameMs</td>
-                    <td>@item.CategoryNameZh</td>
-                    <td>
-                        <a href='@Url.Action("Index", "Home")' class=''></a>
-
-                        <a href="@Url.Action("Edit", "Category", new { CategoryName = item.CategoryName })" class="btn btn-info col-md-5">
-                            <span>
-                                <strong>Edit</strong>
-                            </span>
-                        </a>
-                        <a href="@Url.Action("Delete", "Category", new { CategoryName = item.CategoryName })" id="btnDelete" class="btn btn-danger col-md-5 offset-md-1">
-                            <span>
-                                <strong>Delete</strong>
-                            </span>
-                        </a>
-                    </td>
+<form id="studentForm" method="POST">
+    <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
+        <table id="tableData" class="table table-hover">
+            <!--remain id as this, else change name in _LayoutIndex too-->
+            <thead class="table-primary">
+                <tr class="text-center">
+                    <th scope="col">Category Code</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Category Name Ms</th>
+                    <th scope="col">Category Name Zh</th>
+                    <th scope="col">Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CategoryCode</td>
+                        <td>@item.CategoryName <span class="badge badge-dark">@(item.LstSubCategory == null ? 0 : item.LstSubCategory.Count) Subcategory</span></td>
+                        <td>@item.CategoryNameMs</td>
+                        <td>@item.CategoryNameZh</td>
+                        <td>
+                            <a href='@Url.Action("Index", "Home")' class=''></a>
 
+                            <a href="@Url.Action("Edit", "Category", new { CategoryName = item.CategoryName })" class="btn btn-info col-md-5">
+                                <span>
+                                    <strong>Edit</strong>
+                                </span>
+                            </a>
+                            <a href="@Url.Action("Delete", "Category", new { CategoryName = item.CategoryName })" id="btnDelete" class="btn btn-danger col-md-5 offset-md-1">
+                                <span>
+                                    <strong>Delete</strong>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</form>
 
 <!--Confirm Delete Modal-->
 <div id="modal-delete" class="modal">
@@ -80,6 +80,30 @@
 @section SpecificScripts{
 
     <script type="text/javascript">
+        $("#btnDelete").click(function (e) {
+            e.preventDefault();
+            swal({
+                title: "Save Changes?",
+                text: "",
+                type: "info",
+                showCancelButton: true,
+                cancelButtonClass: 'btn-secondary waves-effect',
+                confirmButtonClass: 'btn-success waves-effect waves-light',
+                confirmButtonText: "Yes",
+                closeOnConfirm: false
+            })
+                .then(val => {
+                    if (!val) throw null;
+                    swal("Saved!", "Your record has been saved.", "success")
+                        .then((confirm) => {
+                            $("#studentForm").submit();
+                        })
+                });
+        });
+
+        $("#studentForm").on('submit', function () {
+            alert('form POST');
+        })
 
     </script>
 }
