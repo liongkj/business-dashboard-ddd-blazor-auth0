@@ -8,6 +8,6 @@ namespace JomMalaysia.Presentation.Gateways.Category
 {
     public class CategoryListViewModel
     {
-        public List<CategoryViewModel> Categories { get; set; }
+        public List<CategoryViewModel> Data { get; set; }
     }
 }

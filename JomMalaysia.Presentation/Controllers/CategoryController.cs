@@ -112,8 +112,34 @@ namespace JomMalaysia.Presentation.Controllers
 
             return View(categoryViewModel);
         }
-        public ActionResult Edit(CategoryViewModel std)
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CategoryViewModel categoryViewModel)
         {
+            var message = "";
+            IWebServiceResponse response;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // remove subcategory if category.lstCategory[i].isDeleted = true
+                    response = await _gateway.EditCategory(categoryViewModel).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    message = "swal('Good job!', 'You clicked the button!', 'success');";
+                    TempData["Message"] = message;
+                }
+                else
+                {
+                    TempData["Message"] = "Failed to create category. Category name may be duplicated.";
+                }
+            }
+
 
             return RedirectToAction("Index");
         }

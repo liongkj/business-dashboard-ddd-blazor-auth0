@@ -52,6 +52,27 @@ namespace JomMalaysia.Presentation.Gateways.Category
 
         }
 
+        public async Task<IWebServiceResponse> EditCategory(CategoryViewModel vm)
+        {
+            IWebServiceResponse<CategoryViewModel> response;
+            try
+            {
+                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{vm.CategoryName}";
+
+                var method = Method.PUT;
+                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken, vm);
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+            return response;
+
+
+            //handle exception
+
+        }
+
         public async Task<List<CategoryViewModel>> GetCategories()
         {
             List<CategoryViewModel> result = new List<CategoryViewModel>();
@@ -70,7 +91,7 @@ namespace JomMalaysia.Presentation.Gateways.Category
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var categories = response.Data.Categories;
+                var categories = response.Data.Data;
                 foreach (var cat in categories)
                 {
                     result.Add(cat);
