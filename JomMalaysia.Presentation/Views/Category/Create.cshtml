@@ -2,8 +2,29 @@
 
 @{
     ViewData["Title"] = "Create Category";
-    Layout = "~/Views/Shared/_LayoutAction.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<!--HEADER-->
+<div class="form-group col-md-12 no-padding d-none d-md-block">
+    <button type="button" class="btn btn-success col-md-2" onclick="$('#btnSubmit').click()">Save</button>
+    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
+</div>
+
+<!--Mobile Buttons-->
+<div class="form-group col-md-12 no-padding d-sm-block d-md-none">
+    <div class="btn-group col-sm-12 no-padding" role="group">
+        <button type="button" class="btn btn-primary">Action</button>
+        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+            <a class="dropdown-item" onclick="$('#btnSubmit').click()">Save</a>
+            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Cancel</a>
+        </div>
+        <div id="action-button" class="btn-group" role="group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        </div>
+    </div>
+</div>
+<!--END OF HEADER-->
 
 <form asp-action="Create" id="FormCreate" class="form-m-gap-top">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -39,6 +60,51 @@
             @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
-
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryImage)</div>
+        <div class="input-group col-sm-10 col-md-6">
+            <input type="text" class="form-control">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" id="btnUpload">Browse</button>
+                <input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label"></div>
+        <img src="" id="profile-img-tag" width="200" class="img-rounded" />
+    </div>
     <button id="btnSubmit" type="submit" class="d-none"></button>
 </form>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+        $('#btnSubmitCreate').click(function () {
+            debugger;
+            $("#FormCreate").valid();
+        });
+
+
+        $("#btnUpload").click(function () {
+            $("#btnUpload_hidden").click();
+        });
+
+        $("btnUpload_hidden").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#profile-img-tag').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

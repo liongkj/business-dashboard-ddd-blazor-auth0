@@ -18,6 +18,7 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly ICategoryGateway _gateway;
 
         private static List<CategoryViewModel> CategoryList { get; set; }
+        private static Boolean refresh = false;
         public CategoryController(ICategoryGateway gateway)
         {
             _gateway = gateway;
@@ -38,7 +39,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         async Task<List<CategoryViewModel>> GetCategories()
         {
-            if (CategoryList.Count > 0)
+            if (CategoryList.Count > 0 && !refresh)
             {
                 return CategoryList;
             }
@@ -67,6 +68,8 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public ViewResult Create()
         {
+            ViewBag.Messages = "";
+            TempData["Message"] = "";
             return View();
         }
 
@@ -89,8 +92,10 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    message = "swal('Good job!', 'You clicked the button!', 'success');";
+                    refresh = true;
+                    message = "success";
                     TempData["Message"] = message;
+                    ViewBag.Messages = "success";
                 }
                 else
                 {
@@ -131,8 +136,10 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
+                    refresh = true;
                     message = "swal('Good job!', 'You clicked the button!', 'success');";
                     TempData["Message"] = message;
+                    ViewBag.Message = "success";
                 }
                 else
                 {
@@ -146,20 +153,26 @@ namespace JomMalaysia.Presentation.Controllers
 
 
 
-        [HttpGet("{categoryName}")]
-        public async Task<IActionResult> Delete(string categoryName)
+        [HttpGet("{CategoryId}")]
+        public async Task<IActionResult> Delete(String CategoryId)
         {
-            if (categoryName == null) return NotFound();
+            if (CategoryId == null) return NotFound();
             IWebServiceResponse response;
 
             try
             {
-                response = await _gateway.Delete(categoryName);
+                response = await _gateway.Delete(CategoryId);
             }
             catch (Exception e)
             {
                 throw e;
             }
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                refresh = true;
+            }
+
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 //return message with still has subcategory

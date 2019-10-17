@@ -10,6 +10,9 @@ namespace JomMalaysia.Presentation.Models
     public class CategoryViewModel
     {
         public CategoryViewModel() { }
+       
+        public String CategoryId { get; set; }
+
         [Required]
         [StringLength(10, ErrorMessage = "{0} should not exceed 10 characters.")]
         [Display(Name = "Category Code")]
@@ -30,9 +33,9 @@ namespace JomMalaysia.Presentation.Models
         [Display(Name = "名称")]
         public string CategoryNameZh { get; set; }
 
-        //[Required(ErrorMessage = "An Album Title is required")]
-        //[DisplayFormat(ConvertEmptyStringToNull = false)]
-        //[StringLength(160, MinimumLength = 2)]
+        [StringLength(500)]
+        [Display(Name = "Display Image")]
+        public string CategoryImage { get; set; }
         
         public CategoryPathViewModel CategoryPath{ get; set; }
         public List<CategoryViewModel> LstSubCategory { get; set; }

@@ -69,5 +69,6 @@ $(document).ready(function () {
     $(document).click(function (event) {
         $('.dropdown-menu').hide();
     });
+
 });
 
