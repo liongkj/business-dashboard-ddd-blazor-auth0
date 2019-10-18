@@ -43,7 +43,7 @@
                                     <strong>Edit</strong>
                                 </span>
                             </a>
-                            <input onclick="deleteCategory('@item.CategoryId')" type="button" value="Delete" />
+                            <input onclick="deleteCategory('@item.CategoryId')" id="btnDelete" type="button" value="Delete" />
                             @*<button onclick="testswal(@item.CategoryId, count)">Delete</button>
                                 <a href="@Url.Action("Delete", "Category", new { CategoryId = item.CategoryId })" id="btnDelete" class="btn btn-danger col-md-5 offset-md-1">
                                         <span>
@@ -62,7 +62,7 @@
 </form>
 
 <!--Confirm Delete Modal-->
-<div id="modal-delete" class="modal">
+<!-- <div id="modal-delete" class="modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -80,7 +80,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
 
 @section SpecificScripts{
@@ -88,54 +88,44 @@
     <script type="text/javascript">
 
        
-            function deleteCategory(CategoryId) {
-                debugger;
-                swal({
-                    title: "Are you sure?",
-                    text: "Are you sure that you want to delete this Order?",
-                    type: "warning",
-                    showCancelButton: true,
-                    closeOnConfirm: false,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Delete",
-                    confirmButtonColor: "#ec6c62"
-                },
-                    function () {
-                        $.ajax({
-                            url: "/Category/Delete/" + CategoryId,
-                            type: "GET",
-                            success: function (data) {
-                                sweetAlert({
-                                    title: "Deleted",
-                                    text: "Category has been deleted successfully.",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.href = "/Category/Index";
-                                    });
-
-                            }
-                        });
-                    });
-                //.done(function(data)
-                //      {
-                //    sweetAlert
-                //        ({
-                //                title: "Deleted!",
-                //                text: "Your file was successfully deleted!",
-                //                type: "success"
-                //            },
-                //            function()
-                //         {
-                //                window.location.href = '/DeleteConfirmation/Details';
-                //            });
-                //})
-                //.error(function(data)
-                // {
-                //    swal("Oops", "We couldn't connect to the server!", "error");
-                //});
-
-            }
+           function deleteCategory(catId)  
+{  
+          
+        swal({  
+                title: "Are you sure?",  
+                text: "Are you sure that you want to delete this Order?",  
+                type: "warning",  
+                showCancelButton: true,  
+                closeOnConfirm: false,  
+                confirmButtonText: "Yes, delete it!",  
+                confirmButtonColor: "#ec6c62"  
+            },  
+            function()   
+             {  
+                $.ajax({  
+                    //TODO add [ValidateAntiForgeryToken]
+                        url: "/Category/ConfirmDelete/",  
+                        data:  {  
+                            "CategoryId": catId  
+                        },  
+                        type: "POST",
+                        success:(function(data)   
+                            {
+                              sweetAlert({  
+                                title: "Deleted!",  
+                                text: "Your file was successfully deleted!",  
+                                type: "success"  
+                            },  
+                                function()  {  
+                                    window.location.href = '/category';  
+                                });  
+                        }),error:  (function(data)  
+                            {  
+                                swal("Oops", "An error occur!", "error");  
+                            })
+                    })       
+            });  
+    }  
       
     </script>
 }

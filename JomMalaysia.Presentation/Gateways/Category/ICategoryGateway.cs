@@ -13,6 +13,6 @@ namespace JomMalaysia.Presentation.Gateways.Category
         Task<List<CategoryViewModel>> GetCategories();
         Task<IWebServiceResponse> CreateCategory(CategoryViewModel vm);
         Task<IWebServiceResponse> EditCategory(CategoryViewModel vm);
-        Task<IWebServiceResponse> Delete(string CategoryName);
+        Task<IWebServiceResponse> Delete(string CategoryId);
     }
 }

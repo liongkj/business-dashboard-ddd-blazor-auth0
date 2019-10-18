@@ -8,6 +8,7 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Category;
 using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -151,10 +152,29 @@ namespace JomMalaysia.Presentation.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Movies/Delete/5
+        public async Task<IActionResult> Delete(string categoryId)
+        {
+            if (categoryId == null)
+            {
+                return NotFound();
+            }
+
+            var cat = await CategoryList.AsQueryable()
+                .FirstOrDefaultAsync(m => m.CategoryId == categoryId);
+            if (cat == null)
+            {
+                return NotFound();
+            }
+
+            return View(cat);
+        }
 
 
-        [HttpGet("{CategoryId}")]
-        public async Task<IActionResult> Delete(String CategoryId)
+
+        [HttpPost]
+        //TODO [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmDelete(string CategoryId)
         {
             if (CategoryId == null) return NotFound();
             IWebServiceResponse response;

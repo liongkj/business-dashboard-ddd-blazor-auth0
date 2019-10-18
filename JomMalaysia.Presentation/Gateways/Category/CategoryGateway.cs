@@ -103,12 +103,12 @@ namespace JomMalaysia.Presentation.Gateways.Category
             return result;
         }
 
-        public async Task<IWebServiceResponse> Delete(string categoryName)
+        public async Task<IWebServiceResponse> Delete(string categoryId)
         {
             IWebServiceResponse<CategoryViewModel> response;
             try
             {
-                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryName}";
+                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryId}";
 
                 var method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);
