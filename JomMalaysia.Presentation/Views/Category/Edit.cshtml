@@ -2,16 +2,20 @@
 
 @{
     ViewData["Title"] = "Edit Category";
-    Layout = "~/Views/Shared/_LayoutAction.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2" onclick="$('#btnSubmit2').click()">Save1</button>
+    <button type="button" class="btn btn-success col-md-2" onclick="editCategory()">Save</button>
     <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
 </div>
 
 
 <form asp-action="Edit" id="FormEdit" class="form-m-gap-top">
+
+    <!-- add whatever model data not in fields.-->
+    @Html.HiddenFor(m=>m.CategoryId)
+
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
@@ -48,3 +52,41 @@
 
     <button id="btnSubmit2" type="submit" class="d-none"></button>
 </form>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+
+        function editCategory() {
+            debugger;
+            var data = $('#FormEdit').serialize();
+
+            if ($("#FormEdit").valid()) {
+                $.ajax({
+                    //TODO add [ValidateAntiForgeryToken]
+                    url: "/Category/Edit/",
+                    data: data,
+                    type: "POST",
+                    success: (function (data) {
+                        if (data == 1) {
+                            sweetAlert({
+                                title: "Updated",
+                                text: "Category details have been updated successfully!",
+                                type: "success"
+                            },
+                                function () {
+                                    window.location.href = '/category';
+                                });
+                        }
+                        else {
+                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                        }
+                    }), error: (function (data) {
+                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                    })
+                })
+            }
+        }
+    </script>
+}

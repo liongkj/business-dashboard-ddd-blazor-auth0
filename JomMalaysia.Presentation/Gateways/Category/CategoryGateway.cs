@@ -57,7 +57,7 @@ namespace JomMalaysia.Presentation.Gateways.Category
             IWebServiceResponse<CategoryViewModel> response;
             try
             {
-                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{vm.CategoryName}";
+                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{vm.CategoryId}";
 
                 var method = Method.PUT;
                 response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken, vm);

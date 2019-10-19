@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Category;
 using JomMalaysia.Presentation.Models;
@@ -69,16 +70,14 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            ViewBag.Messages = "";
-            TempData["Message"] = "";
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryViewModel vm)
+        public async Task<int> Create(CategoryViewModel vm)
         {
             //handle statuscode = 0; handle bad request
-            var message = "";
+            int message = 0;
             IWebServiceResponse response;
             if (ModelState.IsValid)
             {
@@ -94,35 +93,32 @@ namespace JomMalaysia.Presentation.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     refresh = true;
-                    message = "success";
-                    TempData["Message"] = message;
-                    ViewBag.Messages = "success";
+                    message = GlobalConstant.RESPONSE_OK;
                 }
                 else
                 {
-                    TempData["Message"] = "Failed to create category. Category name may be duplicated.";
+                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
                 }
             }
 
-            return RedirectToAction("Index");
+            return message;
 
-            // update student to the database
         }
 
         [HttpGet]
-        public ViewResult Edit(String categoryName)
+        public ViewResult Edit(String categoryId)
         {
             CategoryViewModel categoryViewModel = new CategoryViewModel();
 
-            categoryViewModel = CategoryList.FirstOrDefault(m => m.CategoryName == categoryName);
+            categoryViewModel = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
 
             return View(categoryViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(CategoryViewModel categoryViewModel)
+        public async Task<int> Edit(CategoryViewModel categoryViewModel)
         {
-            var message = "";
+            int message = 0;
             IWebServiceResponse response;
             if (ModelState.IsValid)
             {
@@ -133,27 +129,27 @@ namespace JomMalaysia.Presentation.Controllers
                 }
                 catch (Exception e)
                 {
+                    //should change message to string. pass exception details.
+                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
                     throw e;
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     refresh = true;
-                    message = "swal('Good job!', 'You clicked the button!', 'success');";
-                    TempData["Message"] = message;
-                    ViewBag.Message = "success";
+                    message = GlobalConstant.RESPONSE_OK;
                 }
                 else
                 {
-                    TempData["Message"] = "Failed to create category. Category name may be duplicated.";
+                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
                 }
             }
 
 
-            return RedirectToAction("Index");
+            return message;
         }
 
         // GET: Movies/Delete/5
-        public async Task<IActionResult> Delete(string categoryId)
+       /* public async Task<IActionResult> Delete(string categoryId)
         {
             if (categoryId == null)
             {
@@ -168,15 +164,18 @@ namespace JomMalaysia.Presentation.Controllers
             }
 
             return View(cat);
-        }
+        }*/
 
 
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ConfirmDelete(string CategoryId)
+        public async Task<int> ConfirmDelete(string CategoryId)
         {
-            if (CategoryId == null) return NotFound();
+            int message = 0;
+
+            if (CategoryId == null) { message = GlobalConstant.RESPONSE_ERR_NOT_FOUND; }
+
             IWebServiceResponse response;
 
             try
@@ -191,16 +190,29 @@ namespace JomMalaysia.Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 refresh = true;
+                message = GlobalConstant.RESPONSE_OK;
             }
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
             {
-                //return message with still has subcategory
+                message = GlobalConstant.RESPONSE_ERR_DEPENDENCY;
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
+            }
+            return message;
 
         }
 
+      /*  public ActionResult Constants()
+        {
+            var constants = typeof(GlobalConstant)
+                .GetFields()
+                .ToDictionary(x => x.Name, x => x.GetValue(null));
+            var json = new JavaScriptSerializer().Serialize(constants);
+            return Content("var constants = " + json + ";");
+        }
+*/
         public ActionResult Publish(int id)
         {
             // delete student from the database whose id matches with specified id

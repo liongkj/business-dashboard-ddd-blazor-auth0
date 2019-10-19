@@ -35,4 +35,9 @@
   <ItemGroup>
     <ProjectReference Include="..\JomMalaysia.Framework\JomMalaysia.Framework.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Extensions">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0\System.Web.Extensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@
 
 <!--HEADER-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2" onclick="$('#btnSubmit').click()">Save</button>
+    <button type="button" class="btn btn-success col-md-2" onclick="createCategory()">Save</button>
     <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
 </div>
 
@@ -26,7 +26,7 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-action="Create" id="FormCreate" class="form-m-gap-top">
+<form asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post"s>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
@@ -74,18 +74,41 @@
         <div class="col-sm-2 col-md-3 col-form-label"></div>
         <img src="" id="profile-img-tag" width="200" class="img-rounded" />
     </div>
-    <button id="btnSubmit" type="submit" class="d-none"></button>
+    @*<button id="btnSubmit" type="submit" class="d-none"></button>*@
 </form>
 
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
-
-        $('#btnSubmitCreate').click(function () {
+       
+       function createCategory() {
             debugger;
-            $("#FormCreate").valid();
-        });
+           var data = $('#FormCreate').serialize();
+
+            if ($("#FormCreate").valid()) {
+                 $.ajax({
+                        //TODO add [ValidateAntiForgeryToken]
+                        url: "/Category/Create/",
+                        data: data,
+                        type: "POST",
+                        success: (function (data) {
+                            if (data == 1) {
+                                sweetAlert({
+                                    title: "Created",
+                                    text: "Category has been created successfully!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = '/category';
+                                    });
+                            }
+                        }), error: (function (data) {
+                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                        })
+                    })
+            }           
+        }
 
 
         $("#btnUpload").click(function () {
