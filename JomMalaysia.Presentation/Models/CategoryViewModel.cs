@@ -10,7 +10,7 @@ namespace JomMalaysia.Presentation.Models
     public class CategoryViewModel
     {
         public CategoryViewModel() { }
-       
+
         public String CategoryId { get; set; }
 
         [Required]
@@ -35,9 +35,9 @@ namespace JomMalaysia.Presentation.Models
 
         [StringLength(500)]
         [Display(Name = "Display Image")]
-        public string CategoryImage { get; set; }
-        
-        public CategoryPathViewModel CategoryPath{ get; set; }
+        public Image CategoryImage { get; set; }
+
+        public CategoryPathViewModel CategoryPath { get; set; }
         public List<CategoryViewModel> LstSubCategory { get; set; }
 
         public bool IsDeleted { get; set; }
