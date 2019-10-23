@@ -47,10 +47,12 @@ namespace JomMalaysia.Presentation
                 options.Audience = "https://localhost:44368/";
             });
 
-            services.AddAuthorization(options =>
+            services.AddAuthorization(
+                options =>
             {
                 options.AddPolicy("read:merchant", policy => policy.Requirements.Add(new HasScopeRequirement("read:merchant", "https://jomn9.auth0.com/")));
-            });
+            }
+            );
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
@@ -92,7 +94,7 @@ namespace JomMalaysia.Presentation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseAuthentication();
+            // app.UseAuthentication(); //auth: enable this
 
             app.UseMvc(routes =>
             {
