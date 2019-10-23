@@ -13,7 +13,7 @@ using JomMalaysia.Presentation.Manager;
 
 namespace JomMalaysia.Presentation.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class HomeController : Controller
     {
         private readonly IAppSetting _appSetting;
@@ -30,7 +30,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             ViewData["AT"] = _authorizationManagers.accessToken;
             return View();
-            
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

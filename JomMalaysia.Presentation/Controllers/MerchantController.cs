@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace JomMalaysia.Presentation.Controllers
 {
-    [Authorize("read:merchant")]
+    // [Authorize("read:merchant")] auth:enable this
     public class MerchantController : Controller
     {
         private Merchant merchant;
@@ -34,12 +34,12 @@ namespace JomMalaysia.Presentation.Controllers
             return View(merchantList);
         }
 
-       // [HttpPost, ValidateAntiForgeryToken]
+        // [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Create(Merchant merchant)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                
+
             }
 
             // update student to the database
