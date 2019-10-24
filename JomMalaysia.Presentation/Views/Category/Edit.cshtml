@@ -5,16 +5,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2" onclick="editCategory()">Save</button>
-    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
-</div>
-
+    <div class="form-group col-md-12 no-padding d-none d-md-block">
+        <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
+        <button type="button" class="btn btn-success col-md-2" onclick="editCategory()">Save</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-subcategory">
+            Launch demo modal
+        </button>
+    </div>
 
 <form asp-action="Edit" id="FormEdit" class="form-m-gap-top">
 
     <!-- add whatever model data not in fields.-->
-    @Html.HiddenFor(m=>m.CategoryId)
+    @Html.HiddenFor(m => m.CategoryId)
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group row">
@@ -53,10 +55,94 @@
     <button id="btnSubmit2" type="submit" class="d-none"></button>
 </form>
 
+<div class="modal fade bd-example-modal-xl" id="modal-subcategory" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Subcategory</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <button id="new-subcategory" type="button" class="btn btn-success col-md-2">New SubCategory</button>
+                <div class="col-md-12 col-sm-12 no-padding form-m-gap-top" style="overflow-x:auto !important" ;">
+                    <table class="table table-hover tb-subcategory">
+                        <thead class="table-primary">
+                            <tr>
+                                <th scope="col">Sub Category ID</th>
+                                <th scope="col">Sub Category Name</th>
+                                <th scope="col">Sub Category Name Ms</th>
+                                <th scope="col">Sub Category Name Zh</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="subcategory-0">
+                                @*https://stackoverflow.com/questions/38929009/how-to-bind-an-array-in-mvc-core
+                                    https://fildev.net/2017/05/14/send-array-from-view-to-controller-as-class-asp-net-core/*@
+                                <td>
+                                    @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryCode, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryCode)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryName)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameMs, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameMs)
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameZh, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameZh)
+                                </td>
+                                <td>
+                                    @Html.HiddenFor(m => m.LstSubCategory[0].IsDeleted, new { @class = "form-control" })
+                                </td>
+                                <td><button id="delete-subcategory" type="button" class="btn btn-danger invisible isDelete">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
+        var counter = 1;
+
+        $("#new-subcategory").on("click", function () {
+            var newRow = $("<tr>");
+            var cols = "";
+
+            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryId" name="lstSubCategory[' + counter + '].categoryId" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryName" name="lstSubCategory[' + counter + '].categoryName" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryNameMs" name="lstSubCategory[' + counter + '].categoryNameMs" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryNameZh" name="lstSubCategory[' + counter + '].categoryNameZh" type="text" value=""></td>'
+            cols += '<td> <input class="isDelete form-control" data-val="true" id="lstSubCategory_' + counter + '__isDeleted" name="lstSubCategory[' + counter + '].isDeleted" type="hidden" value=""></td>'
+            cols += '<td> <button type="button" class="btn btn-danger btnDelete">Delete</button></td> ';
+
+            newRow.append(cols);
+            $(".tb-subcategory").append(newRow);
+            counter++;
+        });
+
+        $(".tb-subcategory").on("click", ".btnDelete", function (event) {
+            $(this).closest("tr").addClass("d-none");
+            $(this).closest("tr").find('.isDelete').val("true");
+            //lstSubCategory_0__categoryId
+            //$(this).closest('tr').find('#isDeleted').prop('checked', true);
+        });
 
         function editCategory() {
             debugger;
