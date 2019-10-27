@@ -8,4 +8,11 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 
 - [ ] find out why released version css is missing https://portal-jommalaysia.azurewebsites.net/
 
-- [ ] troubleshoot add category not working
+- [x] troubleshoot add category not working
+
+- [x] User gateway
+- [ ] Listing gateway
+- [ ] Workflow gateway
+- [ ] Merchant gateway
+
+* [ ] Google Map Geocoding in Add listing page
