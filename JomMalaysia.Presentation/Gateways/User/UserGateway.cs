@@ -79,13 +79,13 @@ namespace JomMalaysia.Presentation.Gateways.User
         public async Task<List<UserViewModel>> GetAll()
         {
             List<UserViewModel> result = new List<UserViewModel>();
-            IWebServiceResponse<UserListViewModel> response = default;
+            IWebServiceResponse<UserListResponse> response = default;
 
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<UserListViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<UserListResponse>(req, method, _authorizationManagers.accessToken);
 
             }
             catch (GatewayException ex)

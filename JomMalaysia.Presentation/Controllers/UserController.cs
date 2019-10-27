@@ -49,14 +49,13 @@ namespace JomMalaysia.Presentation.Controllers
             try
             {
                 UserList = await _gateway.GetAll().ConfigureAwait(false);
-
-
+                return UserList;
             }
             catch (Exception e)
             {
                 throw e;
             }
-            return UserList;
+
         }
 
         // GET: /<controller>/

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using JomMalaysia.Presentation.Models.Common;
 
 namespace JomMalaysia.Presentation.Models.AppUsers
 {
@@ -9,23 +10,18 @@ namespace JomMalaysia.Presentation.Models.AppUsers
         public string Username { get; set; }
         public Email Email { get; set; }
         public Name Name { get; set; }
-        public string Role { get; set; }
-        public List<string> additionalPermissions { get; set; }
-        public string pictureUri { get; set; }
-        public DateTime lastLogin { get; set; }
+        public Role Role { get; set; }
+        public List<string> AdditionalPermissions { get; set; }
+        public string PictureUri { get; set; }
+        public DateTime LastLogin { get; set; }
     }
-    public class Email
+
+
+    public class Role
     {
-        public string user { get; set; }
-        public string domain { get; set; }
+        public string Name { get; set; }
+
+
+
     }
-
-    public class Name
-    {
-        public string lastName { get; set; }
-    }
-
-
-
-
 }
