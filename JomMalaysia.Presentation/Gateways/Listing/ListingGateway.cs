@@ -72,7 +72,7 @@ namespace JomMalaysia.Presentation.Gateways.Listing
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var listings = response.Data.Listings;
+                var listings = response.Data.Data;
                 foreach (var list in listings)
                 {
                     result.Add(list);

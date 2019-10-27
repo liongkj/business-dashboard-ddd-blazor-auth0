@@ -9,6 +9,6 @@ namespace JomMalaysia.Presentation.Gateways.Listing
 {
     public class ListingListViewModel
     {
-        public List<ListingViewModel> Listings { get; set; }
+        public List<ListingViewModel> Data { get; set; }
     }
 }
