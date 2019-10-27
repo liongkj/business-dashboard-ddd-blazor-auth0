@@ -9,6 +9,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -32,7 +33,29 @@ namespace JomMalaysia.Presentation.Gateways.User
 
         }
 
-        public async Task<IWebServiceResponse> Add(UserInfoViewModel vm)
+        //TODO Refer this pattern
+        // public IActionResult Create()
+        // {
+        //     return PartialView(new CreateListingViewModel());
+        // }
+
+        // POST: Listing/Create
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public ActionResult Create(CreateListingViewModel collection)
+        // {
+        //     try
+        //     {
+        //         // TODO: Add insert logic here
+
+        //         return RedirectToAction(nameof(Index));
+        //     }
+        //     catch
+        //     {
+        //         return View();
+        //     }
+        // }
+        public async Task<IWebServiceResponse> Add(UserViewModel vm)
         {
             IWebServiceResponse<UserInfoViewModel> response;
             try
@@ -53,9 +76,9 @@ namespace JomMalaysia.Presentation.Gateways.User
 
         }
 
-        public async Task<List<UserInfoViewModel>> GetAll()
+        public async Task<List<UserViewModel>> GetAll()
         {
-            List<UserInfoViewModel> result = new List<UserInfoViewModel>();
+            List<UserViewModel> result = new List<UserViewModel>();
             IWebServiceResponse<UserListViewModel> response = default;
 
             try
@@ -83,13 +106,13 @@ namespace JomMalaysia.Presentation.Gateways.User
 
         public async Task<IWebServiceResponse> Delete(string userId)
         {
-            IWebServiceResponse<CategoryViewModel> response;
+            IWebServiceResponse response;
             try
             {
                 var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.User))}/{userId}";
 
                 var method = Method.DELETE;
-                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<UserViewModel>(req, method, _authorizationManagers.accessToken);
             }
             catch (GatewayException ex)
             {

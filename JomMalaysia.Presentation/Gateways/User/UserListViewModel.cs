@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JomMalaysia.Presentation.Models;
+﻿using System.Collections.Generic;
+using JomMalaysia.Presentation.Models.AppUsers;
 
 namespace JomMalaysia.Presentation.Gateways.User
 {

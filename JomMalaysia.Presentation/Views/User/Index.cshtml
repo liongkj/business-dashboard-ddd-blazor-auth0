@@ -1,4 +1,4 @@
-﻿@model IEnumerable<JomMalaysia.Presentation.Models.UserInfoViewModel>
+﻿@model IEnumerable<JomMalaysia.Presentation.Models.AppUsers.UserViewModel>
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
@@ -30,8 +30,8 @@
                 {
 
                     <tr>
-                        <td>@item.name</td>
-                        <td>@item.scope </td>
+                        <td>@item.Username</td>
+                        <td>@item.Role </td>
                         
                         <td>
                             <a href='@Url.Action("Index", "Home")' class=''></a>

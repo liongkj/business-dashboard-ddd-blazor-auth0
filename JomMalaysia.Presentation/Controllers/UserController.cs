@@ -8,6 +8,7 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.User;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
@@ -20,7 +21,7 @@ namespace JomMalaysia.Presentation.Controllers
     {
 
         private readonly IUserGateway _gateway;
-        private static List<UserInfoViewModel> UserList { get; set; }
+        private static List<UserViewModel> UserList { get; set; }
 
         private static Boolean refresh = false;
 
@@ -35,11 +36,11 @@ namespace JomMalaysia.Presentation.Controllers
                 UserList = await GetUsers();
             else
             {
-                UserList = new List<UserInfoViewModel>();
+                UserList = new List<UserViewModel>();
             }
         }
 
-        async Task<List<UserInfoViewModel>> GetUsers()
+        async Task<List<UserViewModel>> GetUsers()
         {
             if (UserList.Count > 0 && !refresh)
             {
