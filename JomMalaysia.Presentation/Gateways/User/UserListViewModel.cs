@@ -8,6 +8,11 @@ namespace JomMalaysia.Presentation.Gateways.User
 {
     public class UserListViewModel
     {
-        public List<UserInfoViewModel> Users { get; set; }
+        public ResultViewModel Data { get; set; }
+    }
+
+    public class ResultViewModel
+    {
+        public List<UserViewModel> Results { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Merchants
 {
     public class Merchant
     {

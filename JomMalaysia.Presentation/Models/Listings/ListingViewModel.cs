@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Presentation.Models.Categories;
+using JomMalaysia.Presentation.Models.Merchants;
 using Newtonsoft.Json;
 
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Listings
 {
     public class ListingViewModel
     {
 
         public string MerchantId { get; set; }
 
-        public Status Status { get; set; }
+        public string Status { get; set; }
 
 
-        public ListingType ListingType { get; set; }
+        public string ListingType { get; set; }
 
 
 
@@ -35,4 +37,3 @@ namespace JomMalaysia.Presentation.Models
 
     }
 }
-

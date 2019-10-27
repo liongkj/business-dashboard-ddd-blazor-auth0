@@ -9,6 +9,7 @@ using Auth0.AuthenticationApi.Models;
 using JomMalaysia.Framework.Configuration;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -43,65 +44,65 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User vm)
         {
-            // if (ModelState.IsValid)
-            // {
-            //     try
-            //     {
-            //         AuthenticationApiClient client = new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    AuthenticationApiClient client = new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
 
-            //         var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
-            //         {
-            //             ClientId = _appSetting.Auth0ClientId,
-            //             ClientSecret = _appSetting.Auth0ClientSecret,
-            //             Scope = _appSetting.Scope,
-            //             Realm = _appSetting.DBConnection,
-            //             Username = vm.email,
-            //             Password = vm.password,
-            //             Audience = _appSetting.Audience
-            //         });
+                    var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
+                    {
+                        ClientId = _appSetting.Auth0ClientId,
+                        ClientSecret = _appSetting.Auth0ClientSecret,
+                        Scope = _appSetting.Scope,
+                        Realm = _appSetting.DBConnection,
+                        Username = vm.email,
+                        Password = vm.password,
+                        Audience = _appSetting.Audience
+                    });
 
-            //         // Get user info from token
-            //         var user = await client.GetUserInfoAsync(result.AccessToken);
-            //         //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
+                    // Get user info from token
+                    var user = await client.GetUserInfoAsync(result.AccessToken);
+                    //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
 
 
-            //         var handler = new JwtSecurityTokenHandler();
-            //         var jsonToken = handler.ReadToken(result.AccessToken);
+                    var handler = new JwtSecurityTokenHandler();
+                    var jsonToken = handler.ReadToken(result.AccessToken);
 
-            //         var tokenS = handler.ReadToken(result.AccessToken) as JwtSecurityToken;
-            //         var role = tokenS.Claims.Where(c => c.Type == _appSetting.AdditionalClaimsRoles).FirstOrDefault().ToString();
-            //         var permission = tokenS.Claims.Where(c => c.Type == "permissions").ToList();
-            //         //var role = tokenS.Payload.Values[_appSetting.AdditionalClaimsRoles].Values<String>().ToList();
-            //         String permissionClaim = String.Empty;
-            //         permission.ForEach(c =>
-            //         {
-            //             permissionClaim = permissionClaim + " " + c.Value;
-            //         });
+                    var tokenS = handler.ReadToken(result.AccessToken) as JwtSecurityToken;
+                    var role = tokenS.Claims.Where(c => c.Type == _appSetting.AdditionalClaimsRoles).FirstOrDefault().ToString();
+                    var permission = tokenS.Claims.Where(c => c.Type == "permissions").ToList();
+                    //var role = tokenS.Payload.Values[_appSetting.AdditionalClaimsRoles].Values<String>().ToList();
+                    String permissionClaim = String.Empty;
+                    permission.ForEach(c =>
+                    {
+                        permissionClaim = permissionClaim + " " + c.Value;
+                    });
 
-            //         // Create claims principal
-            //         var claims = new List<Claim>
-            //         {
-            //             new Claim(ConstantHelper.Claims.accessToken, result.AccessToken),
-            //             new Claim(ConstantHelper.Claims.refreshToken, result.RefreshToken),
-            //             new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString()),
-            //             new Claim(ConstantHelper.Claims.userId, user.UserId),
-            //             new Claim(ConstantHelper.Claims.name, user.FullName),
-            //             new Claim(ConstantHelper.Claims.scope, permissionClaim, "string", tokenS.Issuer),
+                    // Create claims principal
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ConstantHelper.Claims.accessToken, result.AccessToken),
+                        new Claim(ConstantHelper.Claims.refreshToken, result.RefreshToken),
+                        new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString()),
+                        new Claim(ConstantHelper.Claims.userId, user.UserId),
+                        new Claim(ConstantHelper.Claims.name, user.FullName),
+                        new Claim(ConstantHelper.Claims.scope, permissionClaim, "string", tokenS.Issuer),
 
-            //         };
+                    };
 
-            //         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            //         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
-            //         // Sign user into cookie middleware
-            //         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+                    // Sign user into cookie middleware
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-            //         return RedirectToLocal(vm.returnURL);
-            //     }
-            //     catch (Exception e)
-            //     {
-            //         ModelState.AddModelError("", e.Message);
-            //     }
-            // }
+                    return RedirectToLocal(vm.returnURL);
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError("", e.Message);
+                }
+            }
             return RedirectToLocal(vm.returnURL); //auth: disable this
             // return View(vm); //auth:enable this
         }

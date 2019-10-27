@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Category;
+using JomMalaysia.Presentation.Models.Common;
 
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Categories
 {
     public class CategoryViewModel
     {

@@ -12,13 +12,11 @@ namespace JomMalaysia.Framework.Constant
             {
                 public const string Category = "api/Categories";
 
-                public const string Subcategory = "api/Categories/{catName}";
-
                 public const string Listing = "api/Listings";
 
                 public const string Image = "api/Images";
 
-                public const string User = "api/User";
+                public const string User = "api/Users";
             }
         }
     }

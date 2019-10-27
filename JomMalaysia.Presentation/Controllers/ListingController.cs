@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Listing;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Listings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,8 +35,8 @@ namespace JomMalaysia.Presentation.Controllers
             }
         }
 
-       
-        
+
+
         // GET: Listing
         async Task<List<ListingViewModel>> GetListings()
         {
@@ -60,7 +61,7 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var listings = await GetListings();
-            
+
             return View(listings);
         }
 

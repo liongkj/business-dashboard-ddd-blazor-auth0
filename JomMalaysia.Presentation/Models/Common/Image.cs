@@ -1,4 +1,4 @@
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Common
 {
     public class Image
     {

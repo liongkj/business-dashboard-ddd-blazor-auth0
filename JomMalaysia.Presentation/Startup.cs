@@ -94,7 +94,7 @@ namespace JomMalaysia.Presentation
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            // app.UseAuthentication(); //auth: enable this
+            app.UseAuthentication(); //auth: enable this
 
             app.UseMvc(routes =>
             {

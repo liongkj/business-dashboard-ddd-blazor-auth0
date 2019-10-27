@@ -9,6 +9,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
@@ -33,13 +34,13 @@ namespace JomMalaysia.Presentation.Gateways.User
 
         public async Task<IWebServiceResponse> Add(UserInfoViewModel vm)
         {
-            IWebServiceResponse<CategoryViewModel> response;
+            IWebServiceResponse<UserInfoViewModel> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
 
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<CategoryViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<UserInfoViewModel>(req, method, _authorizationManagers.accessToken);
             }
             catch (GatewayException ex)
             {
@@ -59,7 +60,7 @@ namespace JomMalaysia.Presentation.Gateways.User
 
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
+                var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
                 var method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<UserListViewModel>(req, method, _authorizationManagers.accessToken);
 
@@ -70,7 +71,7 @@ namespace JomMalaysia.Presentation.Gateways.User
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var users = response.Data.Users;
+                var users = response.Data.Data.Results;
                 foreach (var u in users)
                 {
                     result.Add(u);

@@ -1,8 +1,5 @@
-﻿using JomMalaysia.Presentation.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
+using JomMalaysia.Presentation.Models.Auth0;
 
 namespace JomMalaysia.Presentation.Manager
 {

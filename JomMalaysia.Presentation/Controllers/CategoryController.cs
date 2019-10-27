@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Category;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -147,22 +148,22 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         // GET: Movies/Delete/5
-       /* public async Task<IActionResult> Delete(string categoryId)
-        {
-            if (categoryId == null)
-            {
-                return NotFound();
-            }
+        /* public async Task<IActionResult> Delete(string categoryId)
+         {
+             if (categoryId == null)
+             {
+                 return NotFound();
+             }
 
-            var cat = await CategoryList.AsQueryable()
-                .FirstOrDefaultAsync(m => m.CategoryId == categoryId);
-            if (cat == null)
-            {
-                return NotFound();
-            }
+             var cat = await CategoryList.AsQueryable()
+                 .FirstOrDefaultAsync(m => m.CategoryId == categoryId);
+             if (cat == null)
+             {
+                 return NotFound();
+             }
 
-            return View(cat);
-        }*/
+             return View(cat);
+         }*/
 
 
 
@@ -202,15 +203,15 @@ namespace JomMalaysia.Presentation.Controllers
 
         }
 
-      /*  public ActionResult Constants()
-        {
-            var constants = typeof(GlobalConstant)
-                .GetFields()
-                .ToDictionary(x => x.Name, x => x.GetValue(null));
-            var json = new JavaScriptSerializer().Serialize(constants);
-            return Content("var constants = " + json + ";");
-        }
-*/
+        /*  public ActionResult Constants()
+          {
+              var constants = typeof(GlobalConstant)
+                  .GetFields()
+                  .ToDictionary(x => x.Name, x => x.GetValue(null));
+              var json = new JavaScriptSerializer().Serialize(constants);
+              return Content("var constants = " + json + ";");
+          }
+  */
         public ActionResult Publish(int id)
         {
             // delete student from the database whose id matches with specified id

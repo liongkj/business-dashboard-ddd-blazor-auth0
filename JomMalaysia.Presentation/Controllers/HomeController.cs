@@ -10,6 +10,7 @@ using RestSharp;
 using JomMalaysia.Framework.Configuration;
 using System.Security.Claims;
 using JomMalaysia.Presentation.Manager;
+using JomMalaysia.Presentation.Models.Common;
 
 namespace JomMalaysia.Presentation.Controllers
 {

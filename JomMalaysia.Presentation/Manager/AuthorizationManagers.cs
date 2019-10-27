@@ -1,5 +1,6 @@
 ﻿using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Linq;

@@ -9,6 +9,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;

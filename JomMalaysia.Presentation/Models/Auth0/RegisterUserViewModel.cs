@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Auth0
 {
     public class RegisterUserViewModel
     {

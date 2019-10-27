@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
+using JomMalaysia.Presentation.Models.Merchants;
 
 namespace JomMalaysia.Presentation.Controllers
 {

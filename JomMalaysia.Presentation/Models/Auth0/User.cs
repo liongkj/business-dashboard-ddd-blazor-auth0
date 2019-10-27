@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace JomMalaysia.Presentation.Models
+namespace JomMalaysia.Presentation.Models.Auth0
 {
     public class User
     {
-        [Display(Name="Email Address")]
+        [Display(Name = "Email Address")]
         public String email { get; set; }
 
         [Display(Name = "Password")]

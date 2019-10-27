@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JomMalaysia.Presentation.Gateways.User

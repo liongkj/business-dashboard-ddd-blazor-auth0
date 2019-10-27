@@ -1,0 +1,107 @@
+﻿@model IEnumerable<JomMalaysia.Presentation.Models.UserInfoViewModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "User";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+
+    if (TempData["Message"] != null)
+    {
+
+    }
+}
+
+<form id="studentForm" method="POST">
+    <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
+        <table id="tableData" class="table table-hover">
+            <!--remain id as this, else change name in _LayoutIndex too-->
+            <thead class="table-primary">
+
+                <tr class="text-center">
+                    <th scope="col">Category Code</th>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var count = 0; }
+
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.scope </td>
+                        
+                        <td>
+                            <a href='@Url.Action("Index", "Home")' class=''></a>
+                        </td>
+                    </tr>
+
+                    count += 1;
+                }
+
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
+
+@section SpecificScripts{
+
+    <script type="text/javascript">
+
+       
+        function deleteCategory(catId, catName) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Are you sure that you want to delete " + catName + "?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes",
+                confirmButtonColor: "#ec6c62"
+            },
+                function () {
+                    $.ajax({
+                        //TODO add [ValidateAntiForgeryToken]
+                        url: "/Category/ConfirmDelete/",
+                        data: {
+                            "CategoryId": catId
+                        },
+                        type: "POST",
+                        success: (function (data) {
+                            if (data == 1) {
+                                sweetAlert({
+                                    title: "Deleted",
+                                    text: catName + " has been deleted successfully!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = '/category';
+                                    });
+                            }
+                            else if (data == -2) {
+                                swal("Oops", "Subcategory has been created for this category. Please remove subcategory first.", "error");
+                            }
+                            else if (data == -3) {
+                                swal("Oops", "This category might have been deleted. Please refresh the page.", "error");
+                            }
+                            else {
+                                swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                            }
+                        }), error: (function (data) {
+                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                        })
+                    })
+                });
+        }
+
+
+
+
+
+    </script>
+}
