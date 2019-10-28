@@ -12,5 +12,6 @@ namespace JomMalaysia.Presentation
         public const int RESPONSE_ERR_DUPLICATED = -1;
         public const int RESPONSE_ERR_DEPENDENCY = -2;
         public const int RESPONSE_ERR_NOT_FOUND = -3;
+        public const int RESPONSE_ERR_VALIDATION_FAILED = -4;
     }
 }

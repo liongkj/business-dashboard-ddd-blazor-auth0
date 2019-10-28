@@ -308,3 +308,6 @@ a:not([href]):not([tabindex]) {
     width: 30%;
 }
 
+input#imageName {
+    border-radius: 0.25rem;
+}

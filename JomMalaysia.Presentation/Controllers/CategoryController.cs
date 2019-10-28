@@ -75,13 +75,22 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<int> Create(Category vm)
         {
             //handle statuscode = 0; handle bad request
+            int subCount = vm.LstSubCategory == null ? 0 : vm.LstSubCategory.Count;
             int message = 0;
             IWebServiceResponse response;
+
+            for (int i = subCount - 1; i >= 0; i--)
+            {
+                if (vm.LstSubCategory[i].IsDeleted)
+                {
+                    vm.LstSubCategory.RemoveAt(i);
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // remove subcategory if category.lstCategory[i].isDeleted = true
                     response = await _gateway.CreateCategory(vm).ConfigureAwait(false);
                 }
                 catch (Exception e)
@@ -97,6 +106,10 @@ namespace JomMalaysia.Presentation.Controllers
                 {
                     message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
                 }
+            }
+            else
+            {
+                message = GlobalConstant.RESPONSE_ERR_VALIDATION_FAILED;
             }
 
             return message;
@@ -140,6 +153,10 @@ namespace JomMalaysia.Presentation.Controllers
                 {
                     message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
                 }
+            }
+            else
+            {
+                message = GlobalConstant.RESPONSE_ERR_VALIDATION_FAILED;
             }
 
 

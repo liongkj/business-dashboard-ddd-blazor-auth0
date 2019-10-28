@@ -26,7 +26,7 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post"s>
+<form asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post" s>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
@@ -49,7 +49,6 @@
         <div class="col-sm-10 col-md-6">
             @Html.TextBoxFor(m => m.CategoryNameMs, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.CategoryNameMs)
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
     <div class="form-group row">
@@ -57,123 +56,166 @@
         <div class="col-sm-10 col-md-6">
             @Html.TextBoxFor(m => m.CategoryNameZh, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.CategoryNameZh)
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryImage)</div>
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryImageUrl)</div>
         <div class="input-group col-sm-10 col-md-6">
-            <input type="text" class="form-control" id="cloudinary-publicid"/>
+            @Html.HiddenFor(m => m.CategoryImageUrl, new { @class = "form-control", id = "imageUrl" })
+            @Html.HiddenFor(m => m.CategoryThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
+            <input type="text" class="form-control" id="imageName" disabled />
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="btnUpload">Browse</button>
+                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
                 @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
-
-
             </div>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label"></div>
-        <img src="" id="profile-img-tag" width="200" class="img-rounded" />
+    <br />
+    <hr />
+    <br />
+    <button id="new-subcategory" type="button" class="btn btn-success col-md-2">New SubCategory</button>
+    <div class="col-md-12 col-sm-12 no-padding form-m-gap-top" style="overflow-x:auto !important" ;">
+        <table class="table table-hover tb-subcategory">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th scope="col">Sub Category ID</th>
+                    <th scope="col">Sub Category Name</th>
+                    <th scope="col">Sub Category Name Ms</th>
+                    <th scope="col">Sub Category Name Zh</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="subcategory-0">
+                    @*https://stackoverflow.com/questions/38929009/how-to-bind-an-array-in-mvc-core
+                        https://fildev.net/2017/05/14/send-array-from-view-to-controller-as-class-asp-net-core/*@
+                    <td>
+                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryCode, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryCode)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryName, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryName)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameMs, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameMs)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameZh, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameZh)
+                    </td>
+                    <td>
+                        <button id="delete-subcategory" type="button" class="btn btn-danger invisible isDelete">Delete</button>
+                        @Html.HiddenFor(m => m.LstSubCategory[0].IsDeleted, new { @class = "" })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    @*<button id="btnSubmit" type="submit" class="d-none"></button>*@
 </form>
 
 @section Scripts{
-    <!-- cloudinary api -->
-<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">  </script>
 
-<script>cloudinary.setCloudName("jomn9-com")</script>
-
-
-<script type="text/javascript">
-     
-
-    var uploadImageWidget = cloudinary.createUploadWidget(
-        {
-            ucloudname: 'jomn9-com',
-            uploadPreset: 'ox3azzqe',
-            apiKey: '731121621859821',
-            folder:'category_thumbnail',
-            sources: ["local", "url", "image_search"],
-            googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
-            searchBySites: ["all", "cloudinary.com","unsplash.com","freepik.com"],
-            searchByRights: true,
-            cropping:true,
-            croppingAspectRatio: 1,
-            resourceType: ["image"],
-            clientAllowedFormats: ["png", "jpg", "jpeg"],
-            minImageWidth:100,
-            minImageHeight: 100,
-            autoMinimize: true,
-            showSkipCropButton: false,
-            
-            
-        }, (error, result) => {
-            if (!error && result && result.event === "success") {
-                debugger;
-                console.log("Image uploaded");
-                document.getElementById("cloudinary-publicid").value = result.info.url;
-                //cheechuen - add onemore thumbnail url = result.info.thumbnail.url
-                
-            }
-        }
-    )
-
-    document.getElementById("btnUpload").addEventListener("click", function () {
-        uploadImageWidget.open();
-    }, false);
-</script>
-<!--chee chuen: how to properly put js? -->
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- cloudinary api -->
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+    <script>cloudinary.setCloudName("jomn9-com")</script>
     <script type="text/javascript">
-       
-       function createCategory() {
+        var counter = 1;
+
+        $("#new-subcategory").on("click", function () {
+            var newRow = $("<tr>");
+            var cols = "";
+            LstSubCategory_0__CategoryCode
+            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryCode" name="LstSubCategory[' + counter + '].CategoryCode" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryName" name="LstSubCategory[' + counter + '].CategoryName" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryNameMs" name="LstSubCategory[' + counter + '].CategoryNameMs" type="text" value=""></td>'
+            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryNameZh" name="LstSubCategory[' + counter + '].CategoryNameZh" type="text" value=""></td>'
+            cols += '<td> <button type="button" class="btn btn-danger btnDelete">Delete</button></td> '
+            cols += '<td> <input class="isDelete d-none" data-val="true" id="LstSubCategory_' + counter + '__IsDeleted" name="LstSubCategory[' + counter + '].IsDeleted" type="hidden" value=""></td>';
+
+            $('#LstSubCategory_' + counter + '__CategoryImageUrl').val("");
+            $('#LstSubCategory_' + counter + '__CategoryThumbnailUrl').val("");
+
+            newRow.append(cols);
+            $(".tb-subcategory").append(newRow);
+            counter++;
+        });
+
+        $(".tb-subcategory").on("click", ".btnDelete", function (event) {
+            $(this).closest("tr").addClass("d-none");
+            $(this).closest("tr").find('.isDelete').val("true");
+        });
+
+        var uploadImageWidget = cloudinary.createUploadWidget(
+            {
+                ucloudname: 'jomn9-com',
+                uploadPreset: 'ox3azzqe',
+                apiKey: '731121621859821',
+                folder: 'category_thumbnail',
+                sources: ["local", "url", "image_search"],
+                googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
+                searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
+                searchByRights: true,
+                cropping: true,
+                croppingAspectRatio: 1,
+                resourceType: ["image"],
+                clientAllowedFormats: ["png", "jpg", "jpeg"],
+                minImageWidth: 100,
+                minImageHeight: 100,
+                autoMinimize: true,
+                showSkipCropButton: false,
+
+
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                    debugger;
+                    console.log("Image uploaded");
+                    $("#imageUrl").val(result.info.url);
+                    $("#thumbnailUrl").val(result.info.thumbnail_url);
+                    $("#imageName").val(result.info.original_filename + "." + result.info.format);
+                }
+            }
+        )
+
+        $("#btnUpload").on("click", function () {
+            uploadImageWidget.open();
+        });
+
+        function createCategory() {
             debugger;
-           var data = $('#FormCreate').serialize();
+            var data = $('#FormCreate').serialize();
 
             if ($("#FormCreate").valid()) {
-                 $.ajax({
-                        //TODO add [ValidateAntiForgeryToken]
-                        url: "/Category/Create/",
-                        data: data,
-                        type: "POST",
-                        success: (function (data) {
-                            if (data == 1) {
-                                sweetAlert({
-                                    title: "Created",
-                                    text: "Category has been created successfully!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.href = '/category';
-                                    });
-                            }
-                        }), error: (function (data) {
+                $.ajax({
+                    //TODO add [ValidateAntiForgeryToken]
+                    url: "/Category/Create/",
+                    data: data,
+                    type: "POST",
+                    success: (function (data) {
+                        if (data == 1) {
+                            sweetAlert({
+                                title: "Created",
+                                text: "Category has been created successfully!",
+                                type: "success"
+                            },
+                                function () {
+                                    window.location.href = '/category';
+                                });
+                        } else if (data == -4) {
+                            swal("Validation Failed", "Please key in all the fields with correct values.", "error");
+                        }
+                        else {
                             swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                        })
+                        }
+                    }), error: (function (data) {
+                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                     })
-            }           
+                })
+            }
         }
 
-
-        //$("#btnUpload").click(function () {
-        //    $("#btnUpload_hidden").click();
-        //});
-
-        //$("btnUpload_hidden").change(function () {
-        //    readURL(this);
-        //});
-
-        //function readURL(input) {
-        //    if (input.files && input.files[0]) {
-        //        var reader = new FileReader();
-
-        //        reader.onload = function (e) {
-        //            $('#profile-img-tag').attr('src', e.target.result);
-        //        }
-        //        reader.readAsDataURL(input.files[0]);
-        //    }
-        //}
     </script>
 }
