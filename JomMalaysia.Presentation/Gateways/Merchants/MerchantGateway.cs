@@ -57,7 +57,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
 
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
+                var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
                 var method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method, auth);
 

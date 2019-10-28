@@ -1,15 +1,26 @@
+using System;
+
 namespace JomMalaysia.Presentation.Models.Common
 {
     public class Address
     {
 
-        public string add1 { get; set; }
-        public string add2 { get; set; }
-        public string city { get; set; }
-        public string state { get; set; }
-        public string postalCode { get; set; }
-        public string country { get; set; }
-        public Location location { get; set; }
+        public string Add1 { get; set; }
+        public string Add2 { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
+        public Location Location { get; set; }
 
+        public override string ToString()
+        {
+            var formatted = String.Format("{0} {1} \n{2} {3} {4} {5}",
+                Add1,
+                (!string.IsNullOrEmpty(Add2) ? Add2 : ""),
+                PostalCode, City, State, Country
+                );
+            return formatted;
+        }
     }
 }
