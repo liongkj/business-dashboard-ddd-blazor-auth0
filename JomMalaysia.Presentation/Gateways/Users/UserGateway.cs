@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace JomMalaysia.Presentation.Gateways.User
+namespace JomMalaysia.Presentation.Gateways.Users
 {
     public class UserGateway : IUserGateway
     {

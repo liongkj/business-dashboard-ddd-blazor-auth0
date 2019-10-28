@@ -1,4 +1,4 @@
-﻿@model IEnumerable<JomMalaysia.Presentation.Models.Listings.ListingViewModel>
+﻿@model IEnumerable<JomMalaysia.Presentation.Models.Listings.Listing>
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutModal.cshtml";
@@ -27,9 +27,9 @@
                             </div>*@
                     </td>
                     <td>@item.ListingName</td>
-                    <td>@item.Merchant.companyName</td>
-                    <td>@item.ListingType</td>
-                    <td>@item.Status</td>
+                    <td>@item.Merchant.CompanyName</td>
+                    <td>@item.ListingType.Name</td>
+                    <td>@item.PublishStatus.Status.Name</td>
                     <td>check box</td>
                 </tr>
             }

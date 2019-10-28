@@ -5,8 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.WebServices;
-using JomMalaysia.Presentation.Gateways.Category;
-using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +17,7 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly ICategoryGateway _gateway;
 
-        private static List<CategoryViewModel> CategoryList { get; set; }
+        private static List<Category> CategoryList { get; set; }
         private static Boolean refresh = false;
         public CategoryController(ICategoryGateway gateway)
         {
@@ -33,12 +32,12 @@ namespace JomMalaysia.Presentation.Controllers
                 CategoryList = await GetCategories();
             else
             {
-                CategoryList = new List<CategoryViewModel>();
+                CategoryList = new List<Category>();
             }
         }
 
 
-        async Task<List<CategoryViewModel>> GetCategories()
+        async Task<List<Category>> GetCategories()
         {
             if (CategoryList.Count > 0 && !refresh)
             {
@@ -73,7 +72,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<int> Create(CategoryViewModel vm)
+        public async Task<int> Create(Category vm)
         {
             //handle statuscode = 0; handle bad request
             int message = 0;
@@ -107,15 +106,15 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public ViewResult Edit(String categoryId)
         {
-            CategoryViewModel categoryViewModel = new CategoryViewModel();
+            Category category = new Category();
 
-            categoryViewModel = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
+            category = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
 
-            return View(categoryViewModel);
+            return View(category);
         }
 
         [HttpPost]
-        public async Task<int> Edit(CategoryViewModel categoryViewModel)
+        public async Task<int> Edit(Category category)
         {
             int message = 0;
             IWebServiceResponse response;
@@ -124,7 +123,7 @@ namespace JomMalaysia.Presentation.Controllers
                 try
                 {
                     // remove subcategory if category.lstCategory[i].isDeleted = true
-                    response = await _gateway.EditCategory(categoryViewModel).ConfigureAwait(false);
+                    response = await _gateway.EditCategory(category).ConfigureAwait(false);
                 }
                 catch (Exception e)
                 {

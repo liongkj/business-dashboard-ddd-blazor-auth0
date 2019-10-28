@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
 
-namespace JomMalaysia.Presentation.Gateways.Listing
+namespace JomMalaysia.Presentation.Gateways.Listings
 {
     public class ListingGateway : IListingGateway
     {
@@ -33,15 +33,15 @@ namespace JomMalaysia.Presentation.Gateways.Listing
             auth = _authorizationManagers.accessToken;
         }
 
-        public async Task<IWebServiceResponse> CreateListing(ListingViewModel vm)
+        public async Task<IWebServiceResponse> CreateListing(Listing vm)
         {
-            IWebServiceResponse<ListingViewModel> response;
+            IWebServiceResponse<Listing> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
 
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListingViewModel>(req, method, auth);
+                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth);
             }
             catch (GatewayException ex)
             {
@@ -54,16 +54,16 @@ namespace JomMalaysia.Presentation.Gateways.Listing
 
         }
 
-        public async Task<List<ListingViewModel>> GetListings()
+        public async Task<List<Listing>> GetListings()
         {
-            List<ListingViewModel> result = new List<ListingViewModel>();
-            IWebServiceResponse<ListingListViewModel> response = default;
+            List<Listing> result = new List<Listing>();
+            IWebServiceResponse<List<Listing>> response = default;
 
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListingListViewModel>(req, method, auth);
+                response = await _webServiceExecutor.ExecuteRequestAsync<List<Listing>>(req, method, auth);
 
             }
             catch (GatewayException ex)
@@ -72,7 +72,7 @@ namespace JomMalaysia.Presentation.Gateways.Listing
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var listings = response.Data.Data;
+                var listings = response.Data;
                 foreach (var list in listings)
                 {
                     result.Add(list);

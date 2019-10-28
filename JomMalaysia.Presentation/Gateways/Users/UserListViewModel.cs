@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JomMalaysia.Presentation.Models.AppUsers;
 
-namespace JomMalaysia.Presentation.Gateways.User
+namespace JomMalaysia.Presentation.Gateways.Users
 {
     public class UserListResponse
     {

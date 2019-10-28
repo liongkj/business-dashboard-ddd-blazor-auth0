@@ -6,7 +6,7 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 
-namespace JomMalaysia.Presentation.Gateways.User
+namespace JomMalaysia.Presentation.Gateways.Users
 {
     public interface IUserGateway
     {

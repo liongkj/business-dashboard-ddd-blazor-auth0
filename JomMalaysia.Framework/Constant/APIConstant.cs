@@ -17,6 +17,8 @@ namespace JomMalaysia.Framework.Constant
                 public const string Image = "api/Images";
 
                 public const string User = "api/Users";
+
+                public const string Merchant = "api/Merchants";
             }
         }
     }

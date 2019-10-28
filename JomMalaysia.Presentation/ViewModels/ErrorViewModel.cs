@@ -1,6 +1,6 @@
 using System;
 
-namespace JomMalaysia.Presentation.Models.Common
+namespace JomMalaysia.Presentation.ViewModels
 {
     public class ErrorViewModel
     {

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using JomMalaysia.Presentation.Gateways.Category;
 using JomMalaysia.Presentation.Models.Common;
 
 namespace JomMalaysia.Presentation.Models.Categories
 {
-    public class CategoryViewModel
+    public class Category
     {
-        public CategoryViewModel() { }
-
         public String CategoryId { get; set; }
 
         [Required]
@@ -38,8 +35,8 @@ namespace JomMalaysia.Presentation.Models.Categories
         [Display(Name = "Display Image")]
         public Image CategoryImage { get; set; }
 
-        public CategoryPathViewModel CategoryPath { get; set; }
-        public List<CategoryViewModel> LstSubCategory { get; set; }
+        public CategoryPath CategoryPath { get; set; }
+        public List<Category> LstSubCategory { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsSelected { get; set; }

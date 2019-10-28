@@ -6,70 +6,62 @@ using Microsoft.AspNetCore.Mvc;
 using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
 using JomMalaysia.Presentation.Models.Merchants;
+using JomMalaysia.Presentation.Gateways.Merchants;
 
 namespace JomMalaysia.Presentation.Controllers
 {
     // [Authorize("read:merchant")] auth:enable this
     public class MerchantController : Controller
     {
-        private Merchant merchant;
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Index()
+        private readonly IMerchantGateway _gateway;
+
+        private List<Merchant> ListingList { get; set; }
+
+        #region gateway helper
+        public MerchantController(IMerchantGateway gateway)
         {
-            List<Merchant> merchantList = new List<Merchant>();
-            Merchant mct;
-            for (int i = 0; i < 5; i++)
+            _gateway = gateway;
+
+            Refresh();
+        }
+
+        async void Refresh()
+        {
+            if (ListingList != null)
+                ListingList = await GetMerchants();
+            else
             {
-                mct = new Merchant();
-                mct.ssmID = "" + i;
-                mct.companyName = "Test company";
-                mct.companyAddress = " Test Company address";
-                mct.merchantName = " test merchant name";
-                mct.contactNumber = "01232423423";
-
-                merchantList.Add(mct);
-
+                ListingList = new List<Merchant>();
             }
-
-            return View(merchantList);
         }
 
-        // [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create(Merchant merchant)
+
+
+        // GET: Listing
+        async Task<List<Merchant>> GetMerchants()
         {
-            if (ModelState.IsValid)
+            if (ListingList.Count > 0)
             {
-
+                return ListingList;
             }
-
-            // update student to the database
-
-            return View();
+            try
+            {
+                ListingList = await _gateway.GetMerchants().ConfigureAwait(false);
+                return ListingList;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
-        public ActionResult Edit(Merchant std)
+        #endregion
+        // GET: /<controller>/
+        public async Task<IActionResult> Index()
         {
+            var merchants = await GetMerchants();
 
-            // update student to the database
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpDelete]
-        public ActionResult Delete(Merchant merchant)
-        {
-
-            // delete student from the database whose id matches with specified id
-
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult Publish(int id)
-        {
-            // delete student from the database whose id matches with specified id
-
-            return RedirectToAction("Index");
+            return View(merchants);
         }
     }
 }

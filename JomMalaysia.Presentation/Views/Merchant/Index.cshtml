@@ -44,18 +44,11 @@
                 @foreach (var item in Model)
             {
                 <tr>
-                    <td>
-                        <input type="checkbox" asp-for="@item.selected" />
-                        @*<div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chkdt1" checked="">
-                                <label class="custom-control-label" for="customCheck1"></label>
-                            </div>*@
-                    </td>
-                    <td>@item.ssmID</td>
-                    <td>@item.companyName</td>
-                    <td>@item.companyAddress</td>
-                    <td>@item.merchantName</td>
-                    <td>@item.contactNumber</td>
+                    
+                    <td>@item.CompanyRegistration.SsmId</td>
+                    <td>@item.CompanyRegistration.RegistrationName</td>
+                    <td>@item.Address</td>
+                    <td>@item.Contacts[0]</td>
                 </tr>
             }
             </tbody>

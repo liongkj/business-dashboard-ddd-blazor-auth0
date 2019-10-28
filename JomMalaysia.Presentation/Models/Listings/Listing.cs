@@ -10,18 +10,18 @@ using Newtonsoft.Json;
 
 namespace JomMalaysia.Presentation.Models.Listings
 {
-    public class ListingViewModel
+    public class Listing
     {
         public string ListingId { get; set; }
-        public CategoryPathViewModel Category { get; set; }
-        public MerchantViewModel Merchant { get; set; }
+        public CategoryPath Category { get; set; }
+        public ListingMerchant Merchant { get; set; }
         public string ListingName { get; set; }
         public string Description { get; set; }
-        public List<string> Gags { get; set; }
+        public List<string> Tags { get; set; }
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
         public PublishStatus PublishStatus { get; set; }
-        public string ListingType { get; set; }
+        public ListingType ListingType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
@@ -39,14 +39,10 @@ namespace JomMalaysia.Presentation.Models.Listings
             public string OpenTime { get; set; }
             public string CloseTime { get; set; }
         }
+    }
 
-
-
-
-
-
-
-
-
+    public class ListingType
+    {
+        public string Name { get; set; }
     }
 }

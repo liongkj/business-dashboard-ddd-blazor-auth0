@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JomMalaysia.Framework.Configuration;
-using JomMalaysia.Framework.Constant;
-using JomMalaysia.Framework.WebServices;
-using JomMalaysia.Presentation.Gateways.User;
-using JomMalaysia.Presentation.Manager;
-using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Gateways.Users;
 using JomMalaysia.Presentation.Models.AppUsers;
-using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Mvc;
-using RestSharp;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

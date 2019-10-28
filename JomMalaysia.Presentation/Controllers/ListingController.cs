@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using JomMalaysia.Presentation.Gateways.Listing;
-using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Models.Listings;
+using JomMalaysia.Presentation.ViewModels.Listings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +15,7 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly IListingGateway _gateway;
 
-        private List<ListingViewModel> ListingList { get; set; }
+        private List<Listing> ListingList { get; set; }
 
         #region gateway helper
         public ListingController(IListingGateway gateway)
@@ -31,14 +31,14 @@ namespace JomMalaysia.Presentation.Controllers
                 ListingList = await GetListings();
             else
             {
-                ListingList = new List<ListingViewModel>();
+                ListingList = new List<Listing>();
             }
         }
 
 
 
         // GET: Listing
-        async Task<List<ListingViewModel>> GetListings()
+        async Task<List<Listing>> GetListings()
         {
             if (ListingList.Count > 0)
             {
