@@ -13,6 +13,7 @@ namespace JomMalaysia.Presentation.Models.AppUsers
         public string Role { get; set; }
         public string PictureUri { get; set; }
         public DateTime LastLogin { get; set; }
+        public bool HasAuthority { get; set; }
     }
 
 

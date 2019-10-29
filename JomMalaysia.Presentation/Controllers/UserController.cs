@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Users;
+using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +13,17 @@ namespace JomMalaysia.Presentation.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IAuthorizationManagers _auth;
 
         private readonly IUserGateway _gateway;
         private static List<AppUser> UserList { get; set; }
 
         private static Boolean refresh = false;
 
-        public UserController(IUserGateway userGateway)
+        public UserController(IUserGateway userGateway, IAuthorizationManagers authorization)
         {
             _gateway = userGateway;
+            _auth = authorization;
             Refresh();
         }
         async void Refresh()
@@ -35,10 +38,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         async Task<List<AppUser>> GetUsers()
         {
-            if (UserList.Count > 0 && !refresh)
-            {
-                return UserList;
-            }
+
             try
             {
                 UserList = await _gateway.GetAll().ConfigureAwait(false);
@@ -55,7 +55,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-
+            ViewData["Role"] = _auth.LoginInfo.Role;
             var users = await GetUsers();
 
             return View(users);

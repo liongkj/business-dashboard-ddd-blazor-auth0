@@ -5,6 +5,7 @@ using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
+using System.Security.Claims;
 
 namespace JomMalaysia.Presentation.Manager
 {
@@ -44,7 +45,7 @@ namespace JomMalaysia.Presentation.Manager
 
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
                 userInfo.UserId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value).FirstOrDefault();
-                userInfo.Role = claims.Where(c => c.Type == ConstantHelper.Claims.role).Select(c => c.Value).FirstOrDefault();
+                userInfo.Role = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
                 return userInfo;
             }
         }
