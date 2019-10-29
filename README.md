@@ -15,6 +15,6 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 - [ ] Workflow gateway
 - [x] Merchant gateway
 
-- [ ] Fix auth0 claims
+- [x] Fix auth0 claims
 
 * [ ] Google Map Geocoding in Add listing page

@@ -8,6 +8,7 @@ using Auth0.AuthenticationApi;
 using Auth0.AuthenticationApi.Models;
 using JomMalaysia.Framework.Configuration;
 using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Models;
 using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authentication;
@@ -70,14 +71,9 @@ namespace JomMalaysia.Presentation.Controllers
                     var jsonToken = handler.ReadToken(result.AccessToken);
 
                     var tokenS = handler.ReadToken(result.AccessToken) as JwtSecurityToken;
-                    var role = tokenS.Claims.Where(c => c.Type == _appSetting.AdditionalClaimsRoles).FirstOrDefault().ToString();
-                    var permission = tokenS.Claims.Where(c => c.Type == "permissions").ToList();
-                    //var role = tokenS.Payload.Values[_appSetting.AdditionalClaimsRoles].Values<String>().ToList();
-                    String permissionClaim = String.Empty;
-                    permission.ForEach(c =>
-                    {
-                        permissionClaim = permissionClaim + " " + c.Value;
-                    });
+                    var role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+
+
 
                     // Create claims principal
                     var claims = new List<Claim>
@@ -87,12 +83,11 @@ namespace JomMalaysia.Presentation.Controllers
                         new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString()),
                         new Claim(ConstantHelper.Claims.userId, user.UserId),
                         new Claim(ConstantHelper.Claims.name, user.FullName),
-                        new Claim(ConstantHelper.Claims.scope, permissionClaim, "string", tokenS.Issuer),
+                        new Claim(ClaimTypes.Role,role)
 
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
                     // Sign user into cookie middleware
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
@@ -103,8 +98,8 @@ namespace JomMalaysia.Presentation.Controllers
                     ModelState.AddModelError("", e.Message);
                 }
             }
-            return RedirectToLocal(vm.returnURL); //auth: disable this
-            // return View(vm); //auth:enable this
+            // return RedirectToLocal(vm.returnURL); //auth: disable this
+            return View(vm); //auth:enable this to bypass
         }
 
         public async Task<IActionResult> Logout()
@@ -112,6 +107,11 @@ namespace JomMalaysia.Presentation.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return RedirectToAction(nameof(AccountController.Login), "Account");
+        }
+
+        public IActionResult Claims()
+        {
+            return View();
         }
 
         #region Helpers

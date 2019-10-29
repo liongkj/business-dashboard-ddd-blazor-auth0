@@ -46,6 +46,8 @@ namespace JomMalaysia.Presentation.Manager
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
                 userInfo.UserId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value).FirstOrDefault();
                 userInfo.Role = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+
+                userInfo.Name = claims.Where(c => c.Type == ConstantHelper.Claims.name).Select(c => c.Value).FirstOrDefault();
                 return userInfo;
             }
         }

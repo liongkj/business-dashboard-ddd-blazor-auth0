@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Users;
 using JomMalaysia.Presentation.Manager;
@@ -55,10 +56,19 @@ namespace JomMalaysia.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Role"] = _auth.LoginInfo.Role;
-            var users = await GetUsers();
+            if (User.Identity.IsAuthenticated)
+            {
+                AppUser user = new AppUser
+                {
+                    Name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
+                    Role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
+                };
+                return View(user);
+            }
+            // ViewData["Role"] = _auth.LoginInfo.Role;
+            // var users = await GetUsers();
+            return View();
 
-            return View(users);
         }
     }
 }

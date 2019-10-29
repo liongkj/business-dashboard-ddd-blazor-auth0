@@ -14,7 +14,7 @@ namespace JomMalaysia.Framework.Constant
             public static string expiry = "expiry";
             public static string name = "name";
             public static string scope = "scope";
-            public static string role = "role";
+            public static string role = "https://jomn9.com/roles";
             public static string permission = "permissions";
         }
     }
