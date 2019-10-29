@@ -24,9 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                @{ var count = 0; }
-
-                @foreach (var item in Model)
+               @foreach (var item in Model)
                 {
                     <tr class=@(item.HasAuthority?"table-primary":"table-secondary")>
                         <td>@item.Username</td>
@@ -36,8 +34,6 @@
                             <a href='@Url.Action("Index", "Home")' class=''></a>
                         </td>
                     </tr>
-
-                    count += 1;
                 }
 
             </tbody>

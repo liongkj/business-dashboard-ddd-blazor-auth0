@@ -56,18 +56,10 @@ namespace JomMalaysia.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                AppUser user = new AppUser
-                {
-                    Name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
-                    Role = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
-                };
-                return View(user);
-            }
-            // ViewData["Role"] = _auth.LoginInfo.Role;
-            // var users = await GetUsers();
-            return View();
+
+            ViewData["Role"] = _auth.LoginInfo.Role;
+            var users = await GetUsers();
+            return View(users);
 
         }
     }
