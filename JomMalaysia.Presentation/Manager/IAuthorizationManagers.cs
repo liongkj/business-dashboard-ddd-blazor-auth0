@@ -1,4 +1,5 @@
 ﻿
+using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 
 namespace JomMalaysia.Presentation.Manager
@@ -9,6 +10,6 @@ namespace JomMalaysia.Presentation.Manager
 
         string refreshToken { get; }
 
-        UserInfoViewModel LoginInfo { get; }
+        AppUser LoginInfo { get; }
     }
 }

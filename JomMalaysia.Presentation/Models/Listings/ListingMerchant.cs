@@ -4,5 +4,6 @@ namespace JomMalaysia.Presentation.Models.Listings
     {
         public string MerchantId { get; set; }
         public string CompanyName { get; set; }
+        public string SsmId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.Models;
+using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -35,17 +36,15 @@ namespace JomMalaysia.Presentation.Manager
             }
         }
 
-        public UserInfoViewModel LoginInfo
+        public AppUser LoginInfo
         {
             get
             {
-                UserInfoViewModel userInfo = new UserInfoViewModel();
+                AppUser userInfo = new AppUser();
 
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
-                userInfo.userId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value).FirstOrDefault();
-                userInfo.name = claims.Where(c => c.Type == ConstantHelper.Claims.name).Select(c => c.Value).FirstOrDefault();
-                userInfo.scope = claims.Where(c => c.Type == ConstantHelper.Claims.scope).Select(c => c.Value).FirstOrDefault();
-                userInfo.role = claims.Where(c => c.Type == ConstantHelper.Claims.role).Select(c => c.Value).FirstOrDefault();
+                userInfo.UserId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value).FirstOrDefault();
+                userInfo.Role = claims.Where(c => c.Type == ConstantHelper.Claims.role).Select(c => c.Value).FirstOrDefault();
                 return userInfo;
             }
         }

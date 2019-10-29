@@ -1,3 +1,5 @@
+using JomMalaysia.Framework.Helper;
+
 namespace JomMalaysia.Presentation.Models.Common
 {
 
@@ -8,7 +10,7 @@ namespace JomMalaysia.Presentation.Models.Common
 
         public override string ToString()
         {
-            return FirstName.ToUpperInvariant() + LastName.ToUpperInvariant();
+            return StringHelper.CapitalizeOrConvertNullToEmptyString(FirstName) + " " + StringHelper.CapitalizeOrConvertNullToEmptyString(LastName);
         }
     }
 }

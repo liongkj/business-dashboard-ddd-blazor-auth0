@@ -6,7 +6,7 @@ namespace JomMalaysia.Presentation.Models.Common
 
         public override string ToString()
         {
-            return Number.Substring(3, Number.Length - 3);
+            return Number.Substring(4, Number.Length - 4);
         }
     }
 }

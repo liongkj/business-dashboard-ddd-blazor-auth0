@@ -14,7 +14,7 @@ namespace JomMalaysia.Presentation.Controllers
     {
 
         private readonly IUserGateway _gateway;
-        private static List<UserViewModel> UserList { get; set; }
+        private static List<AppUser> UserList { get; set; }
 
         private static Boolean refresh = false;
 
@@ -29,11 +29,11 @@ namespace JomMalaysia.Presentation.Controllers
                 UserList = await GetUsers();
             else
             {
-                UserList = new List<UserViewModel>();
+                UserList = new List<AppUser>();
             }
         }
 
-        async Task<List<UserViewModel>> GetUsers()
+        async Task<List<AppUser>> GetUsers()
         {
             if (UserList.Count > 0 && !refresh)
             {

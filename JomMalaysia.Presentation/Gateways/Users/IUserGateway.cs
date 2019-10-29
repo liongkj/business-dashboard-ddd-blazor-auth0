@@ -10,8 +10,8 @@ namespace JomMalaysia.Presentation.Gateways.Users
 {
     public interface IUserGateway
     {
-        Task<List<UserViewModel>> GetAll();
-        Task<IWebServiceResponse> Add(UserViewModel vm);
+        Task<List<AppUser>> GetAll();
+        Task<IWebServiceResponse> Add(RegisterUserViewModel vm);
         Task<IWebServiceResponse> Delete(string CategoryName);
     }
 }

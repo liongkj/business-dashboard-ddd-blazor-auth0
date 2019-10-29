@@ -55,15 +55,15 @@ namespace JomMalaysia.Presentation.Gateways.Users
         //         return View();
         //     }
         // }
-        public async Task<IWebServiceResponse> Add(UserViewModel vm)
+        public async Task<IWebServiceResponse> Add(RegisterUserViewModel vm)
         {
-            IWebServiceResponse<UserInfoViewModel> response;
+            IWebServiceResponse<RegisterUserViewModel> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
 
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<UserInfoViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<RegisterUserViewModel>(req, method, _authorizationManagers.accessToken);
             }
             catch (GatewayException ex)
             {
@@ -76,9 +76,9 @@ namespace JomMalaysia.Presentation.Gateways.Users
 
         }
 
-        public async Task<List<UserViewModel>> GetAll()
+        public async Task<List<AppUser>> GetAll()
         {
-            List<UserViewModel> result = new List<UserViewModel>();
+            List<AppUser> result = new List<AppUser>();
             IWebServiceResponse<UserListResponse> response = default;
 
             try
@@ -112,7 +112,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
                 var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.User))}/{userId}";
 
                 var method = Method.DELETE;
-                response = await _webServiceExecutor.ExecuteRequestAsync<UserViewModel>(req, method, _authorizationManagers.accessToken);
+                response = await _webServiceExecutor.ExecuteRequestAsync<User>(req, method, _authorizationManagers.accessToken);
             }
             catch (GatewayException ex)
             {

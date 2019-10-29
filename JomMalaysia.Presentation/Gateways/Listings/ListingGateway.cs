@@ -57,13 +57,13 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         public async Task<List<Listing>> GetListings()
         {
             List<Listing> result = new List<Listing>();
-            IWebServiceResponse<List<Listing>> response = default;
+            IWebServiceResponse<ListViewModel<Listing>> response = default;
 
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<List<Listing>>(req, method, auth);
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth);
 
             }
             catch (GatewayException ex)
@@ -72,7 +72,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                var listings = response.Data;
+                var listings = response.Data.Data;
                 foreach (var list in listings)
                 {
                     result.Add(list);
