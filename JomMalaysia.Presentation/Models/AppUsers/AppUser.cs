@@ -11,9 +11,10 @@ namespace JomMalaysia.Presentation.Models.AppUsers
         public string Email { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
-        public string PictureUri { get; set; }
-        public DateTime LastLogin { get; set; }
+        public string PictureUri { get; set; } 
+        public DateTime? LastLogin {get; set;}
         public bool HasAuthority { get; set; }
+        public bool Verified { get; set; }
     }
 
 

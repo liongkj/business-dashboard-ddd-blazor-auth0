@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Users;
@@ -34,7 +35,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
         async void Refresh()
         {
-            if (UserList != null)
+            if (UserList != null && !refresh)
                 UserList = await GetUsers();
             else
             {
@@ -95,38 +96,49 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<int> Create(RegisterUserViewModel vm)
+        public async Task<Tuple<int,string>> Create(RegisterUserViewModel vm)
         {
-            int message;
+            IWebServiceResponse response = null;
+
             if (ModelState.IsValid)
             {
-                
-                IWebServiceResponse response;
                 try
                 {
                     response = await _gateway.Add(vm).ConfigureAwait(false);
                 }
-                catch (Exception e)
+                catch (GatewayException e)
                 {
-                    throw e;
+                    return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
-                {
+                
                     refresh = true;
-                    message = GlobalConstant.RESPONSE_OK;
-                }
-                else
-                {
-                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
-                }
-
-
             }
-            else
+
+            return SweetDialogHelper.HandleResponse(response);
+        }
+
+
+        [HttpPost]
+        //TODO [ValidateAntiForgeryToken]
+        public async Task<Tuple<int, string>> ConfirmDelete(string UserId)
+        {
+            IWebServiceResponse response;
+
+            if (UserId == null) return SweetDialogHelper.HandleNotFound();
+            try
             {
-                message = GlobalConstant.RESPONSE_ERR_VALIDATION_FAILED;
+                response = await _gateway.Delete(UserId);
             }
-            return message;
+            catch (Exception e)
+            {
+                throw e;
+            }
+            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
+
+            return SweetDialogHelper.HandleResponse(response);
+
+
         }
     }
 }

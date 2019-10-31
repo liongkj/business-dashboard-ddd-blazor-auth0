@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.Merchants;

@@ -11,9 +11,10 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 - [x] troubleshoot add category not working
 
 - [x] User gateway
+- [x] Merchant gateway
 - [ ] Listing gateway
 - [ ] Workflow gateway
-- [x] Merchant gateway
+- [ ] Error handling
 
 - [x] Fix auth0 claims
 

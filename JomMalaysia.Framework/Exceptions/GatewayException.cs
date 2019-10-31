@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace JomMalaysia.Presentation.Gateways
+namespace JomMalaysia.Framework.Exceptions
 {
     public class GatewayException : Exception
     {

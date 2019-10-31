@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
@@ -100,16 +102,16 @@ namespace JomMalaysia.Presentation.Controllers
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     refresh = true;
-                    message = GlobalConstant.RESPONSE_OK;
+                    message = GlobalConstant.StatusCode.RESPONSE_OK;
                 }
                 else
                 {
-                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
+                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
                 }
             }
             else
             {
-                message = GlobalConstant.RESPONSE_ERR_VALIDATION_FAILED;
+                message = GlobalConstant.StatusCode.RESPONSE_ERR_VALIDATION_FAILED;
             }
 
             return message;
@@ -141,22 +143,22 @@ namespace JomMalaysia.Presentation.Controllers
                 catch (Exception e)
                 {
                     //should change message to string. pass exception details.
-                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
+                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
                     throw e;
                 }
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     refresh = true;
-                    message = GlobalConstant.RESPONSE_OK;
+                    message = GlobalConstant.StatusCode.RESPONSE_OK;
                 }
                 else
                 {
-                    message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
+                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
                 }
             }
             else
             {
-                message = GlobalConstant.RESPONSE_ERR_VALIDATION_FAILED;
+                message = GlobalConstant.StatusCode.RESPONSE_ERR_VALIDATION_FAILED;
             }
 
 
@@ -185,14 +187,11 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
-        public async Task<int> ConfirmDelete(string CategoryId)
+        public async Task<Tuple<int,string>> ConfirmDelete(string CategoryId)
         {
-            int message = 0;
-
-            if (CategoryId == null) { message = GlobalConstant.RESPONSE_ERR_NOT_FOUND; }
-
             IWebServiceResponse response;
 
+            if (CategoryId == null) return SweetDialogHelper.HandleNotFound();
             try
             {
                 response = await _gateway.Delete(CategoryId);
@@ -201,27 +200,16 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 throw e;
             }
+            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                refresh = true;
-                message = GlobalConstant.RESPONSE_OK;
-            }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                message = GlobalConstant.RESPONSE_ERR_DEPENDENCY;
-            }
-            else
-            {
-                message = GlobalConstant.RESPONSE_ERR_UNKNOWN;
-            }
-            return message;
-
+            return SweetDialogHelper.HandleResponse(response);
+            
+    
         }
 
         /*  public ActionResult Constants()
           {
-              var constants = typeof(GlobalConstant)
+              var constants = typeof(GlobalConstant)StatusCode.
                   .GetFields()
                   .ToDictionary(x => x.Name, x => x.GetValue(null));
               var json = new JavaScriptSerializer().Serialize(constants);

@@ -18,20 +18,25 @@
             <thead class="table-primary">
 
                 <tr class="text-center">
-                    <th scope="col">Category Code</th>
-                    <th scope="col">Category Name</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Last Login</th>"
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                @foreach (var item in Model)
                 {
-                    <tr class=@(item.HasAuthority?"table-primary":"table-secondary")>
+                    <tr class=@(item.HasAuthority?"table-primary":"table-secondary disabled")>
                         <td>@item.Username</td>
+                        <td>@item.Email</td>
+                        <td>@item.Name</td>
                         <td>@(item.Role==null? "EDITOR":item.Role)</td>
-                        
+                        <td>@(item.LastLogin.HasValue ? item.LastLogin.Value.ToString("yy/MM/dd"):"Warning Icon")</td>
                         <td>
-                            <a href='@Url.Action("Index", "Home")' class=''></a>
+                            <input onclick="confirmDelete('@item.UserId', '@item.Username')" asp-for="@item.HasAuthority?" id="btnDelete" type="button" value="Delete" class="btn btn-danger col-md-5 offset-md-1" />
                         </td>
                     </tr>
                 }
@@ -48,11 +53,11 @@
     <script type="text/javascript">
 
        
-        function deleteCategory(catId, catName) {
+        function confirmDelete(userid, username) {
 
             swal({
                 title: "Are you sure?",
-                text: "Are you sure that you want to delete " + catName + "?",
+                text: "Are you sure that you want to delete " + username + "?",
                 type: "warning",
                 showCancelButton: true,
                 closeOnConfirm: false,
@@ -62,20 +67,20 @@
                 function () {
                     $.ajax({
                         //TODO add [ValidateAntiForgeryToken]
-                        url: "/Category/ConfirmDelete/",
+                        url: "/User/ConfirmDelete/",
                         data: {
-                            "CategoryId": catId
+                            "UserId": userid
                         },
                         type: "POST",
                         success: (function (data) {
                             if (data == 1) {
                                 sweetAlert({
                                     title: "Deleted",
-                                    text: catName + " has been deleted successfully!",
+                                    text: username + " has been deleted successfully!",
                                     type: "success"
                                 },
                                     function () {
-                                        window.location.href = '/category';
+                                        window.location.href = '/user';
                                     });
                             }
                             else if (data == -2) {

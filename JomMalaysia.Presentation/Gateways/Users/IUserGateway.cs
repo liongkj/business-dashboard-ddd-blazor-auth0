@@ -12,6 +12,6 @@ namespace JomMalaysia.Presentation.Gateways.Users
     {
         Task<List<AppUser>> GetAll();
         Task<IWebServiceResponse> Add(RegisterUserViewModel vm);
-        Task<IWebServiceResponse> Delete(string CategoryName);
+        Task<IWebServiceResponse> Delete(string UserId);
     }
 }

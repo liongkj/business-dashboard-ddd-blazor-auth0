@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
@@ -45,10 +46,20 @@ namespace JomMalaysia.Presentation.Gateways.Users
                 var method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<RegisterUserViewModel>(req, method, _authorizationManagers.accessToken,vm);
             }
+
+
             catch (GatewayException ex)
             {
                 throw ex;
             }
+            //if (response.StatusCode == HttpStatusCode.OK)
+            //{
+            //    result = response.Data;
+            //}
+            //else
+            //{
+            //    throw new ProcessException(response.StatusCode, ConstantHelper.Error.Common.WebServiceError);
+            //}
             return response;
 
 
@@ -59,8 +70,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
         public async Task<List<AppUser>> GetAll()
         {
             List<AppUser> result = new List<AppUser>();
-            IWebServiceResponse<UserListResponse> response = default;
-
+            IWebServiceResponse<UserListResponse> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.User));
