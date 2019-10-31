@@ -20,10 +20,9 @@ namespace JomMalaysia.Framework.WebServices
                 JsonSerializer = NewtonsoftJsonSerializer.Default,
                 Timeout = TimeSpan.FromMinutes(60).Milliseconds
             };
-            //if (accesstoken != null) request.AddHeader("Authorization", $"Bearer {accesstoken}");
             foreach (var obj in objects)
             {
-                request.AddBody(obj);
+                request.AddJsonBody(obj);
             }
             return request;
         }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Models.AppUsers;
-using JomMalaysia.Presentation.Models.Auth0;
+using JomMalaysia.Presentation.ViewModels.Users;
 
 namespace JomMalaysia.Presentation.Gateways.Users
 {
