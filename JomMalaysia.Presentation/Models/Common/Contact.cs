@@ -6,7 +6,7 @@ namespace JomMalaysia.Presentation.Models.Common
 
     {
         public Name Name { get; set; }
-        public Email Email { get; set; }
+        public string Email { get; set; }
         public Phone Phone { get; set; }
         public bool IsPrimary { get; set; }
 

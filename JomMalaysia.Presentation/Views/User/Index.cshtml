@@ -72,8 +72,8 @@
                             "UserId": userid
                         },
                         type: "POST",
-                        success: (function (data) {
-                            if (data == 1) {
+                        success: (function ({ item1, item2 }) {
+                            if (item1 == 1) {
                                 sweetAlert({
                                     title: "Deleted",
                                     text: username + " has been deleted successfully!",
@@ -83,15 +83,13 @@
                                         window.location.href = '/user';
                                     });
                             }
-                            else if (data == -2) {
-                                swal("Oops", "Subcategory has been created for this category. Please remove subcategory first.", "error");
-                            }
-                            else if (data == -3) {
-                                swal("Oops", "This category might have been deleted. Please refresh the page.", "error");
-                            }
                             else {
-                                swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                            }
+                            swal(
+                                "Oops",
+                                item2,
+                                "error"
+                            );
+                        }
                         }), error: (function (data) {
                             swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                         })

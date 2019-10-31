@@ -7,6 +7,7 @@ using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
 using JomMalaysia.Presentation.Models.Merchants;
 using JomMalaysia.Presentation.Gateways.Merchants;
+using JomMalaysia.Presentation.ViewModels.Merchants;
 
 namespace JomMalaysia.Presentation.Controllers
 {
@@ -15,8 +16,8 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly IMerchantGateway _gateway;
 
-        private List<Merchant> ListingList { get; set; }
-
+        private List<Merchant> Merchants { get; set; }
+        private Boolean refresh = false;
         #region gateway helper
         public MerchantController(IMerchantGateway gateway)
         {
@@ -27,27 +28,25 @@ namespace JomMalaysia.Presentation.Controllers
 
         async void Refresh()
         {
-            if (ListingList != null)
-                ListingList = await GetMerchants();
+            if (Merchants != null && !refresh)
+                Merchants = await GetMerchants();
             else
             {
-                ListingList = new List<Merchant>();
+                Merchants = new List<Merchant>();
             }
         }
-
-
 
         // GET: Listing
         async Task<List<Merchant>> GetMerchants()
         {
-            if (ListingList.Count > 0)
+            if (Merchants.Count > 0)
             {
-                return ListingList;
+                return Merchants;
             }
             try
             {
-                ListingList = await _gateway.GetMerchants().ConfigureAwait(false);
-                return ListingList;
+                Merchants = await _gateway.GetMerchants().ConfigureAwait(false);
+                return Merchants;
             }
             catch (Exception e)
             {
@@ -62,6 +61,12 @@ namespace JomMalaysia.Presentation.Controllers
             var merchants = await GetMerchants();
 
             return View(merchants);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new RegisterMerchantViewModel());
         }
     }
 }

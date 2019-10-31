@@ -1,23 +1,24 @@
-﻿@model JomMalaysia.Presentation.ViewModels.Merchants.CreateMerchant
+﻿@model JomMalaysia.Presentation.ViewModels.Merchants.RegisterMerchantViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Register New Merchant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
 <!--HEADER-->
+
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2" onclick="$('#btnSubmit').click()">New</button>
-    <button type="button" class="btn btn-primary col-md-2" onclick="window.location.href = '@Url.Action("Edit","Merchant")'">Edit</button>
-    <button type="button" class="btn btn-danger col-md-2" onclick="window.location.href = '@Url.Action("Delete","Merchant")'">Delete</button>
-    <button type="button" class="btn btn-secondary col-md-2" onclick="window.location.href = '@Url.Action("Publish","Merchant")'">Publish</button>
+    <button type="button" class="btn btn-success col-md-2" onclick="create()">Save</button>
+    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
 </div>
+<!--Mobile Buttons-->
 <div class="form-group col-md-12 no-padding d-sm-block d-md-none">
     <div class="btn-group col-sm-12 no-padding" role="group">
         <button type="button" class="btn btn-primary">Action</button>
         <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
             <a class="dropdown-item" onclick="$('#btnSubmit').click()">Save</a>
-            <a class="dropdown-item" onclick="window.location.href = '@Url.Action("Delete","Merchant")'">Cancel</a>
+            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Cancel</a>
         </div>
         <div id="action-button" class="btn-group" role="group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
@@ -26,44 +27,127 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-action="Create" class="form-m-gap-top">
+<form asp-controller="Merchant" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.SsmId)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.SsmId, new { @class = "form-control" })
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+            <input asp-for="SsmId" class="form-control" />
+            <span asp-validation-for="SsmId" class="text-danger" />
         </div>
     </div>
+
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CompanyRegistrationName)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CompanyRegistrationName, new { @class = "form-control" })
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+            <input asp-for="CompanyRegistrationName" class="form-control" />
+            <span asp-validation-for="CompanyRegistrationName" class="text-danger" />
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
-        </div>
-    </div>
-    
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Contacts[0])</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.Contacts[0], new { @class = "form-control" })
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
-        </div>
-    </div>
-    <button id="btnSubmit" type="submit"  class="d-none"></button>
-</form>
 
-<div>
-    <a class="d-flex justify-content-end" asp-action="Index">Back to List</a>
-</div>
+    <div class="form-group row">
+        <div class="col-8">
+            <!-- Form Name -->
+            <legend>Address Details</legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="textinput">Line 1</label>
+                <div class="col-sm-10">
+                    <input type="text" placeholder="Address Line 1" class="form-control">
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="textinput">Line 2</label>
+                <div class="col-sm-10">
+                    <input type="text" placeholder="Address Line 2" class="form-control">
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="textinput">City</label>
+                <div class="col-sm-10">
+                    <input type="text" placeholder="City" class="form-control">
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="textinput">State</label>
+                <div class="col-sm-4">
+                    <input type="text" placeholder="State" class="form-control">
+                </div>
+
+                <label class="col-sm-2 control-label" for="textinput">Postcode</label>
+                <div class="col-sm-4">
+                    <input type="text" placeholder="Post Code" class="form-control">
+                </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="textinput">Country</label>
+                <div class="col-sm-10">
+                    <input type="text" placeholder="Country" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            google maps
+        </div>
+    </div>
+
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+    function create() {
+        var data = $("#FormCreate").serialize();
+
+        if ($("#FormCreate").valid()) {
+            $.ajax({
+                //TODO add [ValidateAntiForgeryToken]
+                url: "/User/Create/",
+                data: data,
+                type: "POST",
+                success: function ({ item1, item2 }) {
+                    if (item1 == 1) {
+                        sweetAlert(
+                            {
+                                title: "User Created",
+                                text: "A new email is sent to user to activate their account",
+                                type: "success"
+                            },
+                            function () {
+                                window.location.href = "/user";
+                            }
+                        );
+
+
+                    } else {
+                        swal(
+                            "Oops",
+                            item2,
+                            "error"
+                        );
+                    }
+                },
+                error: function (xhr, err) {
+                    debugger
+                    swal(
+                        "Oops",
+                        "An unknown error occured! Please contact technical support.",
+                        "error"
+                    );
+                }
+            });
+        }
+    }
+
+</script>
 }

@@ -23,9 +23,9 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly IAuthorizationManagers _auth;
 
         private readonly IUserGateway _gateway;
-        private static List<AppUser> UserList { get; set; }
+        private  List<AppUser> UserList { get; set; }
 
-        private static Boolean refresh = false;
+        private  Boolean refresh = false;
 
         public UserController(IUserGateway userGateway, IAuthorizationManagers authorization)
         {
@@ -51,7 +51,7 @@ namespace JomMalaysia.Presentation.Controllers
                 UserList = await _gateway.GetAll().ConfigureAwait(false);
                 return UserList;
             }
-            catch (Exception e)
+            catch (GatewayException e)
             {
                 throw e;
             }
@@ -130,9 +130,9 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 response = await _gateway.Delete(UserId);
             }
-            catch (Exception e)
+            catch (GatewayException e)
             {
-                throw e;
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
             }
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
