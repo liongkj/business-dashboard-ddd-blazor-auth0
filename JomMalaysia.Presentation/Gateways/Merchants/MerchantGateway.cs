@@ -9,6 +9,7 @@ using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.Merchants;
+using JomMalaysia.Presentation.ViewModels.Merchants;
 using RestSharp;
 
 namespace JomMalaysia.Presentation.Gateways.Merchants
@@ -30,15 +31,15 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             auth = _authorizationManagers.accessToken;
         }
 
-        public async Task<IWebServiceResponse> CreateMerchant(Merchant vm)
+        public async Task<IWebServiceResponse> Add(RegisterMerchantViewModel vm)
         {
             IWebServiceResponse<Merchant> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
 
-                var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth);
+                var method = Method.POST;
+                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth,vm);
             }
             catch (GatewayException ex)
             {
@@ -54,8 +55,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
         public async Task<List<Merchant>> GetMerchants()
         {
             List<Merchant> result = new List<Merchant>();
-            IWebServiceResponse<ListViewModel<Merchant>> response = default;
-
+            IWebServiceResponse<ListViewModel<Merchant>> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));

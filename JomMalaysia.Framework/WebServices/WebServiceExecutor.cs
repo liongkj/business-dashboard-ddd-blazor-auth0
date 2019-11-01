@@ -90,7 +90,7 @@ namespace JomMalaysia.Framework.WebServices
             }
             else if (response.StatusCode != HttpStatusCode.OK)
             {
-               
+
                 // Business Exceptions
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -111,26 +111,30 @@ namespace JomMalaysia.Framework.WebServices
                         throw new GatewayException(response.StatusCode, msg);
                     }
                 }
-                
+                //others
+
+                // Business Exceptions
 
                 // Parse the content manually to get the error details (if any).
-                dynamic content = null;
+                dynamic badRequest = null;
                 try
                 {
-                    content = JObject.Parse(response.Content);
+                    badRequest = JObject.Parse(response.Content);
                 }
                 catch (Exception)
                 {
                     // Do nothing.
                 }
 
-                if (content != null && content.messageDetail != null)
+                if (badRequest != null && badRequest.message != null)
                 {
-                    string msg = content.messageDetail;
+                    string msg = badRequest.message;
                     throw new GatewayException(response.StatusCode, msg);
                 }
-            }
-        }
 
+
+            }
+
+        }
     }
 }

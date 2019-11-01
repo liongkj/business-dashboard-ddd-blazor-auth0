@@ -15,7 +15,7 @@ namespace JomMalaysia.Presentation.ViewModels.Users
         public string Name { get; set; }
 
         [Required]
-        [MinLength(5)]
+        [StringLength(15, MinimumLength = 5, ErrorMessage = "Username should be between 5 to 15 characters")]
         public string Username { get; set; }
 
         [Required]

@@ -90,7 +90,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 RoleList = _roles,
                 
-            Role = "editor",
+                Role = "editor",
             };
             return View(vm);
         }

@@ -1,17 +1,19 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace JomMalaysia.Presentation.Models.Common
 {
     public class Address
     {
-
+        [Required]
+        [Display(Name = "Address Line 1")]
         public string Add1 { get; set; }
         public string Add2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public Location Location { get; set; }
+        public Coordinates Coordinates { get; set; }
 
         public override string ToString()
         {

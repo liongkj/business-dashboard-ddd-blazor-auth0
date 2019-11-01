@@ -8,6 +8,11 @@ using Microsoft.AspNetCore.Authorization;
 using JomMalaysia.Presentation.Models.Merchants;
 using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.ViewModels.Merchants;
+using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Exceptions;
+using JomMalaysia.Framework.Helper;
+using System.Net;
+using JomMalaysia.Presentation.ViewModels.Common;
 
 namespace JomMalaysia.Presentation.Controllers
 {
@@ -67,6 +72,34 @@ namespace JomMalaysia.Presentation.Controllers
         public IActionResult Create()
         {
             return View(new RegisterMerchantViewModel());
+        }
+
+        [HttpPost]
+        public async Task<Tuple<int, string>> Create(RegisterMerchantViewModel vm)
+        {
+            IWebServiceResponse response = null;
+            vm.Contacts.Add(new ContactViewModel { 
+            Name="Liong Khai Jiet",
+            Email="khaijiet@hotmail.com",
+            Phone="0187627267"
+            });
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    response = await _gateway.Add(vm).ConfigureAwait(false);
+                }
+                catch (GatewayException e)
+                {
+                    return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+                }
+                if (response.StatusCode == HttpStatusCode.OK)
+
+                    refresh = true;
+            }
+
+            return SweetDialogHelper.HandleResponse(response);
         }
     }
 }
