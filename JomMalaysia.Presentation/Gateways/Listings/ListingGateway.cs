@@ -32,7 +32,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             if (_authorizationManagers != null) auth = _authorizationManagers.accessToken;
         }
 
-        public async Task<IWebServiceResponse> Add(CreateListingViewModel vm)
+        public async Task<IWebServiceResponse> Add(RegisterListingViewModel vm)
         {
             IWebServiceResponse<Listing> response;
             try

@@ -1,21 +1,80 @@
-﻿@model JomMalaysia.Presentation.ViewModels.Listings.CreateListingViewModel
+﻿@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
 <!--modal-->
-<div class="row">
-         <form asp-controller="Listing" asp-action="Create" method="post"
-               class="form-horizontal" role="form">
-             <h3 class="col-md-offset-2">New Listing</h3>
-             <div class="form-group">
-                 <label asp-for="ListingName" class="col-md-2 custom-control-label"/>
-                 <div class="col-md-6">
-                     <input asp-for="ListingName" class="form-control" />
+@{
+    ViewData["Title"] = "Create new Listing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-                 </div>
-             </div>
-             <div class="form-group">
-                 <div class="btn-group col-md-offset-2 col-md-6">
-                     <input class="btn btn-default" type="submit" value="Return">
-
-                 </div>
-             </div>
-         </form>
+<!--HEADER-->
+<div class="form-group col-md-12 no-padding d-none d-md-block">
+    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Back</button>
 </div>
+
+<!--Mobile Buttons-->
+<div class="form-group col-md-12 no-padding d-sm-block d-md-none">
+    <div class="btn-group col-sm-12 no-padding" role="group">
+        <button type="button" class="btn btn-primary">Action</button>
+        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+
+            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Back</a>
+        </div>
+        <div id="action-button" class="btn-group" role="group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        </div>
+    </div>
+</div>
+<!--END OF HEADER-->
+
+<form asp-controller="User" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
+        <div class="col-sm-10 col-md-6">
+            <input asp-for="ListingName" class="form-control" />
+            <span asp-validation-for="ListingName" class="text-danger" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
+        <div class="col-sm-10 col-md-6">
+            <textarea asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.MerchantId)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="MerchantId" asp-items="Model.MerchantList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="MerchantId" class="text-danger" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingType)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="ListingType" asp-items="Model.ListingTypeList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="ListingType" class="text-danger" />
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control"></select>
+            <span asp-validation-for="CategoryId" class="text-danger" />
+        </div>
+    </div>
+    
+    <button type="submit">Register</button>
+</form>
+
+@section Scripts{
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -3,24 +3,32 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using JomMalaysia.Framework.Helper;
+using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
+using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JomMalaysia.Presentation.Controllers
 {
     public class ListingController : Controller
     {
         private readonly IListingGateway _gateway;
+        private readonly IMerchantGateway _merchantGateway;
+        private readonly ICategoryGateway _categoryGateway;
 
         private List<Listing> ListingList { get; set; }
         private Boolean refresh = false;
         #region gateway helper
-        public ListingController(IListingGateway gateway)
+        public ListingController(IListingGateway gateway,IMerchantGateway merchantGateway,ICategoryGateway categoryGateway)
         {
             _gateway = gateway;
+            _merchantGateway = merchantGateway;
+            _categoryGateway = categoryGateway;
 
             Refresh();
         }
@@ -69,15 +77,54 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         // GET: Listing/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return PartialView(new CreateListingViewModel());
+            var _merchants = new List<SelectListItem>();
+            var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
+            
+            foreach (var m in merchants)
+            {
+                _merchants.Add(new SelectListItem
+                {
+                    Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
+                    Value = m.MerchantId
+                });
+            }
+            var _listingTypes = new List<SelectListItem>();
+            var listingTypes = ListingTypeHelper.GetTypeList();
+            
+            foreach (var m in listingTypes)
+            {
+                _listingTypes.Add(new SelectListItem
+                {
+                    Text = m,
+                    Value = m
+                }); ;
+            }
+            var _categories = new List<SelectListItem>();
+            var categories = (await _categoryGateway.GetCategories().ConfigureAwait(false)).Where(x => x.CategoryPath.Subcategory != null).OrderBy(x=>x.CategoryName);
+            foreach (var m in categories)
+            {
+                _categories.Add(new SelectListItem
+                {
+                    Text = $"{m.CategoryPath.Category} - {m.CategoryPath.Subcategory}",
+                    Value = m.CategoryId
+                }); ;
+            }
+            var vm = new RegisterListingViewModel()
+            {
+                CategoryList = _categories,
+                MerchantList = _merchants,
+
+                ListingTypeList = _listingTypes
+            };
+            return PartialView(vm);
         }
 
         // POST: Listing/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateListingViewModel vm)
+        public ActionResult Create(RegisterListingViewModel vm)
         {
             try
             {

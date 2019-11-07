@@ -13,6 +13,6 @@ namespace JomMalaysia.Presentation.Gateways.Listings
     public interface IListingGateway
     {
         Task<List<Listing>> GetAll();
-        Task<IWebServiceResponse> Add(CreateListingViewModel vm);
+        Task<IWebServiceResponse> Add(RegisterListingViewModel vm);
     }
 }
