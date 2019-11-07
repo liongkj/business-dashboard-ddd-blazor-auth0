@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AutoMapper;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
@@ -24,14 +23,12 @@ namespace JomMalaysia.Presentation.Gateways.Users
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
-        private readonly IMapper _mapper;
 
-        public UserGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder, IMapper mapper)
+        public UserGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
             _authorizationManagers = authorizationManagers;
             _apiBuilder = apiBuilder;
-            _mapper = mapper;
 
         }
 

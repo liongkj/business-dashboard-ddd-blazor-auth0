@@ -16,7 +16,7 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly IListingGateway _gateway;
 
         private List<Listing> ListingList { get; set; }
-
+        private Boolean refresh = false;
         #region gateway helper
         public ListingController(IListingGateway gateway)
         {
@@ -27,7 +27,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         async void Refresh()
         {
-            if (ListingList != null)
+            if (ListingList != null && !refresh)
                 ListingList = await GetListings();
             else
             {
@@ -40,19 +40,15 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: Listing
         async Task<List<Listing>> GetListings()
         {
-            if (ListingList.Count > 0)
-            {
-                return ListingList;
-            }
+     
             try
             {
-                ListingList = await _gateway.GetListings().ConfigureAwait(false);
+                ListingList = await _gateway.GetAll().ConfigureAwait(false);
                 return ListingList;
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                return null;
+                throw e;
             }
         }
 

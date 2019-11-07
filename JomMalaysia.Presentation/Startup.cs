@@ -2,9 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using JomMalaysia.Framework;
-using JomMalaysia.Presentation.Mapping;
 using JomMalaysia.Presentation.Scope;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -119,13 +117,7 @@ namespace JomMalaysia.Presentation
 
             services.AddSingleton<IConfiguration>(Configuration);
 
-            // Auto Mapper Configurations
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new DataProfile());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+           
 
 
             // Now register our services with Autofac container.
