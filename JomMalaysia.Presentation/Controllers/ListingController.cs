@@ -28,7 +28,7 @@ namespace JomMalaysia.Presentation.Controllers
         async void Refresh()
         {
             if (ListingList != null && !refresh)
-                ListingList = await GetListings();
+                ListingList = await GetListings().ConfigureAwait(false);
             else
             {
                 ListingList = new List<Listing>();
@@ -56,7 +56,7 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var listings = await GetListings();
+            var listings = await GetListings().ConfigureAwait(false);
 
             return View(listings);
         }
@@ -76,7 +76,7 @@ namespace JomMalaysia.Presentation.Controllers
         // POST: Listing/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CreateListingViewModel collection)
+        public ActionResult Create(CreateListingViewModel vm)
         {
             try
             {
