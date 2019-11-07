@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<JomMalaysia.Presentation.Models.Listings.Listing>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_LayoutModal.cshtml";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
 <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important" ;">
     <table class="table table-hover">
@@ -30,9 +32,32 @@
                     <td>@item.Merchant.RegistrationName</td>
                     <td>@item.ListingType</td>
                     <td>@item.PublishStatus.Status</td>
-                    <td>check box</td>
+                    <td><button id="showDetails"></button></td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="myModal" role="dialog" data-url="@Url.Action("_Details")">
+    <div id="modalContainer"></div>
+</div>
+
+@section SpecificScripts{
+<script type="text/javascript"
+>
+
+    $(document).ready(function() {
+   $('#showDetails').click(function() {
+        var url = $('#myModal').data('url');
+
+        $.get(url, function(data) {
+            $('#modalContainer').html(data);
+
+            $('#myModal').modal('show');
+        });
+   });
+});
+
+</script>   
+}

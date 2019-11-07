@@ -61,10 +61,11 @@ namespace JomMalaysia.Presentation.Controllers
             return View(listings);
         }
 
+        [HttpGet]
         // GET: Listing/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details()
         {
-            return View();
+            return PartialView();
         }
 
         // GET: Listing/Create
