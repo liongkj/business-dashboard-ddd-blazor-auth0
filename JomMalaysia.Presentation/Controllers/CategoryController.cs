@@ -62,9 +62,50 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var cat = await GetCategories();
-            //var filtered = cat.AsQueryable().Where(c => c.CategoryPath.Subcategory == null);
 
-            return View(cat);
+            List<Category> lstcategory = new List<Category>();
+
+            for (int i = 1; i <= 5; i++)
+            {
+                Category category = new Category();
+                category.CategoryId = String.Concat(i + i + i + i + i);
+                category.CategoryCode = "Code " + i;
+                category.CategoryName = " Name " + i;
+                category.CategoryNameMs = "Name Ms" + i;
+                category.CategoryNameZh = " Name Zh " + i;
+                category.CategoryThumbnailUrl = "Thumbnail url " + i;
+                category.CategoryImageUrl = "Image url " + i;
+
+                List<Category> lstsubcategory = new List<Category>();
+                if (i != 3 && i != 5)
+                {
+                    for (int j = 1; j <= 3; j++)
+                    {
+                        Category subcategory = new Category();
+
+                        subcategory.CategoryId = String.Concat("subcategory" + j + j + j + j + j);
+                        subcategory.CategoryCode = "subCode " + j;
+                        subcategory.CategoryName = " subName " + j;
+                        subcategory.CategoryNameMs = "subName Ms" + j;
+                        subcategory.CategoryNameZh = "subName Zh " + j;
+                        subcategory.CategoryThumbnailUrl = "subThumbnail url " + j;
+                        subcategory.CategoryImageUrl = "subImage url " + j;
+
+
+                        lstsubcategory.Add(subcategory);
+                    }
+                }
+                else
+                {
+                    lstsubcategory = null;
+                }
+
+                category.LstSubCategory = lstsubcategory;
+
+                lstcategory.Add(category);
+            }
+
+            return View(lstcategory);
         }
 
         [HttpGet]

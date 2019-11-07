@@ -11,13 +11,13 @@
     }
 }
 
-<form id="studentForm" method="POST">
+<form id="categoryForm" method="POST">
     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
         <table id="tableData" class="table table-hover">
             <!--remain id as this, else change name in _LayoutIndex too-->
             <thead class="table-primary">
-
-                <tr class="text-center">
+                <tr>
+                    <th scope="col" style="width:3%"></th>
                     <th scope="col">Category Code</th>
                     <th scope="col">Category Name</th>
                     <th scope="col">Category Name Ms</th>
@@ -32,22 +32,93 @@
                 {
 
                     <tr>
+                        <td>
+                            <a class="col-md-2 btnSubcategory" style="cursor:pointer;">
+                                <span>
+                                    <i class="fa fa-angle-down big-icon"></i>
+                                </span>
+                            </a>
+                        </td>
                         <td>@item.CategoryCode</td>
-                        <td>@item.CategoryName <span class="badge badge-dark">@(item.LstSubCategory == null ? 0 : item.LstSubCategory.Count) Subcategory</span></td>
+                        <td>@item.CategoryName 	&nbsp; <span class="badge badge-dark">@(item.LstSubCategory == null ? 0 : item.LstSubCategory.Count) Subcategory</span></td>
                         <td>@item.CategoryNameMs</td>
                         <td>@item.CategoryNameZh</td>
                         <td>
-                            <a href='@Url.Action("Index", "Home")' class=''></a>
-
-                            <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-info col-md-5">
+                            <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-info col-md-4">
                                 <span>
-                                    <strong>Edit</strong>
+                                    <i class="fa fa-edit"></i>
                                 </span>
                             </a>
-                            <input onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')" id="btnDelete" type="button" value="Delete" class="btn btn-danger col-md-5 offset-md-1" />
+
+                            <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')" id="btnDelete" class="btn btn-danger col-md-4 offset-md-1">
+                                <span>
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </a>
                         </td>
                     </tr>
+                    @if (item.LstSubCategory != null)
+                    {
+                        <tr class="subcategory-bg subcategory" style="display:none;">
+                            <td colspan="6" class="no-padding">
+                                <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-1 margin-topbottom-15 margin-leftright-15">
+                                    <span>
+                                        New
+                                    </span>
+                                </a>
+                                <br />
+                                <table id="subtabledata" class="table table-hover">
+                                    <thead class="subcategory-header-bg">
+                                        <tr>
+                                            <th scope="col" style="width:3%">&nbsp;</th>
+                                            <th scope="col">Category Code</th>
+                                            <th scope="col">Category Name</th>
+                                            <th scope="col">Category Name Ms</th>
+                                            <th scope="col">Category Name Zh</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{ var count1 = 0; }
 
+                                        @foreach (var subitem in item.LstSubCategory)
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    <a href="" id="btnSubcategory" class="col-md-2">
+                                                        <span>
+                                                            <i class="fa fa-angle-down big-icon-transparent"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                                <td>@subitem.CategoryCode</td>
+                                                <td>@subitem.CategoryName</td>
+                                                <td>@subitem.CategoryNameMs</td>
+                                                <td>@subitem.CategoryNameZh</td>
+                                                <td>
+                                                    <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-4">
+                                                        <span>
+                                                            <i class="fa fa-edit"></i>
+                                                        </span>
+                                                    </a>
+
+                                                    <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1">
+                                                        <span>
+                                                            <i class="fa fa-trash"></i>
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+
+                                            count1 += 1;
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    }
                     count += 1;
                 }
 
@@ -62,56 +133,65 @@
 
     <script type="text/javascript">
 
-       
-        function deleteCategory(catId, catName) {
+        $(document).ready(function () {
 
-            swal({
-                title: "Are you sure?",
-                text: "Are you sure that you want to delete " + catName + "?",
-                type: "warning",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                confirmButtonText: "Yes",
-                confirmButtonColor: "#ec6c62"
-            },
-                function () {
-                    $.ajax({
-                        //TODO add [ValidateAntiForgeryToken]
-                        url: "/Category/ConfirmDelete/",
-                        data: {
-                            "CategoryId": catId
-                        },
-                        type: "POST",
-                        success: (function (data) {
-                            if (data == 1) {
-                                sweetAlert({
-                                    title: "Deleted",
-                                    text: catName + " has been deleted successfully!",
-                                    type: "success"
-                                },
-                                    function () {
-                                        window.location.href = '/category';
-                                    });
-                            }
-                            else if (data == -2) {
-                                swal("Oops", "Subcategory has been created for this category. Please remove subcategory first.", "error");
-                            }
-                            else if (data == -3) {
-                                swal("Oops", "This category might have been deleted. Please refresh the page.", "error");
-                            }
-                            else {
+            $("#categoryForm").on('click', '.btnSubcategory', function () {
+
+                if ($(this).nextAll('.subcategory:first').is(":visible")) {
+                    debugger;
+                      $(this).nextAll('.subcategory:first').css("display", "none");
+                }
+                else {
+                    debugger;
+                     $(this).nextAll('.subcategory:first').css("display", "block");
+                }
+            });
+
+            function deleteCategory(catId, catName) {
+
+                swal({
+                    title: "Are you sure?",
+                    text: "Are you sure that you want to delete " + catName + "?",
+                    type: "warning",
+                    showCancelButton: true,
+                    closeOnConfirm: false,
+                    confirmButtonText: "Yes",
+                    confirmButtonColor: "#ec6c62"
+                },
+                    function () {
+                        $.ajax({
+                            //TODO add [ValidateAntiForgeryToken]
+                            url: "/Category/ConfirmDelete/",
+                            data: {
+                                "CategoryId": catId
+                            },
+                            type: "POST",
+                            success: (function (data) {
+                                if (data == 1) {
+                                    sweetAlert({
+                                        title: "Deleted",
+                                        text: catName + " has been deleted successfully!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.href = '/category';
+                                        });
+                                }
+                                else if (data == -2) {
+                                    swal("Oops", "Subcategory has been created for this category. Please remove subcategory first.", "error");
+                                }
+                                else if (data == -3) {
+                                    swal("Oops", "This category might have been deleted. Please refresh the page.", "error");
+                                }
+                                else {
+                                    swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                                }
+                            }), error: (function (data) {
                                 swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                            }
-                        }), error: (function (data) {
-                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                            })
                         })
-                    })
-                });
-        }
-
-
-
-
-
+                    });
+            }
+        });
     </script>
 }
