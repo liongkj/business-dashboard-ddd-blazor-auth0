@@ -25,9 +25,15 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-controller="User" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
+<form asp-controller="Listing" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <legend>Basic Info</legend>
+    <select class="form-control" multiple="multiple">
+        <option selected="selected">orange</option>
+        <option>white</option>
+        <option selected="selected">purple</option>
+    </select>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
         <div class="col-sm-10 col-md-6">
@@ -39,7 +45,7 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
         <div class="col-sm-10 col-md-6">
-            <textarea asp-for="Description" class="form-control" />
+            <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger" />
         </div>
     </div>
@@ -56,25 +62,52 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingType)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="ListingType" asp-items="Model.ListingTypeList" class="form-control">
+            <select asp-for="ListingType" id="type-select" asp-items="Model.ListingTypeList" class="form-control">
                 <option disabled selected>--- SELECT ---</option>
             </select>
             <span asp-validation-for="ListingType" class="text-danger" />
         </div>
     </div>
-
     <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="ListingType" id="type-select" asp-items="Model.ListingTypeList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="ListingType" class="text-danger" />
+        </div>
+    </div>
+    <span class="badge badge-pill badge-primary">Primary</span>
+
+
+    <legend>Detailed Info</legend>
+    <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control"></select>
+            <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
             <span asp-validation-for="CategoryId" class="text-danger" />
         </div>
     </div>
-    
     <button type="submit">Register</button>
 </form>
 
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#category-input").hide();
+
+            $('#type-select').on('change', function () {
+                if (this.value == "Local" || this.value == "Event") $("#category-input").show();
+                else $("#category-input").hide();
+            });
+
+        });
+    </script>
+
 }

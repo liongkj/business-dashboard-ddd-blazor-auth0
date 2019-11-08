@@ -9,7 +9,7 @@ namespace JomMalaysia.Framework.Helper
         private readonly static string Local = "Local";
         private readonly static string Civic = "Civic";
         private readonly static string Gover = "Government";
-        private readonly static string Event = "Local";
+        private readonly static string Event = "Event";
 
         public static List<string> GetTypeList()
         {

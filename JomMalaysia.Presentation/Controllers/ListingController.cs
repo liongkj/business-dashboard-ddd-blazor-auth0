@@ -102,15 +102,27 @@ namespace JomMalaysia.Presentation.Controllers
                 }); ;
             }
             var _categories = new List<SelectListItem>();
-            var categories = (await _categoryGateway.GetCategories().ConfigureAwait(false)).Where(x => x.CategoryPath.Subcategory != null).OrderBy(x=>x.CategoryName);
-            foreach (var m in categories)
+            var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
+            var cats = categories.Where(x=>x.CategoryPath.Subcategory!=null).OrderBy(x => x.CategoryName).GroupBy(x=>x.CategoryPath.Category);
+            
+            foreach(var category in cats)
             {
-                _categories.Add(new SelectListItem
+                var groups = new SelectListGroup() { Name = category.Key };
+                foreach (var sub in category)
                 {
-                    Text = $"{m.CategoryPath.Category} - {m.CategoryPath.Subcategory}",
-                    Value = m.CategoryId
-                }); ;
+                    if (sub.CategoryPath.Subcategory != null)
+                    {
+                        _categories.Add(new SelectListItem
+                        {
+                            Text = $"{sub.CategoryPath.Subcategory}",
+                            Value = sub.CategoryId,
+                            Group = groups
+
+                        });
+                    } 
+                }
             }
+            
             var vm = new RegisterListingViewModel()
             {
                 CategoryList = _categories,
