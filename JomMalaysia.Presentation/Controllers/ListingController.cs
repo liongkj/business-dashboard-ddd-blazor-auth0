@@ -22,12 +22,12 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly IListingGateway _gateway;
         private readonly IMerchantGateway _merchantGateway;
-        private readonly ICategoryGateway _categoryGateway;
+        private readonly IWorkflowGateway _categoryGateway;
 
         private List<Listing> ListingList { get; set; }
         private Boolean refresh = false;
         #region gateway helper
-        public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway, ICategoryGateway categoryGateway)
+        public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway, IWorkflowGateway categoryGateway)
         {
             _gateway = gateway;
             _merchantGateway = merchantGateway;

@@ -1,0 +1,113 @@
+﻿@model IEnumerable<JomMalaysia.Presentation.Models.Workflows.Workflow>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Workflow";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+
+    if (TempData["Message"] != null)
+    {
+
+    }
+}
+
+<form id="studentForm" method="POST">
+    <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
+        <table id="tableData" class="table table-hover">
+            <!--remain id as this, else change name in _LayoutIndex too-->
+            <thead class="table-primary">
+
+                <tr class="text-center">
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Last Login</th>"
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#test">Info</a>
+                            </h4>
+                        </div>
+                        <div id="test" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                <li class="list-group-item">Java</li>
+                                <li class="list-group-item">PHP</li>
+                                <li class="list-group-item">C++</li>
+                                <li class=" list-group-item">HTML5</li>
+                                <li class=" list-group-item">jQuery</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</form>
+
+<!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
+
+@section SpecificScripts{
+
+    <script type="text/javascript">
+
+       
+        function confirmDelete(userid, username) {
+
+            swal({
+                title: "Are you sure?",
+                text: "Are you sure that you want to delete " + username + "?",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes",
+                confirmButtonColor: "#ec6c62"
+            },
+                function () {
+                    $.ajax({
+                        //TODO add [ValidateAntiForgeryToken]
+                        url: "/User/ConfirmDelete/",
+                        data: {
+                            "UserId": userid
+                        },
+                        type: "POST",
+                        success: (function ({ item1, item2 }) {
+                            if (item1 == 1) {
+                                sweetAlert({
+                                    title: "Deleted",
+                                    text: username + " has been deleted successfully!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = '/user';
+                                    });
+                            }
+                            else {
+                            swal(
+                                "Oops",
+                                item2,
+                                "error"
+                            );
+                        }
+                        }), error: (function (data) {
+                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                        })
+                    })
+                });
+        }
+
+
+
+
+
+    </script>
+}

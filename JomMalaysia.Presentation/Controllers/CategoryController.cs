@@ -17,11 +17,11 @@ namespace JomMalaysia.Presentation.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryGateway _gateway;
+        private readonly IWorkflowGateway _gateway;
 
         private static List<Category> CategoryList { get; set; }
         private static Boolean refresh = false;
-        public CategoryController(ICategoryGateway gateway)
+        public CategoryController(IWorkflowGateway gateway)
         {
             _gateway = gateway;
 
