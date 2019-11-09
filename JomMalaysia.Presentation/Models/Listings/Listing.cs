@@ -12,7 +12,7 @@ namespace JomMalaysia.Presentation.Models.Listings
 {
     public class Listing
     {
-        public string ListingId { get; set; }
+        public string Id { get; set; }
         public CategoryPath Category { get; set; }
         public ListingMerchant Merchant { get; set; }
         public string ListingName { get; set; }

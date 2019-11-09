@@ -4,7 +4,12 @@
     ViewData["Title"] = "Create new Listing";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    #map {
+        height: 400px;
+        width: 400px;
+    }
+</style>
 <!--HEADER-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
     <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Back</button>
@@ -29,19 +34,29 @@
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <legend>Basic Info</legend>
-    <select class="form-control" multiple="multiple">
-        <option selected="selected">orange</option>
-        <option>white</option>
-        <option selected="selected">purple</option>
-    </select>
+
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
         <div class="col-sm-10 col-md-6">
-            <input asp-for="ListingName" class="form-control" />
+
+            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
             <span asp-validation-for="ListingName" class="text-danger" />
+
         </div>
     </div>
-
+    @*logo*@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
+        <div class="input-group col-sm-10 col-md-6">
+            @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new { @class = "form-control", id = "imageUrl" })
+            @Html.HiddenFor(m => m.ImageUris.ListingLogo.ThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
+            <input type="text" class="form-control" id="imageName" disabled />
+            <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
+                @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
+            </div>
+        </div>
+    </div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
         <div class="col-sm-10 col-md-6">
@@ -68,19 +83,58 @@
             <span asp-validation-for="ListingType" class="text-danger" />
         </div>
     </div>
+
+    <legend>Address Info</legend>
+
     <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.Add1)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="ListingType" id="type-select" asp-items="Model.ListingTypeList" class="form-control">
-                <option disabled selected>--- SELECT ---</option>
-            </select>
-            <span asp-validation-for="ListingType" class="text-danger" />
+            <input asp-for="Address.Add1" class="form-control" />
+            <span asp-validation-for="Address.Add1" class="text-danger" />
         </div>
     </div>
-    <span class="badge badge-pill badge-primary">Primary</span>
-
-
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.Add2)</div>
+        <div class="col-sm-10 col-md-6">
+            <input asp-for="Address.Add2" class="form-control" />
+            <span asp-validation-for="Address.Add2" class="text-danger" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.City)</div>
+        <div class="col-sm-10 col-md-3">
+            <input asp-for="Address.City" class="form-control" />
+            <span asp-validation-for="Address.City" class="text-danger" />
+        </div> <div class="col-sm-10 col-md-3">
+            <input asp-for="Address.PostalCode" class="form-control" placeholder="Postcode" />
+            <span asp-validation-for="Address.PostalCode" class="text-danger" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.State)</div>
+        <div class="col-sm-10 col-md-3">
+            <input asp-for="Address.State" class="form-control" />
+            <span asp-validation-for="Address.State" class="text-danger" />
+        </div> <div class="col-sm-10 col-md-3">
+            <input asp-for="Address.Country" class="form-control" placeholder="Country" />
+            <span asp-validation-for="Address.Country" class="text-danger" />
+        </div>
+    </div>
     <legend>Detailed Info</legend>
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
+        <div class="input-group col-sm-10 col-md-6">
+            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control", id = "imageUrl" })
+            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.ThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
+            <input type="text" class="form-control" id="imageName" disabled />
+            <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
+                @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
+            </div>
+        </div>
+    </div>
+
     <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
@@ -90,6 +144,9 @@
             <span asp-validation-for="CategoryId" class="text-danger" />
         </div>
     </div>
+
+
+
     <button type="submit">Register</button>
 </form>
 
@@ -109,5 +166,46 @@
 
         });
     </script>
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
+    <script>cloudinary.setCloudName("jomn9-com")</script>
+    <script type="text/javascript">
+        var uploadImageWidget = cloudinary.createUploadWidget(
+            {
+                ucloudname: 'jomn9-com',
+                uploadPreset: 'ox3azzqe',
+                apiKey: '731121621859821',
+                folder: 'category_thumbnail',
+                sources: ["local", "url", "image_search"],
+                googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
+                searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
+                searchByRights: true,
+                cropping: true,
+                croppingAspectRatio: 1,
+                resourceType: ["image"],
+                clientAllowedFormats: ["png", "jpg", "jpeg"],
+                minImageWidth: 100,
+                minImageHeight: 100,
+                autoMinimize: true,
+                showSkipCropButton: false,
+
+
+            }, (error, result) => {
+                if (!error && result && result.event === "success") {
+                   
+                    console.log("Image uploaded");
+                    $("#imageUrl").val(result.info.url);
+                    $("#thumbnailUrl").val(result.info.thumbnail_url);
+                    $("#imageName").val(result.info.original_filename + "." + result.info.format);
+                }
+            }
+        )
+
+        $("#btnUpload").on("click", function () {
+            uploadImageWidget.open();
+        });
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk&callback=initMap&libraries=places"
+            async defer></script>
 
 }

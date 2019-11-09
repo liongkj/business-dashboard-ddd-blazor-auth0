@@ -126,9 +126,9 @@ namespace JomMalaysia.Framework.WebServices
                     // Do nothing.
                 }
 
-                if (badRequest != null && badRequest.message != null)
+                if (badRequest != null && badRequest.errors != null)
                 {
-                    string msg = badRequest.message;
+                    string msg = badRequest.errors[0];
                     throw new GatewayException(response.StatusCode, msg);
                 }
 

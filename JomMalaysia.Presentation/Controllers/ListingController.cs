@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
@@ -24,7 +27,7 @@ namespace JomMalaysia.Presentation.Controllers
         private List<Listing> ListingList { get; set; }
         private Boolean refresh = false;
         #region gateway helper
-        public ListingController(IListingGateway gateway,IMerchantGateway merchantGateway,ICategoryGateway categoryGateway)
+        public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway, ICategoryGateway categoryGateway)
         {
             _gateway = gateway;
             _merchantGateway = merchantGateway;
@@ -48,7 +51,7 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: Listing
         async Task<List<Listing>> GetListings()
         {
-     
+
             try
             {
                 ListingList = await _gateway.GetAll().ConfigureAwait(false);
@@ -81,7 +84,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             var _merchants = new List<SelectListItem>();
             var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
-            
+
             foreach (var m in merchants)
             {
                 _merchants.Add(new SelectListItem
@@ -92,7 +95,7 @@ namespace JomMalaysia.Presentation.Controllers
             }
             var _listingTypes = new List<SelectListItem>();
             var listingTypes = ListingTypeHelper.GetTypeList();
-            
+
             foreach (var m in listingTypes)
             {
                 _listingTypes.Add(new SelectListItem
@@ -103,9 +106,9 @@ namespace JomMalaysia.Presentation.Controllers
             }
             var _categories = new List<SelectListItem>();
             var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
-            var cats = categories.Where(x=>x.CategoryPath.Subcategory!=null).OrderBy(x => x.CategoryName).GroupBy(x=>x.CategoryPath.Category);
-            
-            foreach(var category in cats)
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null).OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
+
+            foreach (var category in cats)
             {
                 var groups = new SelectListGroup() { Name = category.Key };
                 foreach (var sub in category)
@@ -119,10 +122,10 @@ namespace JomMalaysia.Presentation.Controllers
                             Group = groups
 
                         });
-                    } 
+                    }
                 }
             }
-            
+
             var vm = new RegisterListingViewModel()
             {
                 CategoryList = _categories,
@@ -150,50 +153,34 @@ namespace JomMalaysia.Presentation.Controllers
             }
         }
 
-        // GET: Listing/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public IActionResult Publish()
         {
             return View();
         }
 
-        // POST: Listing/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<Tuple<int, string>> Publish(string id, int months)
         {
-            try
+            IWebServiceResponse response = null;
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic here
+                try
+                {
+                    response = await _gateway.Publish(id, months).ConfigureAwait(false);
+                }
+                catch (GatewayException e)
+                {
+                    return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+                }
+                if (response.StatusCode == HttpStatusCode.OK)
 
-                return RedirectToAction(nameof(Index));
+                    refresh = true;
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: Listing/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Listing/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return SweetDialogHelper.HandleResponse(response);
+          
+           
         }
     }
 }

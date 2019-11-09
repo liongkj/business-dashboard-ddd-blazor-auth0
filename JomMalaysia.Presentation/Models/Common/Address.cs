@@ -8,6 +8,7 @@ namespace JomMalaysia.Presentation.Models.Common
         [Required]
         [Display(Name = "Address Line 1")]
         public string Add1 { get; set; }
+        [Display(Name = "Address Line 2")]
         public string Add2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }

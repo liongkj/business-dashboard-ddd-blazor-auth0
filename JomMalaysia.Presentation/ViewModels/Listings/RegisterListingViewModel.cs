@@ -13,7 +13,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         [Display(Name = "Business Name / Shop Name")]
         public string ListingName { get; set; }
-        
+
         [MinLength(5)]
         [MaxLength(50)]
         public string Description { get; set; }
@@ -27,6 +27,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public IEnumerable<OperatingHourViewModel> OperatingHours { get; set; }
 
         public Address Address { get; set; }
+        public ListingImageViewModel ImageUris{get;set;}
 
         [Required]
         [Display(Name = "Type Of Listing")]

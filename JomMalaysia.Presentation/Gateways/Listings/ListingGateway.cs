@@ -85,5 +85,24 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             //handle exception
             return result;
         }
+
+        public async Task<IWebServiceResponse> Publish(string ListingId, int months)
+        {
+            IWebServiceResponse<ListViewModel<Listing>> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Publish, ListingId, months.ToString());
+                var method = Method.POST;
+
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
+
+            }
+            catch (GatewayException ex)
+            {
+                throw;
+            }
+
+            return response;
+        }
     }
 }
