@@ -7,7 +7,7 @@ using JomMalaysia.Presentation.Models.Categories;
 
 namespace JomMalaysia.Presentation.Gateways.Categories
 {
-    public interface IWorkflowGateway
+    public interface ICategoryGateway
     {
         Task<List<Category>> GetCategories();
         Task<IWebServiceResponse> CreateCategory(Category vm);

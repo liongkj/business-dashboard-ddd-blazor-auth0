@@ -17,11 +17,11 @@ namespace JomMalaysia.Presentation.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly IWorkflowGateway _gateway;
+        private readonly ICategoryGateway _gateway;
 
         private static List<Category> CategoryList { get; set; }
         private static Boolean refresh = false;
-        public CategoryController(IWorkflowGateway gateway)
+        public CategoryController(ICategoryGateway gateway)
         {
             _gateway = gateway;
 
@@ -31,7 +31,7 @@ namespace JomMalaysia.Presentation.Controllers
         async void Refresh()
         {
             if (CategoryList != null)
-                CategoryList = await GetCategories();
+                CategoryList = await GetCategories().ConfigureAwait(false);
             else
             {
                 CategoryList = new List<Category>();

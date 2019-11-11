@@ -73,15 +73,15 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
 
         //}
 
-        public async Task<List<Workflow>> GetAll()
+        public async Task<List<WorkflowModel>> GetAll()
         {
-            List<Workflow> result = new List<Workflow>();
-            IWebServiceResponse<ListViewModel<Workflow>> response;
+            List<WorkflowModel> result = new List<WorkflowModel>();
+            IWebServiceResponse<ListViewModel<WorkflowModel>> response;
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Workflow));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Workflow>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
 
             }
             catch (GatewayException ex)

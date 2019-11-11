@@ -6,25 +6,34 @@ using JomMalaysia.Framework.Helper;
 
 namespace JomMalaysia.Presentation.Models.Workflows
 {
-    public class Workflow
+    public class WorkflowModel
     {
 
         public string WorkflowId { get; set; }
         public string Type { get; set; }
-        public string Status { get; set; }
+        public StatusEnum Status { get; set; }
         public Listing Listing { get; set; }
         public User Requester { get; set; }
         public User Responder { get; set; }
 
         public DateTime Created { get; set; }
 
-        public ICollection<Workflow> HistoryData { get; set; }
+        public ICollection<WorkflowModel> HistoryData { get; set; }
         
         public bool CanHandle(string userRole)
         {
 
             return true;
             //todo
+        }
+        public enum StatusEnum
+        {
+            all,
+            pending,
+            level1,
+            level2,
+            completed,
+            rejected
         }
     }
 }

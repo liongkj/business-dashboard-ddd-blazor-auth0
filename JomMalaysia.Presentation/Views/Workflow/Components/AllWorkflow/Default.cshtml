@@ -1,0 +1,14 @@
+﻿@model IEnumerable<JomMalaysia.Presentation.Models.Workflows.WorkflowModel>
+@{
+    Layout = null;
+}
+
+<h3>Workflows</h3>
+<ul>
+    @foreach (var w in Model)
+    {
+        <li>@w.Type</li>
+        <li>@w.Status</li>
+        <li>@w.Listing.ListingName</li>
+    }
+</ul>

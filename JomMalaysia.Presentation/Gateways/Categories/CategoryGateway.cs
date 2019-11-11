@@ -16,7 +16,7 @@ using RestSharp;
 
 namespace JomMalaysia.Presentation.Gateways.Categories
 {
-    public class WorkflowGateway : IWorkflowGateway
+    public class WorkflowGateway : ICategoryGateway
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IAuthorizationManagers _authorizationManagers;
