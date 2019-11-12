@@ -37,36 +37,43 @@
 </div>
 @if (@Model.HistoryData.Count > 0)
 {
-    <legend>Additional Details</legend>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">Previous Workflows</div>
-        <!-- timeline item 1 -->
-        <div class="row">
-            <!-- timeline item 1 left dot -->
-            <div class="col-auto text-center flex-column d-none d-sm-flex">
-                <div class="row h-50">
-                    <div class="col">&nbsp;</div>
-                    <div class="col">&nbsp;</div>
-                </div>
-                <h5 class="m-2">
-                    <span class="badge badge-pill bg-light border">&nbsp;</span>
-                </h5>
-                <div class="row h-50">
-                    <div class="col border-right">&nbsp;</div>
-                    <div class="col">&nbsp;</div>
-                </div>
-            </div>
-            <!-- timeline item 1 event content -->
-            <div class="col py-2">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="float-right text-muted">Mon, Jan 9th 2019 7:00 AM</div>
-                        <h4 class="card-title text-muted">Day 1 Orientation</h4>
-                        <p class="card-text">Welcome to the campus, introduction and get started with the tour.</p>
+    <div class="container py-2">
+        <h2 class="font-weight-light text-center text-muted py-3">Additional Details</h2>
+        @{int count = 1;}
+        @foreach (var item in Model.HistoryData)
+        {
+
+            <!-- timeline item  -->
+            <div class="row">
+
+                <!-- timeline item 1 left dot -->
+                <div class="col-auto text-center flex-column d-none d-sm-flex">
+                    <div class="row h-50">
+                        <div class="col @(count>1 && count <= Model.HistoryData.Count? "border-right":"")">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <h5 class="m-2">
+                        <span class="badge badge-pill bg-light border">&nbsp;</span>
+                    </h5>
+                    <div class="row h-50">
+                        <div class="col @(Model.HistoryData.Count>1 && count != Model.HistoryData.Count? "border-right":"")">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
                     </div>
                 </div>
+                <!-- timeline item 1 event content -->
+                <div class="col py-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="float-right text-muted">@item.Created.ToString("ddd, dd  MMM yyyy hh:HH tt")</div>
+                            <h4 class="card-title text-muted">@item.Action by @item.Responder.Username</h4>
+                            <p class="card-text">@(String.IsNullOrEmpty(item.Comments)? "No Comments":item.Comments.Trim())</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-        </div>
+            count++;
+        }
     </div>
 
 }

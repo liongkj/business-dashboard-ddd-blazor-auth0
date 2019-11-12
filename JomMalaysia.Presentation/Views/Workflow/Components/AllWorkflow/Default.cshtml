@@ -21,27 +21,31 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @*<input type="checkbox" asp-for="@item.selected" />*@
-                    @*<div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="chkdt1" checked="">
-                <label class="custom-control-label" for="customCheck1"></label>
-            </div>*@
-                </td>
-                <td><a asp-controller="Listing" asp-action="Details" asp-route-id="@item.Listing.ListingId"> @item.Listing.ListingName</a></td>
-                <td>@item.Requester.Username</td>
-                <td>@item.Type</td>
-                <td>@item.Status</td>
-                <td>@item.Created.ToString("dd/MM/yyyy HH:mm")  (@(DateTime.Now.Subtract(@item.Created).Days)
-                @(DateTime.Now.Subtract(@item.Created).Days > 1 ? "days" : "day") ago)</td>
-                <td><button data-toggle="modal" data-target="#WorkflowDetail"
-                            data-id="@item.WorkflowId"
-                            type="button" id="btnLink" 
-                            class="btn btn-primary @(item.IsCompleted() ? "disabled" : "")"  
-                            @(item.IsCompleted() ? "disabled" : "") 
-                            aria-disabled=@(item.IsCompleted())>Respond</button></td>
-            </tr>
+                <tr>
+                    <td>
+                        @*<input type="checkbox" asp-for="@item.selected" />*@
+                        @*<div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chkdt1" checked="">
+                                <label class="custom-control-label" for="customCheck1"></label>
+                            </div>*@
+                    </td>
+                    <td><a asp-controller="Listing" asp-action="Details" asp-route-id="@item.Listing.ListingId"> @item.Listing.ListingName</a></td>
+                    <td>@item.Requester.Username</td>
+                    <td>@item.Type</td>
+                    <td>@item.Status</td>
+                    <td>
+                        @item.Created.ToString("dd/MM/yyyy HH:mm")  (@(DateTime.Now.Subtract(@item.Created).Days)
+                        @(DateTime.Now.Subtract(@item.Created).Days > 1 ? "days" : "day") ago)
+                    </td>
+                    <td>
+                        <button data-toggle="modal" data-target="#WorkflowDetail"
+                                data-id="@item.WorkflowId"
+                                type="button" id="btnLink"
+                                class="btn  @(item.IsCompleted() ? "btn-info" : "btn-primary")" )>
+                            @(item.IsCompleted() ? "View" : "Respond")
+                        </button>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
