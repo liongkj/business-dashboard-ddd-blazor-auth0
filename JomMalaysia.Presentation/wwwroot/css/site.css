@@ -311,3 +311,44 @@ a:not([href]):not([tabindex]) {
 input#imageName {
     border-radius: 0.25rem;
 }
+
+.subcategory-bg {
+    background: #eaeff4;
+}
+
+.subcategory-header-bg {
+    background: #d0e1f1;
+}
+
+.btn-tertiary {
+    background: #60a7b2;
+}
+
+table#subtabledata th, table#subtabledata td {
+    font-size: 13px;
+    /* color: grey; */
+}
+
+.big-icon {
+    font-size: 16px;
+    color: black;
+}
+
+.big-icon-transparent {
+    font-size: 16px;
+    color: transparent;
+}
+
+.opacity-65 {
+    opacity: 0.65;
+}
+
+.margin-topbottom-15 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.margin-leftright-15 {
+    margin-left: 15px;
+    margin-right: 15px;
+}

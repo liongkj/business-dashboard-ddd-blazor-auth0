@@ -71,49 +71,6 @@
             </div>
         </div>
     </div>
-    <br />
-    <hr />
-    <br />
-    <button id="new-subcategory" type="button" class="btn btn-success col-md-2">New SubCategory</button>
-    <div class="col-md-12 col-sm-12 no-padding form-m-gap-top" style="overflow-x:auto !important" ;">
-        <table class="table table-hover tb-subcategory">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th scope="col">Sub Category ID</th>
-                    <th scope="col">Sub Category Name</th>
-                    <th scope="col">Sub Category Name Ms</th>
-                    <th scope="col">Sub Category Name Zh</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="subcategory-0">
-                    @*https://stackoverflow.com/questions/38929009/how-to-bind-an-array-in-mvc-core
-                        https://fildev.net/2017/05/14/send-array-from-view-to-controller-as-class-asp-net-core/*@
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryCode, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryCode)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryName)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameMs, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameMs)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameZh, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameZh)
-                    </td>
-                    <td>
-                        <button id="delete-subcategory" type="button" class="btn btn-danger invisible isDelete">Delete</button>
-                        @Html.HiddenFor(m => m.LstSubCategory[0].IsDeleted, new { @class = "" })
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </form>
 
 @section Scripts{
@@ -125,25 +82,6 @@
     <script>cloudinary.setCloudName("jomn9-com")</script>
     <script type="text/javascript">
         var counter = 1;
-
-        $("#new-subcategory").on("click", function () {
-            var newRow = $("<tr>");
-            var cols = "";
-            LstSubCategory_0__CategoryCode
-            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryCode" name="LstSubCategory[' + counter + '].CategoryCode" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryName" name="LstSubCategory[' + counter + '].CategoryName" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryNameMs" name="LstSubCategory[' + counter + '].CategoryNameMs" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="LstSubCategory_' + counter + '__CategoryNameZh" name="LstSubCategory[' + counter + '].CategoryNameZh" type="text" value=""></td>'
-            cols += '<td> <button type="button" class="btn btn-danger btnDelete">Delete</button></td> '
-            cols += '<td> <input class="isDelete d-none" data-val="true" id="LstSubCategory_' + counter + '__IsDeleted" name="LstSubCategory[' + counter + '].IsDeleted" type="hidden" value=""></td>';
-
-            $('#LstSubCategory_' + counter + '__CategoryImageUrl').val("");
-            $('#LstSubCategory_' + counter + '__CategoryThumbnailUrl').val("");
-
-            newRow.append(cols);
-            $(".tb-subcategory").append(newRow);
-            counter++;
-        });
 
         $(".tb-subcategory").on("click", ".btnDelete", function (event) {
             $(this).closest("tr").addClass("d-none");
@@ -174,7 +112,7 @@
                 if (!error && result && result.event === "success") {
                     debugger;
                     console.log("Image uploaded");
-                    $("#imageUrl").val(result.info.url);
+                    $("#imageUrl").val(result.info.url); //TODO KJ - add one more for image url for subcategory?
                     $("#thumbnailUrl").val(result.info.thumbnail_url);
                     $("#imageName").val(result.info.original_filename + "." + result.info.format);
                 }
@@ -188,7 +126,7 @@
         function createCategory() {
             debugger;
             var data = $('#FormCreate').serialize();
-
+             //TODO KJ - create one more for create subcategory
             if ($("#FormCreate").valid()) {
                 $.ajax({
                     //TODO add [ValidateAntiForgeryToken]

@@ -4,11 +4,6 @@
 @{
     ViewData["Title"] = "Category List";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
-
-    if (TempData["Message"] != null)
-    {
-
-    }
 }
 
 <form id="categoryForm" method="POST">
@@ -33,9 +28,12 @@
 
                     <tr>
                         <td>
-                            <a class="col-md-2 btnSubcategory" style="cursor:pointer;">
+                            <a class="col-md-2 btnSubcategory" style="cursor:pointer;" data-toggle="collapse" data-target="collapse-next-subcategory">
                                 <span>
                                     <i class="fa fa-angle-down big-icon"></i>
+                                </span>
+                                <span style="display:none">
+                                    <i class="fa fa-angle-up big-icon"></i>
                                 </span>
                             </a>
                         </td>
@@ -59,9 +57,10 @@
                     </tr>
                     @if (item.LstSubCategory != null)
                     {
-                        <tr class="subcategory-bg subcategory" style="display:none;">
+                        <tr class="subcategory-bg subcategory collapse">
                             <td colspan="6" class="no-padding">
-                                <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-1 margin-topbottom-15 margin-leftright-15">
+                                <!--TODO KJ - link to create subcategory controller !! THIS ONE IS FOR THE SITUATION WHERE SUBCATEGORY HAS BEEN CREATED BEFORE !! -->
+                                <a href="@Url.Action("Create", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-1 margin-topbottom-15 margin-leftright-15">
                                     <span>
                                         New
                                     </span>
@@ -97,12 +96,13 @@
                                                 <td>@subitem.CategoryNameMs</td>
                                                 <td>@subitem.CategoryNameZh</td>
                                                 <td>
+                                                    <!--TODO KJ - link to edit subcategory controller -- get subcategory id using subitem.CategoryId -->
                                                     <a href="@Url.Action("Edit", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-4">
                                                         <span>
                                                             <i class="fa fa-edit"></i>
                                                         </span>
                                                     </a>
-
+                                                    <!--TODO KJ - link to delete subcategory controller -- get subcategory id using subitem.CategoryId -->
                                                     <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1">
                                                         <span>
                                                             <i class="fa fa-trash"></i>
@@ -119,6 +119,20 @@
                             </td>
                         </tr>
                     }
+                    else
+                    {
+                        <tr class="subcategory-bg subcategory collapse">
+                            <td colspan="6" class="no-padding">
+                                <!--TODO KJ - link to create subcategory controller -- get subcategory id using subitem.CategoryId !! THIS IS FOR CREATING FIRST SUBCATEGORY !!-->
+                                <a href="@Url.Action("Create", "Category", new { CategoryId = item.CategoryId })" class="btn btn-outline-info col-md-1 margin-topbottom-15 margin-leftright-15">
+                                    <span>
+                                        New
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
                     count += 1;
                 }
 
@@ -135,18 +149,12 @@
 
         $(document).ready(function () {
 
-            $("#categoryForm").on('click', '.btnSubcategory', function () {
-
-                if ($(this).nextAll('.subcategory:first').is(":visible")) {
-                    debugger;
-                      $(this).nextAll('.subcategory:first').css("display", "none");
-                }
-                else {
-                    debugger;
-                     $(this).nextAll('.subcategory:first').css("display", "block");
-                }
+            $('#categoryForm').on('click.collapse-next-subcategory.data-api', '[data-target=collapse-next-subcategory]', function () {
+                debugger;
+                var $target = $(this).parent().parent().closest('tr').next('tr').toggle();
             });
 
+             //TODO KJ - create one more for delete subcategory
             function deleteCategory(catId, catName) {
 
                 swal({

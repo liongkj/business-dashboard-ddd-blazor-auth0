@@ -48,50 +48,6 @@
             @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
-    <br />
-    <hr />
-    <br />
-    <button id="new-subcategory" type="button" class="btn btn-success col-md-2">New SubCategory</button>
-    <div class="col-md-12 col-sm-12 no-padding form-m-gap-top" style="overflow-x:auto !important" ;">
-        <table class="table table-hover tb-subcategory">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th scope="col">Sub Category ID</th>
-                    <th scope="col">Sub Category Name</th>
-                    <th scope="col">Sub Category Name Ms</th>
-                    <th scope="col">Sub Category Name Zh</th>
-                    <th scope="col">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="subcategory-0">
-                    @*https://stackoverflow.com/questions/38929009/how-to-bind-an-array-in-mvc-core
-                        https://fildev.net/2017/05/14/send-array-from-view-to-controller-as-class-asp-net-core/*@
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryCode, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryCode)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryName)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameMs, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameMs)
-                    </td>
-                    <td>
-                        @Html.TextBoxFor(m => m.LstSubCategory[0].CategoryNameZh, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.LstSubCategory[0].CategoryNameZh)
-                    </td>
-                    <td>
-                        <button id="delete-subcategory" type="button" class="btn btn-danger invisible isDelete">Delete</button>
-                        @Html.HiddenFor(m => m.LstSubCategory[0].IsDeleted, new { @class = "" })
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <button id="btnSubmit2" type="submit" class="d-none"></button>
 </form>
 
 
@@ -100,22 +56,6 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         var counter = 1;
-
-        $("#new-subcategory").on("click", function () {
-            var newRow = $("<tr>");
-            var cols = "";
-
-            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryId" name="lstSubCategory[' + counter + '].categoryId" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryName" name="lstSubCategory[' + counter + '].categoryName" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryNameMs" name="lstSubCategory[' + counter + '].categoryNameMs" type="text" value=""></td>'
-            cols += '<td> <input class="form-control" id="lstSubCategory_' + counter + '__categoryNameZh" name="lstSubCategory[' + counter + '].categoryNameZh" type="text" value=""></td>'
-            cols += '<td> <button type="button" class="btn btn-danger btnDelete">Delete</button></td> '
-            cols += '<td> <input class="isDelete d-none" data-val="true" id="lstSubCategory_' + counter + '__isDeleted" name="lstSubCategory[' + counter + '].isDeleted" type="hidden" value=""></td>';
-
-            newRow.append(cols);
-            $(".tb-subcategory").append(newRow);
-            counter++;
-        });
 
         $(".tb-subcategory").on("click", ".btnDelete", function (event) {
             $(this).closest("tr").addClass("d-none");
@@ -128,6 +68,7 @@
             debugger;
             var data = $('#FormEdit').serialize();
 
+            //TODO KJ - create one more for edit subcategory
             if ($("#FormEdit").valid()) {
                 $.ajax({
                     //TODO add [ValidateAntiForgeryToken]
