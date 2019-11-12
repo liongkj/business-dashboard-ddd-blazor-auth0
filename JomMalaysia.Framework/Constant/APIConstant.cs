@@ -21,6 +21,7 @@ namespace JomMalaysia.Framework.Constant
                 public const string Merchant = "api/Merchants";
 
                 public const string Workflow = "api/Workflows";
+                public const string WorkflowDetail = "api/Workflows/{0}";
 
                 //listing
                 public const string Publish = "api/Listings/{0}/Publish/{1}";

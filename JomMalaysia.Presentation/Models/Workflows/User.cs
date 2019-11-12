@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace JomMalaysia.Presentation.Models.Workflows
 {
-    public class User
+    public class UserSummary
     {
         public string Username { get; set; }
         public string UserId { get; set; }

@@ -74,7 +74,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpGet]
         // GET: Listing/Details/5
-        public IActionResult Details()
+        public IActionResult Details(string Id)
         {
             return PartialView();
         }

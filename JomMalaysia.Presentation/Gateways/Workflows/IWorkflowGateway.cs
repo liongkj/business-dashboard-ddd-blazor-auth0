@@ -9,6 +9,6 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
     public interface IWorkflowGateway
     {
         Task<List<WorkflowModel>> GetAll();
-        
+        Task<WorkflowModel> Detail(string id);
     }
 }

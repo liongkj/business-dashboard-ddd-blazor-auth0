@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Helper;
+using static JomMalaysia.Framework.Constant.EnumConstant;
 
 namespace JomMalaysia.Presentation.Models.Workflows
 {
@@ -10,30 +11,22 @@ namespace JomMalaysia.Presentation.Models.Workflows
     {
 
         public string WorkflowId { get; set; }
-        public string Type { get; set; }
-        public StatusEnum Status { get; set; }
-        public Listing Listing { get; set; }
-        public User Requester { get; set; }
-        public User Responder { get; set; }
+        public WorkflowTypeEnum Type { get; set; }
+        public WorkflowStatusEnum Status { get; set; }
+        public string Level { get; set; }
+        public ListingSummary Listing { get; set; }
+        public UserSummary Requester { get; set; }
+        public UserSummary Responder { get; set; }
 
         public DateTime Created { get; set; }
 
-        public ICollection<WorkflowModel> HistoryData { get; set; }
-        
-        public bool CanHandle(string userRole)
-        {
+        public ICollection<WorkflowSummary> HistoryData { get; set; }
 
-            return true;
-            //todo
-        }
-        public enum StatusEnum
+        public bool IsCompleted()
         {
-            all,
-            pending,
-            level1,
-            level2,
-            completed,
-            rejected
+            return Status == WorkflowStatusEnum.rejected || Status == WorkflowStatusEnum.completed;
+          
         }
+      
     }
 }

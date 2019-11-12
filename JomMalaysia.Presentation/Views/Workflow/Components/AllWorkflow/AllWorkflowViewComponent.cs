@@ -18,28 +18,13 @@ namespace JomMalaysia.Presentation.Views.Workflow.Components.AllWorkflow
         }
 
         public async Task<IViewComponentResult> InvokeAsync(
-        string status)
+        )
         {
-            var items = await GetItemsAsync(status).ConfigureAwait(false);
+            List<WorkflowModel> items = await _gateway.GetAll().ConfigureAwait(false);
+            
             return View(items);
         }
-        private async Task<List<WorkflowModel>> GetItemsAsync(string status)
-        {
-            if (Enum.TryParse(status, out WorkflowModel.StatusEnum statusEnum))
-            {
-                List<WorkflowModel> items = await _gateway.GetAll().ConfigureAwait(false);
-                List<WorkflowModel> found;
-                if (statusEnum != WorkflowModel.StatusEnum.all)
-                {
-                    found = items.Where(x => x.Status.Equals(statusEnum)).ToList();
-                    return found;
-                }
-                return items;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid status");
-            }
-        }
+
+
     }
 }

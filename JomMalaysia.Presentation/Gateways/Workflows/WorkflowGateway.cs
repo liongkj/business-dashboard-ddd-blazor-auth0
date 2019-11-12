@@ -31,47 +31,30 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
 
         }
 
-        //public async Task<IWebServiceResponse> CreateCategory(Category vm)
-        //{
-        //    IWebServiceResponse<Category> response;
-        //    try
-        //    {
-        //        var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
+        public async Task<WorkflowModel> Detail(string id)
+        {
+            WorkflowModel result = null;
+            IWebServiceResponse<ViewModel<WorkflowModel>> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.WorkflowDetail, id);
+                var method = Method.GET;
+                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
 
-        //        var method = Method.POST;
-        //        response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm).ConfigureAwait(false);
-        //    }
-        //    catch (GatewayException ex)
-        //    {
-        //        throw;
-        //    }
-        //    return response;
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
 
+               result= response.Data.Data;
+            }
+            //handle exception
+            return result;
+        }
 
-        //    //handle exception
-
-        //}
-
-        //public async Task<IWebServiceResponse> EditCategory(Category vm)
-        //{
-        //    IWebServiceResponse<Category> response;
-        //    try
-        //    {
-        //        var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{vm.CategoryId}";
-
-        //        var method = Method.PUT;
-        //        response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm).ConfigureAwait(false);
-        //    }
-        //    catch (GatewayException ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    return response;
-
-
-        //    //handle exception
-
-        //}
 
         public async Task<List<WorkflowModel>> GetAll()
         {
@@ -90,6 +73,7 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                Console.Error.WriteLine("called workflow api");
                 var workflows = response.Data.Data;
                 foreach (var work in workflows)
                 {

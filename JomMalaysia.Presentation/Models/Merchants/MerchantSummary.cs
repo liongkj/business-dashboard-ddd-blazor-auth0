@@ -1,6 +1,6 @@
 namespace JomMalaysia.Presentation.Models.Merchants
 {
-    public class CompanyRegistration
+    public class MerchantSummary
     {
         public string SsmId { get; set; }
         public string OldSsmId { get; set; }
