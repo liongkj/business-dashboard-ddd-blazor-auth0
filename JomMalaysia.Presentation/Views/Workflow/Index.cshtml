@@ -1,0 +1,79 @@
+﻿@model IEnumerable<JomMalaysia.Presentation.ViewModels.Workflows.WorkflowStatus>
+@addTagHelper *, JomMalaysia.Presentation
+
+@{
+    ViewData["Title"] = "Workflow";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+
+    if (TempData["Message"] != null)
+    {
+
+    }
+}
+
+@*remove create button*@
+<ul class="nav nav-tabs">
+    @foreach (var x in @Model)
+    {
+        <li class="nav-item">
+            <a class="nav-link justify-content-between align-items-center" data-toggle="tab" href="#@x.Name">@x.Name <span class="badge badge-primary badge-pill">@x.Count</span></a>
+
+        </li>
+    }
+</ul>
+
+<vc:all-workflow>
+</vc:all-workflow>
+
+<!-- Modal -->
+<div class="modal fade" id="WorkflowDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    Fetching
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger">Reject</button>
+                <button type="button" class="btn btn-primary">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
+
+@section SpecificScripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#WorkflowDetail').on('show.bs.modal', function (e) {
+                debugger
+                var id = e.relatedTarget.dataset.id;
+                var $modal = $(this);
+
+                $.ajax({
+                    cache: false,
+                    type: 'GET',
+                    url: '/Workflow/Detail/' + id,
+                    success: function (data) {
+                        $modal.find('.modal-body').html(data);
+                    },
+                    fail: function (error) {
+                        debugger
+                    }
+                });
+            });
+        });
+
+
+    </script>
+}

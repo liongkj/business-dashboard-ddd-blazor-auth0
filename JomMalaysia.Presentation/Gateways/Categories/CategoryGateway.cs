@@ -16,13 +16,13 @@ using RestSharp;
 
 namespace JomMalaysia.Presentation.Gateways.Categories
 {
-    public class CategoryGateway : ICategoryGateway
+    public class WorkflowGateway : ICategoryGateway
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
 
-        public CategoryGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
+        public WorkflowGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
             _authorizationManagers = authorizationManagers;

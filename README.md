@@ -6,13 +6,14 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 - [ ] refactor cloudinary code
 - [x] update image to include thumbnail url and normal url
 
-- [ ] find out why released version css is missing https://portal-jommalaysia.azurewebsites.net/
+- [x] find out why released version css is missing https://portal-jommalaysia.azurewebsites.net/
 
 - [x] troubleshoot add category not working
 
 - [x] User gateway
 - [x] Merchant gateway
-- [ ] Listing gateway
+- [x] Listing gateway
+- [ ] Listing create if else condition
 - [ ] Workflow gateway
 - [ ] Error handling
 

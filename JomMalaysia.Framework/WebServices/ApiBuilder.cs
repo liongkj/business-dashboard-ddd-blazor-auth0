@@ -21,10 +21,12 @@ namespace JomMalaysia.Framework.WebServices
             StringBuilder apiString = new StringBuilder();
             apiString.Append(WebApiUrl);
             apiString.Append(path);
-            foreach (var param in parameters)
+
+            for (int i = 0; i < parameters.Length; i++)
             {
-                apiString.Replace(($"{{param}}"), param);
+                apiString.Replace("{" + i + "}", parameters[i]);
             }
+
             return apiString.ToString();
         }
     }

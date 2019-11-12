@@ -31,7 +31,7 @@ namespace JomMalaysia.Presentation.Controllers
         async void Refresh()
         {
             if (CategoryList != null)
-                CategoryList = await GetCategories();
+                CategoryList = await GetCategories().ConfigureAwait(false);
             else
             {
                 CategoryList = new List<Category>();

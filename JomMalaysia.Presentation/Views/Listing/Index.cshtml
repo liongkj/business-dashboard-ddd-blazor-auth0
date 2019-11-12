@@ -32,32 +32,69 @@
                     <td>@item.Merchant.RegistrationName</td>
                     <td>@item.ListingType</td>
                     <td>@item.PublishStatus.Status</td>
-                    <td><button id="showDetails"></button></td>
+                    <td><button onclick="publishListing('@item.ListingId')">Publish</button></td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<div class="modal fade" id="myModal" role="dialog" data-url="@Url.Action("_Details")">
-    <div id="modalContainer"></div>
+<div class="modal fade" id="myModal" role="dialog" data-url="@Url.Action("Publish")">
+    <div id="publish-detail"></div>
 </div>
 
 @section SpecificScripts{
-<script type="text/javascript"
->
+    <script type="text/javascript">
 
-    $(document).ready(function() {
-   $('#showDetails').click(function() {
-        var url = $('#myModal').data('url');
 
-        $.get(url, function(data) {
-            $('#modalContainer').html(data);
 
-            $('#myModal').modal('show');
-        });
-   });
-});
+        function publishListing(ListingId) {
 
-</script>   
+            swal({
+                title: 'Do you want to publish this listing?',
+                icon: 'question',
+                type: 'input',
+                inputPlaceholder: "Duration in months. Default to 12",
+                buttons: true,
+                dangerMode: true,
+            }, function (inputValue) {
+                    if (!inputValue) { inputValue = 12;}
+                    $.ajax({
+                        //TODO add [ValidateAntiForgeryToken]
+                        url: "/Listing/Publish",
+                        data: {
+                            "id": ListingId,
+                            "months": inputValue,
+                        },
+                        type: "POST",
+                        success: (function ({ item1, item2 }) {
+                            if (item1 == 1) {
+                                sweetAlert({
+                                    title: "Pending Approval",
+                                    text: "Listing is sent to approval.",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = '/listing';
+                                    });
+                            } else {
+                                swal(
+                                "Oops",
+                                item2,
+                                "error"
+                            );
+                            }
+
+                        }),
+                        error: (function (data) {
+                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                        })
+                    });
+            })
+        }
+
+
+
+
+    </script>
 }

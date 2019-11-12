@@ -7,7 +7,7 @@ namespace JomMalaysia.Presentation.Models.Merchants
     {
         public string MerchantId { get; set; }
         public string CompanyName { get; set; }
-        public CompanyRegistration CompanyRegistration { get; set; }
+        public MerchantSummary CompanyRegistration { get; set; }
         public Address Address { get; set; }
         public List<string> Listings { get; set; }
         public List<Contact> Contacts { get; set; }

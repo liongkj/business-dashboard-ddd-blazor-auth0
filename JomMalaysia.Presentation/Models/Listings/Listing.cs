@@ -7,6 +7,7 @@ using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Merchants;
 using Newtonsoft.Json;
+using static JomMalaysia.Framework.Constant.EnumConstant;
 
 namespace JomMalaysia.Presentation.Models.Listings
 {
@@ -14,14 +15,14 @@ namespace JomMalaysia.Presentation.Models.Listings
     {
         public string ListingId { get; set; }
         public CategoryPath Category { get; set; }
-        public ListingMerchant Merchant { get; set; }
+        public MerchantSummary Merchant { get; set; }
         public string ListingName { get; set; }
         public string Description { get; set; }
         public List<string> Tags { get; set; }
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
         public PublishStatus PublishStatus { get; set; }
-        public string ListingType { get; set; }
+        public ListingTypeEnum ListingType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
@@ -32,6 +33,8 @@ namespace JomMalaysia.Presentation.Models.Listings
             public string OpenTime { get; set; }
             public string CloseTime { get; set; }
         }
+
+        
     }
 
 
