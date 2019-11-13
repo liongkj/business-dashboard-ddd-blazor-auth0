@@ -20,7 +20,7 @@ namespace JomMalaysia.Presentation.Views.Workflow.Components.WorkflowDetail
         public async Task<IViewComponentResult> InvokeAsync(
         string id)
         {
-            WorkflowModel item = await _gateway.Detail(id).ConfigureAwait(false);
+            var item = await _gateway.Detail(id).ConfigureAwait(false);
 
             return View(item);
         }

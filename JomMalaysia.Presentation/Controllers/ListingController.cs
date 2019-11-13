@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
-using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -25,9 +22,12 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly ICategoryGateway _categoryGateway;
 
         private List<Listing> ListingList { get; set; }
-        private Boolean refresh = false;
+        private Boolean refresh;
+
         #region gateway helper
-        public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway, ICategoryGateway categoryGateway)
+
+        public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway,
+            ICategoryGateway categoryGateway)
         {
             _gateway = gateway;
             _merchantGateway = merchantGateway;
@@ -47,23 +47,15 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
 
-
         // GET: Listing
-        async Task<List<Listing>> GetListings()
+        private async Task<List<Listing>> GetListings()
         {
-
-            try
-            {
-                ListingList = await _gateway.GetAll().ConfigureAwait(false);
-                return ListingList;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            ListingList = await _gateway.GetAll().ConfigureAwait(false);
+            return ListingList;
         }
 
         #endregion
+
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
@@ -72,45 +64,28 @@ namespace JomMalaysia.Presentation.Controllers
             return View(listings);
         }
 
-        [HttpGet]
-        // GET: Listing/Details/5
-        public IActionResult Details(string Id)
-        {
-            return PartialView();
-        }
 
         // GET: Listing/Create
         public async Task<IActionResult> Create()
         {
-            var _merchants = new List<SelectListItem>();
+            //merchant
             var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
-
-            foreach (var m in merchants)
+            var _merchants = merchants.Select(m => new SelectListItem
             {
-                _merchants.Add(new SelectListItem
-                {
-                    Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
-                    Value = m.MerchantId
-                });
-            }
-            var _listingTypes = new List<SelectListItem>();
+                Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})", Value = m.MerchantId
+            }).ToList();
+            //listing
             var listingTypes = ListingTypeHelper.GetTypeList();
-
-            foreach (var m in listingTypes)
-            {
-                _listingTypes.Add(new SelectListItem
-                {
-                    Text = m,
-                    Value = m
-                }); ;
-            }
+            var _listingTypes = listingTypes.Select(m => new SelectListItem {Text = m, Value = m}).ToList();
+            //categories
             var _categories = new List<SelectListItem>();
             var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
-            var cats = categories.Where(x => x.CategoryPath.Subcategory != null).OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null).OrderBy(x => x.CategoryName)
+                .GroupBy(x => x.CategoryPath.Category);
 
             foreach (var category in cats)
             {
-                var groups = new SelectListGroup() { Name = category.Key };
+                var groups = new SelectListGroup {Name = category.Key};
                 foreach (var sub in category)
                 {
                     if (sub.CategoryPath.Subcategory != null)
@@ -120,13 +95,13 @@ namespace JomMalaysia.Presentation.Controllers
                             Text = $"{sub.CategoryPath.Subcategory}",
                             Value = sub.CategoryId,
                             Group = groups
-
                         });
                     }
                 }
             }
 
-            var vm = new RegisterListingViewModel()
+//create vm
+            var vm = new RegisterListingViewModel
             {
                 CategoryList = _categories,
                 MerchantList = _merchants,
@@ -147,40 +122,31 @@ namespace JomMalaysia.Presentation.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
                 return View();
             }
         }
 
-        [HttpGet]
-        public IActionResult Publish()
-        {
-            return View();
-        }
 
         [HttpPost]
         public async Task<Tuple<int, string>> Publish(string id, int months)
         {
-            IWebServiceResponse response = null;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
             {
-                try
-                {
-                    response = await _gateway.Publish(id, months).ConfigureAwait(false);
-                }
-                catch (GatewayException e)
-                {
-                    return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
-                }
+                var response = await _gateway.Publish(id, months).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
-
+                {
                     refresh = true;
-            }
+                }
 
-            return SweetDialogHelper.HandleResponse(response);
-          
-           
+                return SweetDialogHelper.HandleResponse(response);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
         }
     }
 }

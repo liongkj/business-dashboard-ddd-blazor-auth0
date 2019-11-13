@@ -29,11 +29,7 @@ namespace JomMalaysia.Presentation.Controllers
             _appSetting = appSetting;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
+      
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -60,10 +56,10 @@ namespace JomMalaysia.Presentation.Controllers
                         Username = vm.email,
                         Password = vm.password,
                         Audience = _appSetting.Audience
-                    });
+                    }).ConfigureAwait(false);
 
                     // Get user info from token
-                    var user = await client.GetUserInfoAsync(result.AccessToken);
+                    var user = await client.GetUserInfoAsync(result.AccessToken).ConfigureAwait(false);
                     //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
 
 

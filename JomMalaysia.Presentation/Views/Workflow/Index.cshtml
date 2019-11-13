@@ -40,11 +40,7 @@
                     Fetching
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger">Reject</button>
-                <button type="button" class="btn btn-primary">Approve</button>
-            </div>
+
         </div>
     </div>
 </div>
@@ -73,7 +69,12 @@
                 });
             });
         });
-
+        $(function () {
+            $('#WorkflowDetail').on('hidden.bs.modal', function () {
+               
+                $(this).find('.modal-body').empty();
+            });
+        });
 
     </script>
 }

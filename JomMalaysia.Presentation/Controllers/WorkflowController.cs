@@ -100,5 +100,10 @@ namespace JomMalaysia.Presentation.Controllers
             vm.Add(allStatus);
             return View(vm);
         }
+
+        public IActionResult Respond()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

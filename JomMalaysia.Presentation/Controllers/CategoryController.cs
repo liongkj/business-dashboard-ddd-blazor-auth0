@@ -61,9 +61,23 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var cat = await GetCategories();
+            var categories = await GetCategories();
+            var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
 
-            return View(cat);
+            List<Category> vm = new List<Category>();
+            foreach (var category in cats)
+            {
+                Category c = category.Where(x => x.IsCategory()).FirstOrDefault();
+                c.LstSubCategory = new List<Category>();
+                foreach (var sub in category)
+                {
+                    if (!sub.IsCategory())
+                        c.LstSubCategory.Add(sub);
+                }
+                vm.Add(c);
+            }
+
+            return View(vm);
         }
 
         [HttpGet]
@@ -186,7 +200,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
-        public async Task<Tuple<int,string>> ConfirmDelete(string CategoryId)
+        public async Task<Tuple<int, string>> ConfirmDelete(string CategoryId)
         {
             IWebServiceResponse response;
 
@@ -202,8 +216,8 @@ namespace JomMalaysia.Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
-            
-    
+
+
         }
 
         /*  public ActionResult Constants()

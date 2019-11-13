@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JomMalaysia.Presentation.Models;
+﻿using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Workflows;
 using Microsoft.AspNetCore.Mvc;
-using JomMalaysia.Presentation.Models.Workflows;
 
 namespace JomMalaysia.Presentation.Views.Workflow.Components.AllWorkflow
 {
@@ -17,10 +12,9 @@ namespace JomMalaysia.Presentation.Views.Workflow.Components.AllWorkflow
             _gateway = gateway;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-        )
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            List<WorkflowModel> items = await _gateway.GetAll().ConfigureAwait(false);
+            var items = await _gateway.GetAll().ConfigureAwait(false);
             
             return View(items);
         }

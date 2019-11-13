@@ -5,7 +5,7 @@
 
 <h3>Workflows</h3>
 
-<div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important" ;">
+<div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important" >
     <table class="table table-hover">
         <thead class="table-primary">
             <tr>
@@ -34,8 +34,8 @@
                     <td>@item.Type</td>
                     <td>@item.Status</td>
                     <td>
-                        @item.Created.ToString("dd/MM/yyyy HH:mm")  (@(DateTime.Now.Subtract(@item.Created).Days)
-                        @(DateTime.Now.Subtract(@item.Created).Days > 1 ? "days" : "day") ago)
+                        @item.Created.ToString("dd/MM/yyyy HH:mm")  (@(DateTime.Now.Subtract(item.Created).Days)
+                        @(DateTime.Now.Subtract(item.Created).Days > 1 ? "days" : "day") ago)
                     </td>
                     <td>
                         <button data-toggle="modal" data-target="#WorkflowDetail"

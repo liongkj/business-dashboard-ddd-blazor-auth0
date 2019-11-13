@@ -18,17 +18,17 @@ namespace JomMalaysia.Presentation.Models.Categories
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "Category Name")]
+        [Display(Name = "Category")]
         public string CategoryName { get; set; }
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "Name Kategori")]
+        [Display(Name = "Kategori")]
         public string CategoryNameMs { get; set; }
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "名称")]
+        [Display(Name = "类别")]
         public string CategoryNameZh { get; set; }
 
         [Required]
@@ -41,6 +41,10 @@ namespace JomMalaysia.Presentation.Models.Categories
         public CategoryPath CategoryPath { get; set; }
         public List<Category> LstSubCategory { get; set; }
 
+        public bool IsCategory()
+        {
+            return CategoryPath.Subcategory == null;
+        }
         public bool IsDeleted { get; set; }
         public bool IsSelected { get; set; }
 
