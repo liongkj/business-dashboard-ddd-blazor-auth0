@@ -5,10 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
+using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
+using JomMalaysia.Presentation.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,6 +23,7 @@ namespace JomMalaysia.Presentation.Controllers
 
         private static List<Category> CategoryList { get; set; }
         private static Boolean refresh = false;
+
         public CategoryController(ICategoryGateway gateway)
         {
             _gateway = gateway;
@@ -28,7 +31,7 @@ namespace JomMalaysia.Presentation.Controllers
             Refresh();
         }
 
-        async void Refresh()
+        private async void Refresh()
         {
             if (CategoryList != null)
                 CategoryList = await GetCategories().ConfigureAwait(false);
@@ -39,12 +42,13 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
 
-        async Task<List<Category>> GetCategories()
+        private async Task<List<Category>> GetCategories()
         {
             if (CategoryList.Count > 0 && !refresh)
             {
                 return CategoryList;
             }
+
             try
             {
                 CategoryList = await _gateway.GetCategories().ConfigureAwait(false);
@@ -61,19 +65,21 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var categories = await GetCategories();
+            var categories = await GetCategories().ConfigureAwait(false);
             var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
 
-            List<Category> vm = new List<Category>();
+            var vm = new List<Category>();
             foreach (var category in cats)
             {
-                Category c = category.Where(x => x.IsCategory()).FirstOrDefault();
+                var c = category.FirstOrDefault(x => x.IsCategory());
+                if (c == null) continue;
                 c.LstSubCategory = new List<Category>();
                 foreach (var sub in category)
                 {
                     if (!sub.IsCategory())
                         c.LstSubCategory.Add(sub);
                 }
+
                 vm.Add(c);
             }
 
@@ -81,159 +87,98 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         [HttpGet]
-        public ViewResult Create()
+        public ActionResult Create(string CategoryId, string parentName)
         {
+            if (string.IsNullOrEmpty(CategoryId))
+            {
+                TempData["title"] = "New Category";
+                return View();
+            }
+                
+            TempData["title"] = $"Create new subcategory for {parentName}";
+            TempData["categoryId"] = CategoryId;
             return View();
         }
 
+
         [HttpPost]
-        public async Task<int> Create(Category vm)
+        public async Task<Tuple<int, string>> Create(NewCategoryViewModel vm, string parentCategoryId = null)
         {
-            //handle statuscode = 0; handle bad request
-            int subCount = vm.LstSubCategory == null ? 0 : vm.LstSubCategory.Count;
-            int message = 0;
+
             IWebServiceResponse response;
-
-            for (int i = subCount - 1; i >= 0; i--)
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
             {
-                if (vm.LstSubCategory[i].IsDeleted)
-                {
-                    vm.LstSubCategory.RemoveAt(i);
-                }
+                response = await _gateway.CreateCategory(vm, parentCategoryId).ConfigureAwait(false);
             }
-
-            if (ModelState.IsValid)
+            catch (GatewayException e)
             {
-                try
-                {
-                    response = await _gateway.CreateCategory(vm).ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    refresh = true;
-                    message = GlobalConstant.StatusCode.RESPONSE_OK;
-                }
-                else
-                {
-                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
-                }
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
             }
-            else
-            {
-                message = GlobalConstant.StatusCode.RESPONSE_ERR_VALIDATION_FAILED;
-            }
+            if (response.StatusCode == HttpStatusCode.OK)refresh = true;
 
-            return message;
-
+            return SweetDialogHelper.HandleResponse(response);
         }
 
         [HttpGet]
-        public ViewResult Edit(String categoryId)
+        public ViewResult Edit(string categoryId)
         {
-            Category category = new Category();
-
-            category = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
-
+            var category = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
             return View(category);
         }
 
         [HttpPost]
         public async Task<int> Edit(Category category)
         {
-            int message = 0;
-            IWebServiceResponse response;
+            var message = 0;
             if (ModelState.IsValid)
             {
                 try
                 {
                     // remove subcategory if category.lstCategory[i].isDeleted = true
-                    response = await _gateway.EditCategory(category).ConfigureAwait(false);
+                    var response = await _gateway.EditCategory(category).ConfigureAwait(false);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        refresh = true;
+                        message = GlobalConstant.StatusCode.RESPONSE_OK;
+                    }
+                    else
+                    {
+                        message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
+                    }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //should change message to string. pass exception details.
                     message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
-                    throw e;
-                }
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    refresh = true;
-                    message = GlobalConstant.StatusCode.RESPONSE_OK;
-                }
-                else
-                {
-                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
                 }
             }
+
             else
             {
                 message = GlobalConstant.StatusCode.RESPONSE_ERR_VALIDATION_FAILED;
             }
 
-
             return message;
         }
-
-        // GET: Movies/Delete/5
-        /* public async Task<IActionResult> Delete(string categoryId)
-         {
-             if (categoryId == null)
-             {
-                 return NotFound();
-             }
-
-             var cat = await CategoryList.AsQueryable()
-                 .FirstOrDefaultAsync(m => m.CategoryId == categoryId);
-             if (cat == null)
-             {
-                 return NotFound();
-             }
-
-             return View(cat);
-         }*/
-
-
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
         public async Task<Tuple<int, string>> ConfirmDelete(string CategoryId)
         {
             IWebServiceResponse response;
-
-            if (CategoryId == null) return SweetDialogHelper.HandleNotFound();
+            if (string.IsNullOrEmpty(CategoryId)) return SweetDialogHelper.HandleNotFound();
             try
             {
-                response = await _gateway.Delete(CategoryId);
+                response = await _gateway.Delete(CategoryId).ConfigureAwait(false);
             }
             catch (Exception e)
             {
                 throw e;
             }
+
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
-
             return SweetDialogHelper.HandleResponse(response);
-
-
-        }
-
-        /*  public ActionResult Constants()
-          {
-              var constants = typeof(GlobalConstant)StatusCode.
-                  .GetFields()
-                  .ToDictionary(x => x.Name, x => x.GetValue(null));
-              var json = new JavaScriptSerializer().Serialize(constants);
-              return Content("var constants = " + json + ";");
-          }
-  */
-        public ActionResult Publish(int id)
-        {
-            // delete student from the database whose id matches with specified id
-
-            return RedirectToAction("Index");
         }
     }
 }

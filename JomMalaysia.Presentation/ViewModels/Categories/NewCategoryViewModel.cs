@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using JomMalaysia.Presentation.Models.Common;
+using FluentValidation.Internal;
 
-namespace JomMalaysia.Presentation.Models.Categories
+namespace JomMalaysia.Presentation.ViewModels.Categories
 {
-    public class Category
+    public class NewCategoryViewModel
     {
-        public string CategoryId { get; set; }
-
         [Required]
         [StringLength(10, ErrorMessage = "{0} should not exceed 10 characters.")]
         [Display(Name = "Category Code")]
@@ -37,16 +32,5 @@ namespace JomMalaysia.Presentation.Models.Categories
 
         [Required]
         public string CategoryThumbnailUrl { get; set; }
-
-        public CategoryPath CategoryPath { get; set; }
-        public List<Category> LstSubCategory { get; set; }
-
-        public bool IsCategory()
-        {
-            return CategoryPath.Subcategory == null;
-        }
-        public bool IsDeleted { get; set; }
-        public bool IsSelected { get; set; }
-
     }
 }

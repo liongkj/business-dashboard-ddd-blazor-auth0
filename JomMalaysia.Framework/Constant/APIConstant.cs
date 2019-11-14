@@ -12,8 +12,9 @@ namespace JomMalaysia.Framework.Constant
             {
                 public const string Category = "api/Categories";
 
+                public const string CategoryWithId = "api/Categories/{0}";
                 
-
+                public const string NewSubcategory = "api/Categories/{0}/Subcategories";
               
 
                 public const string User = "api/Users";

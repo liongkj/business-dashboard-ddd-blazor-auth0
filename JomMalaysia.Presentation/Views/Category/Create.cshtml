@@ -1,8 +1,8 @@
 ﻿
-@model JomMalaysia.Presentation.Models.Categories.Category
+@model JomMalaysia.Presentation.ViewModels.Categories.NewCategoryViewModel
 
 @{
-    ViewData["Title"] = "Create Category";
+    
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,9 +26,10 @@
     </div>
 </div>
 <!--END OF HEADER-->
-
+<h2>@TempData["title"]</h2>
 <form asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.Hidden("parentCategoryId",TempData["categoryId"])
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
         <div class="col-sm-10 col-md-6">
@@ -67,7 +68,7 @@
             <input type="text" class="form-control" id="imageName" disabled />
             <div class="input-group-append">
                 <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
-                @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
+               
             </div>
         </div>
     </div>
@@ -83,11 +84,7 @@
     <script type="text/javascript">
         var counter = 1;
 
-        $(".tb-subcategory").on("click", ".btnDelete", function (event) {
-            $(this).closest("tr").addClass("d-none");
-            $(this).closest("tr").find('.isDelete').val("true");
-        });
-
+    
         var uploadImageWidget = cloudinary.createUploadWidget(
             {
                 ucloudname: 'jomn9-com',
@@ -105,27 +102,27 @@
                 minImageWidth: 100,
                 minImageHeight: 100,
                 autoMinimize: true,
-                showSkipCropButton: false,
+                showSkipCropButton: true,
 
 
             }, (error, result) => {
                 if (!error && result && result.event === "success") {
-                    debugger;
+                    
                     console.log("Image uploaded");
                     $("#imageUrl").val(result.info.url); //TODO KJ - add one more for image url for subcategory?
                     $("#thumbnailUrl").val(result.info.thumbnail_url);
                     $("#imageName").val(result.info.original_filename + "." + result.info.format);
                 }
             }
-        )
+        );
 
         $("#btnUpload").on("click", function () {
             uploadImageWidget.open();
         });
 
         function createCategory() {
-            debugger;
-            var data = $('#FormCreate').serialize();
+           
+            let data = $('#FormCreate').serialize();
              //TODO KJ - create one more for create subcategory
             if ($("#FormCreate").valid()) {
                 $.ajax({
@@ -133,8 +130,9 @@
                     url: "/Category/Create/",
                     data: data,
                     type: "POST",
-                    success: (function (data) {
-                        if (data == 1) {
+                    success: (function ({ item1, item2 }) {
+                        debugger
+                         if (item1 === 1) {
                             sweetAlert({
                                 title: "Created",
                                 text: "Category has been created successfully!",
@@ -143,13 +141,10 @@
                                 function () {
                                     window.location.href = '/category';
                                 });
-                        } else if (data == -4) {
-                            swal("Validation Failed", "Please key in all the fields with correct values.", "error");
+                        } else {
+                              swal("Oops",item2,"error");
                         }
-                        else {
-                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                        }
-                    }), error: (function (data) {
+                               }),  error: (function (data) {
                         swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                     })
                 })

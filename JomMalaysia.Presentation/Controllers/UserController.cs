@@ -23,9 +23,9 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly IAuthorizationManagers _auth;
 
         private readonly IUserGateway _gateway;
-        private  List<AppUser> UserList { get; set; }
+        private List<AppUser> UserList { get; set; }
 
-        private  Boolean refresh = false;
+        private Boolean refresh = false;
 
         public UserController(IUserGateway userGateway, IAuthorizationManagers authorization)
         {
@@ -33,6 +33,7 @@ namespace JomMalaysia.Presentation.Controllers
             _auth = authorization;
             Refresh();
         }
+
         async void Refresh()
         {
             if (UserList != null && !refresh)
@@ -45,7 +46,6 @@ namespace JomMalaysia.Presentation.Controllers
 
         async Task<List<AppUser>> GetUsers()
         {
-
             try
             {
                 UserList = await _gateway.GetAll().ConfigureAwait(false);
@@ -55,23 +55,20 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 throw e;
             }
-
         }
 
         // GET: /<controller>/
 
         public async Task<IActionResult> Index()
         {
-
             ViewData["Role"] = _auth.LoginInfo.Role;
             var users = await GetUsers();
 
             return View(users.OrderBy(u =>
-                        {
-                            var index = RoleHelper.AuthorityList.IndexOf(u.Role);
-                            return index == -1 ? int.MaxValue : index;
-                        }));
-
+            {
+                var index = RoleHelper.AuthorityList.IndexOf(u.Role);
+                return index == -1 ? int.MaxValue : index;
+            }));
         }
 
         [HttpGet]
@@ -86,34 +83,32 @@ namespace JomMalaysia.Presentation.Controllers
                     Value = role
                 });
             }
+
             var vm = new RegisterUserViewModel
             {
                 RoleList = _roles,
-                
+
                 Role = "editor",
             };
             return View(vm);
         }
 
         [HttpPost]
-        public async Task<Tuple<int,string>> Create(RegisterUserViewModel vm)
+        public async Task<Tuple<int, string>> Create(RegisterUserViewModel vm)
         {
-            IWebServiceResponse response = null;
+            IWebServiceResponse response;
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
             {
-                try
-                {
-                    response = await _gateway.Add(vm).ConfigureAwait(false);
-                }
-                catch (GatewayException e)
-                {
-                    return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
-                }
-                if (response.StatusCode == HttpStatusCode.OK)
-                
-                    refresh = true;
+                response = await _gateway.Add(vm).ConfigureAwait(false);
             }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
+
+            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
@@ -132,13 +127,12 @@ namespace JomMalaysia.Presentation.Controllers
             }
             catch (GatewayException e)
             {
-                return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
+
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
-
-
         }
     }
 }

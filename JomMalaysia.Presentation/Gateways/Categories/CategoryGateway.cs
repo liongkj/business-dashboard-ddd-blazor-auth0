@@ -10,6 +10,7 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
 using JomMalaysia.Presentation.Models.Categories;
+using JomMalaysia.Presentation.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
@@ -29,25 +30,22 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             _apiBuilder = apiBuilder;
 
         }
-
-        public async Task<IWebServiceResponse> CreateCategory(Category vm)
+        
+        public async Task<IWebServiceResponse> CreateCategory(NewCategoryViewModel vm, string categoryID)
         {
             IWebServiceResponse<Category> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
-
-                var method = Method.POST;
+                var req = string.IsNullOrEmpty(categoryID) ? _apiBuilder.GetApi(APIConstant.API.Path.Category) : _apiBuilder.GetApi(APIConstant.API.Path.NewSubcategory,categoryID);
+               
+                const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm).ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
-                throw;
+                throw ex;
             }
             return response;
-
-
-            //handle exception
 
         }
 
@@ -56,9 +54,9 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             IWebServiceResponse<Category> response;
             try
             {
-                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{vm.CategoryId}";
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Category,vm.CategoryId);
 
-                var method = Method.PUT;
+                const Method method = Method.PUT;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm).ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -74,13 +72,13 @@ namespace JomMalaysia.Presentation.Gateways.Categories
 
         public async Task<List<Category>> GetCategories()
         {
-            List<Category> result = new List<Category>();
+            var result = new List<Category>();
             IWebServiceResponse<ListViewModel<Category>> response = default;
 
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
-                var method = Method.GET;
+                const Method method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Category>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
 
             }
@@ -88,16 +86,10 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             {
                 throw ex;
             }
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var categories = response.Data.Data;
-                foreach (var cat in categories)
-                {
-                    result.Add(cat);
-                }
 
-
-            }
+            if (response.StatusCode != HttpStatusCode.OK) return result;
+            var categories = response.Data.Data;
+            result.AddRange(categories);
             //handle exception
             return result;
         }
@@ -107,9 +99,9 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             IWebServiceResponse<Category> response;
             try
             {
-                var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryId}";
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId,categoryId);
 
-                var method = Method.DELETE;
+                const Method method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
             }
             catch (GatewayException ex)

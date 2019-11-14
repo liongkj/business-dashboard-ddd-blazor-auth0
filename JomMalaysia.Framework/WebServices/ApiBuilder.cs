@@ -18,11 +18,11 @@ namespace JomMalaysia.Framework.WebServices
 
         public string GetApi(string path, params string[] parameters)
         {
-            StringBuilder apiString = new StringBuilder();
+            var apiString = new StringBuilder();
             apiString.Append(WebApiUrl);
             apiString.Append(path);
 
-            for (int i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
                 apiString.Replace("{" + i + "}", parameters[i]);
             }
