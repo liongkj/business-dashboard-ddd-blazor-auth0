@@ -172,9 +172,9 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 response = await _gateway.Delete(CategoryId).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (GatewayException e)
             {
-                throw e;
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
 
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;

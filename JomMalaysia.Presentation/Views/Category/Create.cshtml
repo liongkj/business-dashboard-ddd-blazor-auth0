@@ -68,7 +68,7 @@
             <input type="text" class="form-control" id="imageName" disabled />
             <div class="input-group-append">
                 <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
-               
+                 @Html.ValidationMessageFor(m => m.CategoryThumbnailUrl)
             </div>
         </div>
     </div>
