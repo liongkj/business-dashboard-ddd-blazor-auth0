@@ -11,8 +11,9 @@ namespace JomMalaysia.Presentation.Gateways.Categories
     public interface ICategoryGateway
     {
         Task<List<Category>> GetCategories();
+        Task<Category> GetCategory(string CategoryId);
         Task<IWebServiceResponse> CreateCategory(NewCategoryViewModel vm, string categoryId);
-        Task<IWebServiceResponse> EditCategory(Category vm);
+        Task<IWebServiceResponse> EditCategory(NewCategoryViewModel vm, string categoryId);
         Task<IWebServiceResponse> Delete(string CategoryId);
     }
 }

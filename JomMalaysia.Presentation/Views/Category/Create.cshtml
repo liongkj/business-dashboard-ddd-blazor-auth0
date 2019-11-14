@@ -81,11 +81,10 @@
     <!-- cloudinary api -->
     <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
     <script>cloudinary.setCloudName("jomn9-com")</script>
-    <script type="text/javascript">
-        var counter = 1;
-
     
-        var uploadImageWidget = cloudinary.createUploadWidget(
+    <script type="text/javascript">
+     
+        let uploadImageWidget = cloudinary.createUploadWidget(
             {
                 ucloudname: 'jomn9-com',
                 uploadPreset: 'ox3azzqe',
@@ -109,7 +108,7 @@
                 if (!error && result && result.event === "success") {
                     
                     console.log("Image uploaded");
-                    $("#imageUrl").val(result.info.url); //TODO KJ - add one more for image url for subcategory?
+                    $("#imageUrl").val(result.info.url); 
                     $("#thumbnailUrl").val(result.info.thumbnail_url);
                     $("#imageName").val(result.info.original_filename + "." + result.info.format);
                 }
@@ -131,7 +130,6 @@
                     data: data,
                     type: "POST",
                     success: (function ({ item1, item2 }) {
-                        debugger
                          if (item1 === 1) {
                             sweetAlert({
                                 title: "Created",

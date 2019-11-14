@@ -94,7 +94,7 @@ namespace JomMalaysia.Presentation.Controllers
                 TempData["title"] = "New Category";
                 return View();
             }
-                
+
             TempData["title"] = $"Create new subcategory for {parentName}";
             TempData["categoryId"] = CategoryId;
             return View();
@@ -104,7 +104,6 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<Tuple<int, string>> Create(NewCategoryViewModel vm, string parentCategoryId = null)
         {
-
             IWebServiceResponse response;
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
@@ -113,53 +112,43 @@ namespace JomMalaysia.Presentation.Controllers
             }
             catch (GatewayException e)
             {
-                return SweetDialogHelper.HandleStatusCode(e.StatusCode,e.Message);
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
-            if (response.StatusCode == HttpStatusCode.OK)refresh = true;
+
+            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
 
         [HttpGet]
-        public ViewResult Edit(string categoryId)
+        public async Task<ViewResult> Edit(string categoryId)
         {
-            var category = CategoryList.FirstOrDefault(m => m.CategoryId == categoryId);
+            var category = await _gateway.GetCategory(categoryId).ConfigureAwait(false);
+           
             return View(category);
         }
 
         [HttpPost]
-        public async Task<int> Edit(Category category)
+        public async Task<Tuple<int, string>> Edit(NewCategoryViewModel category, string categoryId)
         {
-            var message = 0;
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)return SweetDialogHelper.HandleResponse(null);
             {
+                IWebServiceResponse response;
                 try
                 {
-                    // remove subcategory if category.lstCategory[i].isDeleted = true
-                    var response = await _gateway.EditCategory(category).ConfigureAwait(false);
-                    if (response.StatusCode == HttpStatusCode.OK)
-                    {
-                        refresh = true;
-                        message = GlobalConstant.StatusCode.RESPONSE_OK;
-                    }
-                    else
-                    {
-                        message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
-                    }
+                  
+                    response = await _gateway.EditCategory(category, categoryId).ConfigureAwait(false);
+                 
                 }
-                catch (Exception)
+                catch (GatewayException e)
                 {
-                    //should change message to string. pass exception details.
-                    message = GlobalConstant.StatusCode.RESPONSE_ERR_UNKNOWN;
+                    return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
                 }
-            }
+                if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
-            else
-            {
-                message = GlobalConstant.StatusCode.RESPONSE_ERR_VALIDATION_FAILED;
+                return SweetDialogHelper.HandleResponse(response);
             }
-
-            return message;
+            
         }
 
         [HttpPost]

@@ -32,12 +32,9 @@ namespace JomMalaysia.Presentation.Models.Categories
         public string CategoryNameZh { get; set; }
 
         [Required]
-        [Display(Name = "Category Image")]
-        public string CategoryImageUrl { get; set; }
-
-        [Required]
-        public string CategoryThumbnailUrl { get; set; }
-
+        [Display(Name = "Category Thumbnail")]
+        public Image CategoryThumbnail { get; set; }
+        
         public CategoryPath CategoryPath { get; set; }
         public List<Category> LstSubCategory { get; set; }
 

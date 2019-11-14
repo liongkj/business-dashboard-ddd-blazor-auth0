@@ -1,25 +1,25 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
-
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
 }
 
 <h3>@ViewBag.Title</h3>
-<br />
+<br/>
 <div class="row">
     <div class="col-md-2">
         <button type="button" class="btn btn-success form-control" onclick="window.location.href = '@Url.Action("Create", controller)'">New</button>
     </div>
     <div class="col-md-3 offset-md-5">
-        @Html.TextBox("keyword", null, new { @placeholder = "Filter keyword", @id = "txtKeyword", @class = "form-control" })
+        @Html.TextBox("keyword", null, new {placeholder = "Filter keyword", id = "txtKeyword", @class = "form-control"})
     </div>
     <div class="col-md-2">
         <button id="btnClear" type="button" class="btn btn-secondary form-control">Clear</button>
     </div>
 </div>
-<br />
+<br/>
 
 @RenderBody()
+
 @section Scripts{
     @RenderSection("SpecificScripts", required: true)
     <script type="text/javascript">
@@ -46,4 +46,3 @@
         });
     </script>
 }
-

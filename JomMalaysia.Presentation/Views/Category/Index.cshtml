@@ -29,23 +29,9 @@
                     <td>
                         @if (item.LstSubCategory.Count > 0)
                         {
-                            <a class="col-md-2 btnSubcategory">
+                            <a class="col-md-2 ">
                                 <span>
-                                    <i class="fa fa-angle-down big-icon"></i>
-                                </span>
-                                <span style="display:none">
-                                    <i class="fa fa-angle-up big-icon"></i>
-                                </span>
-                            </a>
-                        }
-                        else
-                        {
-                            <a class="col-md-2 btnAddSubcategory" style="cursor:pointer;" data-toggle="collapse" data-target="collapse-next-subcategory">
-                                <span>
-                                    <i class="fa fa-plus big-icon"></i>
-                                </span>
-                                <span style="display:none">
-                                    <i class="fa fa-angle-up big-icon"></i>
+                                    <i class="btnSubcategory fa fa-angle-down big-icon"></i>
                                 </span>
                             </a>
                         }
@@ -88,16 +74,16 @@
 
                             <br/>
                             <table id="subtabledata" class="table table-hover">
-                                <thead class="subcategory-header-bg">
-                                <tr>
-                                    <th scope="col" style="width:3%">&nbsp;</th>
-                                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th>
-                                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
-                                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
-                                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                                </thead>
+                                @* <thead class="subcategory-header-bg"> *@
+                                @* <tr> *@
+                                @*     <th scope="col" style="width:3%">&nbsp;</th> *@
+                                @*     <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th> *@
+                                @*     <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th> *@
+                                @*     <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th> *@
+                                @*     <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th> *@
+                                @*     <th scope="col">Action</th> *@
+                                @* </tr> *@
+                                @* </thead> *@
                                 <tbody>
                                 @{ var count1 = 0; }
 
@@ -135,19 +121,6 @@
                         </td>
                     </tr>
                 }
-                else
-                {
-                    <tr class="subcategory-bg subcategory collapse">
-                        <td colspan="6" class="no-padding">
-                            <!--TODO KJ - link to create subcategory controller -- get subcategory id using subitem.CategoryId !! THIS IS FOR CREATING FIRST SUBCATEGORY !!-->
-                            <a href="@Url.Action("Create", "Category", new {item.CategoryId})" class="btn btn-outline-info col-md-1 margin-topbottom-15 margin-leftright-15">
-                                <span>
-                                    New
-                                </span>
-                            </a>
-                        </td>
-                    </tr>
-                }
 
                 count += 1;
             }
@@ -169,7 +142,8 @@
             $('#categoryForm').on('click.collapse-next-subcategory.data-api', '[data-target=collapse-next-subcategory]', function () {
                 
                 //var $target = $(this).parent().parent().closest('tr').next('tr').toggle();
-                $(this).closest('tr').next('tr').toggle();
+                $(this).closest('tr').next('tr.subcategory').toggle();
+                $(".btnSubcategory").toggleClass("fa-angle-down fa-angle-up");
             });
              //prevent buttons to execute function above
             $(".addButton").click(function (event) {

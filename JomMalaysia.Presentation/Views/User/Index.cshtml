@@ -33,7 +33,7 @@
                         <td>@item.Username</td>
                         <td>@item.Email</td>
                         <td>@item.Name</td>
-                        <td>@(item.Role==null? "EDITOR":item.Role)</td>
+                        <td>@(item.Role ?? "EDITOR")</td>
                         <td>@(item.LastLogin.HasValue ? item.LastLogin.Value.ToString("yy/MM/dd"):"Warning Icon")</td>
                         <td>
                             <input onclick="confirmDelete('@item.UserId', '@item.Username')" asp-for="@item.HasAuthority?" id="btnDelete" type="button" value="Delete" class="btn btn-danger col-md-5 offset-md-1" />
