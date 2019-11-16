@@ -12,6 +12,7 @@
 </style>
 <!--HEADER-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
+    <button type="button" class="btn btn-success col-md-2" onclick="$('#btnListingSubmit').click">Save</button>
     <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Back</button>
 </div>
 
@@ -84,42 +85,15 @@
         </div>
     </div>
 
-    <legend>Address Info</legend>
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.FullAddress, new { @class = "form-control", @readonly = true, id = "txtAddress", data_toggle = "modal", data_target = "#modal-address" })
+            @Html.ValidationMessageFor(m => m.FullAddress)
+            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
+        </div>
+    </div>
 
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.Add1)</div>
-        <div class="col-sm-10 col-md-6">
-            <input asp-for="Address.Add1" class="form-control" />
-            <span asp-validation-for="Address.Add1" class="text-danger" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.Add2)</div>
-        <div class="col-sm-10 col-md-6">
-            <input asp-for="Address.Add2" class="form-control" />
-            <span asp-validation-for="Address.Add2" class="text-danger" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.City)</div>
-        <div class="col-sm-10 col-md-3">
-            <input asp-for="Address.City" class="form-control" />
-            <span asp-validation-for="Address.City" class="text-danger" />
-        </div> <div class="col-sm-10 col-md-3">
-            <input asp-for="Address.PostalCode" class="form-control" placeholder="Postcode" />
-            <span asp-validation-for="Address.PostalCode" class="text-danger" />
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Address.State)</div>
-        <div class="col-sm-10 col-md-3">
-            <input asp-for="Address.State" class="form-control" />
-            <span asp-validation-for="Address.State" class="text-danger" />
-        </div> <div class="col-sm-10 col-md-3">
-            <input asp-for="Address.Country" class="form-control" placeholder="Country" />
-            <span asp-validation-for="Address.Country" class="text-danger" />
-        </div>
-    </div>
     <legend>Detailed Info</legend>
 
     <div class="form-group row">
@@ -145,16 +119,69 @@
         </div>
     </div>
 
-
-
-    <button type="submit">Register</button>
+    <button type="submit" id="btnListingSubmit">Register</button>
 </form>
+
+<div class="modal" id="modal-address">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Address Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-controller="Listing" asp-action="Create" id="formAddress" class="form-m-gap-top" method="post">
+                    <div class="form-group row">
+                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add1)</div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Address.Add1, new { @class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.Address.Add1)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add2)</div>
+                        <div class="col-md-9">
+                            @Html.TextBoxFor(m => m.Address.Add2, new { @class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.Address.Add2)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.City)</div>
+                        <div class="col-md-5">
+                            @Html.TextBoxFor(m => m.Address.City, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Address.City)
+                        </div> <div class="col-md-4">
+                            @Html.TextBoxFor(m => m.Address.PostalCode, new { @class = "form-control", placeholder = "Postal Code" })
+                            @Html.ValidationMessageFor(m => m.Address.PostalCode)
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.State)</div>
+                        <div class="col-md-5">
+                            @Html.TextBoxFor(m => m.Address.State, new { @class = "form-control"})
+                            @Html.ValidationMessageFor(m => m.Address.State)
+                        </div> <div class="col-md-4">
+                            @Html.TextBoxFor(m => m.Address.Country, new { @class = "form-control", placeholder = "Country"})
+                            @Html.ValidationMessageFor(m => m.Address.Country)
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSaveAddress">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-    <script type="text/javascript">
+<script type="text/javascript">
         $(document).ready(function () {
 
             $("#category-input").hide();
@@ -164,8 +191,21 @@
                 else $("#category-input").hide();
             });
 
+            $("#btnSaveAddress").click(function () {
+                debugger;
+                var addline1 = $("#Address_Add1").val();
+                var addline2 = $("#Address_Add2").val();
+                var city = $("#Address_City").val();
+                var postalCode = $("#Address_PostalCode").val();
+                var state = $("#Address_State").val();
+                var country = $("#Address_Country").val();
+
+                $("#txtAddress").val(addline1 + ", " + addline2 + ", " + city + " " + postalCode + ", " + state +  ", " + country);
+
+            });
+
         });
-    </script>
+</script>
     <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
     <script>cloudinary.setCloudName("jomn9-com")</script>
     <script type="text/javascript">
@@ -191,7 +231,7 @@
 
             }, (error, result) => {
                 if (!error && result && result.event === "success") {
-                   
+
                     console.log("Image uploaded");
                     $("#imageUrl").val(result.info.url);
                     $("#thumbnailUrl").val(result.info.thumbnail_url);

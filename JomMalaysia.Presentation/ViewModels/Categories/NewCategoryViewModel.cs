@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using FluentValidation.Internal;
 
 namespace JomMalaysia.Presentation.ViewModels.Categories
 {

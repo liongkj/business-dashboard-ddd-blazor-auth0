@@ -26,6 +26,8 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 
         public IEnumerable<OperatingHourViewModel> OperatingHours { get; set; }
 
+        [Display(Name = "Address")]
+        public String FullAddress { get; set; }
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
 
