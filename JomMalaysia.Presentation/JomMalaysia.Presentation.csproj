@@ -9,6 +9,7 @@
       <PackageReference Include="Auth0.Core" Version="6.5.4"/>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
