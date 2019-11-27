@@ -7,56 +7,55 @@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Type)</div>
     <div class="col-sm-10 col-md-3">
-        <input asp-for="Type" readonly class="form-control-plaintext" />
+        <input asp-for="Type" readonly class="form-control-plaintext"/>
     </div>
 
     <div class="col-sm-10 col-md-5">
-        <input asp-for="Status" readonly class="form-control-plaintext" />
+        <input asp-for="Status" readonly class="form-control-plaintext"/>
     </div>
 </div>
 <legend>Listing</legend>
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Listing.ListingName)</div>
     <div class="col-sm-10 col-md-6">
-        <input asp-for="Listing.ListingName" readonly class="form-control-plaintext" />
+        <input asp-for="Listing.ListingName" readonly class="form-control-plaintext"/>
     </div>
     <div class="col-sm-10 col-md-3">
-        <input asp-for="Listing.ListingType" readonly class="form-control-plaintext" />
+        <input asp-for="Listing.ListingType" readonly class="form-control-plaintext"/>
     </div>
 </div>
 
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Listing.Merchant.SsmId)</div>
     <div class="col-sm-10 col-md-3">
-        <input asp-for="Listing.Merchant.SsmId" readonly class="form-control-plaintext" />
+        <input asp-for="Listing.Merchant.SsmId" readonly class="form-control-plaintext"/>
     </div>
 
     <div class="col-sm-10 col-md-5">
-        <input asp-for="Listing.Merchant.RegistrationName" readonly class="form-control-plaintext" />
+        <input asp-for="Listing.Merchant.RegistrationName" readonly class="form-control-plaintext"/>
     </div>
 </div>
-@if (@Model.HistoryData.Count > 0)
+@if (Model.HistoryData.Count > 0)
 {
     <div class="container py-2">
         <h2 class="font-weight-light text-center text-muted py-3">Additional Details</h2>
-        @{int count = 1;}
+        @{ var count = 1; }
         @foreach (var item in Model.HistoryData)
         {
-
             <!-- timeline item  -->
             <div class="row">
 
                 <!-- timeline item 1 left dot -->
                 <div class="col-auto text-center flex-column d-none d-sm-flex">
                     <div class="row h-50">
-                        <div class="col @(count>1 && count <= Model.HistoryData.Count? "border-right":"")">&nbsp;</div>
+                        <div class="col @(count > 1 && count <= Model.HistoryData.Count ? "border-right" : "")">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                     <h5 class="m-2">
                         <span class="badge badge-pill bg-light border">&nbsp;</span>
                     </h5>
                     <div class="row h-50">
-                        <div class="col @(Model.HistoryData.Count>1 && count != Model.HistoryData.Count? "border-right":"")">&nbsp;</div>
+                        <div class="col @(Model.HistoryData.Count > 1 && count != Model.HistoryData.Count ? "border-right" : "")">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                 </div>
@@ -66,7 +65,7 @@
                         <div class="card-body">
                             <div class="float-right text-muted">@item.Created.ToString("ddd, dd  MMM yyyy hh:HH tt")</div>
                             <h4 class="card-title text-muted">@item.Action by @item.Responder.Username</h4>
-                            <p class="card-text">@(String.IsNullOrEmpty(item.Comments)? "No Comments":item.Comments.Trim())</p>
+                            <p class="card-text">@(string.IsNullOrEmpty(item.Comments) ? "No Comments" : item.Comments.Trim())</p>
                         </div>
                     </div>
                 </div>
@@ -75,8 +74,4 @@
             count++;
         }
     </div>
-
 }
-
-
-

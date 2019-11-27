@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JomMalaysia.Framework.Constant
+﻿namespace JomMalaysia.Framework.Constant
 {
-    public partial class APIConstant
+    public class APIConstant
     {
         public class API
         {
@@ -13,11 +9,12 @@ namespace JomMalaysia.Framework.Constant
                 public const string Category = "api/Categories";
 
                 public const string CategoryWithId = "api/Categories/{0}";
-                
+
                 public const string NewSubcategory = "api/Categories/{0}/Subcategories";
-              
+
 
                 public const string User = "api/Users";
+                public const string UserWithId = "api/Users/{0}";
 
                 public const string Merchant = "api/Merchants";
 

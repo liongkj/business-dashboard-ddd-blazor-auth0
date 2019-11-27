@@ -9,7 +9,7 @@
       <PackageReference Include="Auth0.Core" Version="6.5.4"/>
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.4.0" />
-    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435"/>
+      <PackageReference Include="BuildBundlerMinifier" Version="3.2.435"/>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
@@ -39,4 +39,74 @@
   <ItemGroup>
     <ProjectReference Include="..\JomMalaysia.Framework\JomMalaysia.Framework.csproj" />
   </ItemGroup>
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\css\select2.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\css\select2.min.css"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\af.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ar.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\az.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\bg.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\bn.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\bs.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ca.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\cs.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\da.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\de.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\dsb.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\el.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\en.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\es.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\et.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\eu.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\fa.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\fi.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\fr.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\gl.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\he.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\hi.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\hr.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\hsb.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\hu.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\hy.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\id.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\is.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\it.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ja.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ka.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\km.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ko.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\lt.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\lv.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\mk.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ms.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\nb.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ne.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\nl.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\pl.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ps.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\pt-BR.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\pt.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ro.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\ru.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sk.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sl.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sq.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sr-Cyrl.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sr.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\sv.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\th.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\tk.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\tr.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\uk.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\vi.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\zh-CN.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\i18n\zh-TW.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.full.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.full.min.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.min.js"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Folder Include="Pages\Shared"/>
+    </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@
 @RenderBody()
 
 @section Scripts{
-    @RenderSection("SpecificScripts", required: true)
+    @RenderSection("SpecificScripts", true)
     <script type="text/javascript">
 
 
@@ -29,16 +29,17 @@
             // #region Common Scripts in Filter
             //filter
             $("#txtKeyword").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
+                const value = $(this).val().toLowerCase();
                 $("#tableData tbody tr").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
 
             //clear filter
+            const txtKeyword = $('#txtKeyword');
             $('#btnClear').click(function () {
-                $('#txtKeyword').val("");
-                $('#txtKeyword').keyup();
+                txtKeyword.val("");
+                txtKeyword.keyup();
             });
 
             // #endregion

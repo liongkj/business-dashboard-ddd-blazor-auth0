@@ -9,7 +9,8 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/site.js",
+      "wwwroot/js/custom-js.js"
     ],
     "minify": {
       "enabled": true,

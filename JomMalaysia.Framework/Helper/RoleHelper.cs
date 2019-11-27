@@ -1,41 +1,39 @@
-using System;
 using System.Collections.Generic;
 
 namespace JomMalaysia.Framework.Helper
 {
     public static class RoleHelper
     {
-        private readonly static string Superadmin = "Superadmin";
-        private readonly static string Manager = "Manager";
-        private readonly static string Admin = "Admin";
-        private readonly static string Editor = "Editor";
+        private static readonly string Superadmin = "Superadmin";
+        private static readonly string Manager = "Manager";
+        private static readonly string Admin = "Admin";
+        private static readonly string Editor = "Editor";
 
-        public static readonly List<string> AuthorityList = new List<string>() {
+        public static readonly List<string> AuthorityList = new List<string>
+        {
             Superadmin.ToUpper(), Superadmin,
             Manager.ToUpper(), Manager,
             Admin.ToUpper(), Admin,
-            Editor.ToUpper(), Editor, };
+            Editor.ToUpper(), Editor
+        };
 
         public static List<string> GetAssignableRoles(string role)
         {
             var find = role.ToLower();
-            List<string> roleList = new List<string>() { "superadmin", "manager", "admin", "editor" };
+            var roleList = new List<string> {"manager", "admin", "editor"};
             switch (find)
             {
-                case ("superadmin"):
-                    break;
-                case ("manager"):
+                case "manager":
                     roleList.RemoveAt(0);
                     break;
-                case ("admin"):
+                case "admin":
                     roleList.RemoveRange(0, 2);
                     break;
                 default:
                     return null;
             }
+
             return roleList;
         }
-
-        
     }
 }

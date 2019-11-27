@@ -6,9 +6,9 @@ namespace JomMalaysia.Presentation.ViewModels.Users
 {
     public class RegisterUserViewModel
     {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
+        public string UserId { get; set; }
+
+        [Required] [EmailAddress] public string Email { get; set; }
 
         [Required]
         [Display(Name = "Full Name")]
@@ -21,6 +21,7 @@ namespace JomMalaysia.Presentation.ViewModels.Users
         [Required]
         [Display(Name = "Assign Role")]
         public string Role { get; set; }
+
         public IEnumerable<SelectListItem> RoleList { get; set; }
     }
 }
