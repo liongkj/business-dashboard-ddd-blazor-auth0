@@ -29,7 +29,7 @@ namespace JomMalaysia.Presentation.Controllers
             _appSetting = appSetting;
         }
 
-      
+
         [HttpGet]
         public IActionResult Login(string returnUrl)
         {
@@ -94,8 +94,8 @@ namespace JomMalaysia.Presentation.Controllers
                     ModelState.AddModelError("", e.Message);
                 }
             }
-            // return RedirectToLocal(vm.returnURL); //auth: disable this
-            return View(vm); //auth:enable this to bypass
+            return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
+            // return View(vm); //auth:enable this to bypass
         }
 
         public async Task<IActionResult> Logout()

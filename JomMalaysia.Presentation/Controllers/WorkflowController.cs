@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Workflows;
 using JomMalaysia.Presentation.Models.Workflows;
 using JomMalaysia.Presentation.ViewModels.Workflows;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static JomMalaysia.Framework.Constant.EnumConstant;
 using static JomMalaysia.Presentation.Models.Workflows.WorkflowModel;
@@ -13,6 +14,7 @@ using static JomMalaysia.Presentation.Models.Workflows.WorkflowModel;
 
 namespace JomMalaysia.Presentation.Controllers
 {
+    [Authorize]
     public class WorkflowController : Controller
     {
         private readonly IWorkflowGateway _gateway;

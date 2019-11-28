@@ -14,7 +14,7 @@ using JomMalaysia.Presentation.ViewModels;
 
 namespace JomMalaysia.Presentation.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IAppSetting _appSetting;
@@ -38,7 +38,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             return View();
         }
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

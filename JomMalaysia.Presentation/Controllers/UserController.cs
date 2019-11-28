@@ -10,6 +10,7 @@ using JomMalaysia.Presentation.Gateways.Users;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JomMalaysia.Presentation.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IAuthorizationManagers _auth;
@@ -168,7 +170,7 @@ namespace JomMalaysia.Presentation.Controllers
         private List<SelectListItem> GetAssignableRole()
         {
             return RoleHelper.GetAssignableRoles(_auth.LoginInfo.Role)
-                .Select(role => new SelectListItem {Text = role, Value = role}).ToList();
+                .Select(role => new SelectListItem { Text = role, Value = role }).ToList();
         }
     }
 }
