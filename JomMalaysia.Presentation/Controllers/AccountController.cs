@@ -41,36 +41,34 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) 
+                return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
+            try
             {
-                try
+                AuthenticationApiClient client = new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
+
+                var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
                 {
-                    AuthenticationApiClient client = new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
+                    ClientId = _appSetting.Auth0ClientId,
+                    ClientSecret = _appSetting.Auth0ClientSecret,
+                    Scope = _appSetting.Scope,
+                    Realm = _appSetting.DBConnection,
+                    Username = vm.email,
+                    Password = vm.password,
+                    Audience = _appSetting.Audience
+                }).ConfigureAwait(false);
 
-                    var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
-                    {
-                        ClientId = _appSetting.Auth0ClientId,
-                        ClientSecret = _appSetting.Auth0ClientSecret,
-                        Scope = _appSetting.Scope,
-                        Realm = _appSetting.DBConnection,
-                        Username = vm.email,
-                        Password = vm.password,
-                        Audience = _appSetting.Audience
-                    }).ConfigureAwait(false);
-
-                    // Get user info from token
-                    var user = await client.GetUserInfoAsync(result.AccessToken).ConfigureAwait(false);
-                    //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
+                // Get user info from token
+                var user = await client.GetUserInfoAsync(result.AccessToken).ConfigureAwait(false);
+                //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
 
 
-                    var handler = new JwtSecurityTokenHandler();
-                    var jsonToken = handler.ReadToken(result.AccessToken);
+                var handler = new JwtSecurityTokenHandler();
+                var jsonToken = handler.ReadToken(result.AccessToken);
 
-                    var tokenS = handler.ReadToken(result.AccessToken) as JwtSecurityToken;
+                if (handler.ReadToken(result.AccessToken) is JwtSecurityToken tokenS)
+                {
                     var role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
-
-
-
                     // Create claims principal
                     var claims = new List<Claim>
                     {
@@ -85,14 +83,14 @@ namespace JomMalaysia.Presentation.Controllers
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     // Sign user into cookie middleware
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity)).ConfigureAwait(false);
+                }
 
-                    return RedirectToLocal(vm.returnURL);
-                }
-                catch (Exception e)
-                {
-                    ModelState.AddModelError("", e.Message);
-                }
+                return RedirectToLocal(vm.returnURL);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e.Message);
             }
             return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
             // return View(vm); //auth:enable this to bypass
@@ -100,9 +98,9 @@ namespace JomMalaysia.Presentation.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
 
-            return RedirectToAction(nameof(AccountController.Login), "Account");
+            return RedirectToAction(nameof(Login), "Account");
         }
 
         public IActionResult Claims()

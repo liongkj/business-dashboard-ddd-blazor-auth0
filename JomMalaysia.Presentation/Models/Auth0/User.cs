@@ -8,13 +8,13 @@ namespace JomMalaysia.Presentation.Models.Auth0
 {
     public class User
     {
-        [Display(Name = "Email Address")]
-        public String email { get; set; }
+        [Display(Name = "Email Address / Username")]
+        public string email { get; set; }
 
         [Display(Name = "Password")]
-        public String password { get; set; }
+        public string password { get; set; }
 
         [Display(Name = "ReturnURL")]
-        public String returnURL { get; set; }
+        public string returnURL { get; set; }
     }
 }

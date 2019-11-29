@@ -66,21 +66,25 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await GetCategories().ConfigureAwait(false);
-            var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
-
             var vm = new List<Category>();
-            foreach (var category in cats)
+            if (categories.Count > 0)
             {
-                var c = category.FirstOrDefault(x => x.IsCategory());
-                if (c == null) continue;
-                c.LstSubCategory = new List<Category>();
-                foreach (var sub in category)
-                {
-                    if (!sub.IsCategory())
-                        c.LstSubCategory.Add(sub);
-                }
+                var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
 
-                vm.Add(c);
+                
+                foreach (var category in cats)
+                {
+                    var c = category.FirstOrDefault(x => x.IsCategory());
+                    if (c == null) continue;
+                    c.LstSubCategory = new List<Category>();
+                    foreach (var sub in category)
+                    {
+                        if (!sub.IsCategory())
+                            c.LstSubCategory.Add(sub);
+                    }
+
+                    vm.Add(c);
+                }
             }
 
             return View(vm);
