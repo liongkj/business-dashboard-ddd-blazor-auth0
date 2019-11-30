@@ -67,24 +67,21 @@ namespace JomMalaysia.Presentation.Controllers
         {
             var categories = await GetCategories().ConfigureAwait(false);
             var vm = new List<Category>();
-            if (categories.Count > 0)
-            {
-                var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
-
+            if (categories == null ) return View(vm);
+            var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
                 
-                foreach (var category in cats)
+            foreach (var category in cats)
+            {
+                var c = category.FirstOrDefault(x => x.IsCategory());
+                if (c == null) continue;
+                c.LstSubCategory = new List<Category>();
+                foreach (var sub in category)
                 {
-                    var c = category.FirstOrDefault(x => x.IsCategory());
-                    if (c == null) continue;
-                    c.LstSubCategory = new List<Category>();
-                    foreach (var sub in category)
-                    {
-                        if (!sub.IsCategory())
-                            c.LstSubCategory.Add(sub);
-                    }
-
-                    vm.Add(c);
+                    if (!sub.IsCategory())
+                        c.LstSubCategory.Add(sub);
                 }
+
+                vm.Add(c);
             }
 
             return View(vm);
@@ -95,11 +92,11 @@ namespace JomMalaysia.Presentation.Controllers
         {
             if (string.IsNullOrEmpty(CategoryId))
             {
-                TempData["title"] = "New Category";
+                ViewData["title"] = "New Category";
                 return View();
             }
 
-            TempData["title"] = $"Create new subcategory for {parentName}";
+            ViewData["title"] = $"Create new subcategory for {parentName}";
             TempData["categoryId"] = CategoryId;
             return View();
         }

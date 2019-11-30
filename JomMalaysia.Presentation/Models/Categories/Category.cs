@@ -11,30 +11,31 @@ namespace JomMalaysia.Presentation.Models.Categories
     {
         public string CategoryId { get; set; }
 
-        [Required]
+        
         [StringLength(10, ErrorMessage = "{0} should not exceed 10 characters.")]
         [Display(Name = "Category Code")]
         public string CategoryCode { get; set; }
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "Category")]
+        [Display(Name = "Category Name (EN)")]
         public string CategoryName { get; set; }
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "Kategori")]
+        [Display(Name = "Category Name (BM)")]
         public string CategoryNameMs { get; set; }
 
         [Required]
         [StringLength(500)]
-        [Display(Name = "类别")]
+        [Display(Name = "Category Name (中文)")]
         public string CategoryNameZh { get; set; }
 
         [Required]
-        [Display(Name = "Category Thumbnail")]
+        [Display(Name = "Category Logo")]
         public Image CategoryThumbnail { get; set; }
-        
+
+        public CategoryType CategoryType { get; set; } = CategoryType.Private;
         public CategoryPath CategoryPath { get; set; }
         public List<Category> LstSubCategory { get; set; }
 
@@ -45,5 +46,14 @@ namespace JomMalaysia.Presentation.Models.Categories
         public bool IsDeleted { get; set; }
         public bool IsSelected { get; set; }
 
+    }
+    
+    public enum CategoryType
+    {
+        Professional,
+        Government,
+        Private,
+        Nonprofit,
+        Attraction
     }
 }

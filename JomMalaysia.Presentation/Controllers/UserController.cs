@@ -62,7 +62,7 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             ViewData["Role"] = _auth.LoginInfo.Role;
-            var users = await GetUsers();
+            var users = await GetUsers().ConfigureAwait(false);
 
             return View(users.OrderBy(u =>
             {

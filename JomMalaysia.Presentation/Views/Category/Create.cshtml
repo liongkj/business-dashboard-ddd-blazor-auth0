@@ -1,6 +1,7 @@
 ﻿
+@using JomMalaysia.Presentation.Models.Categories
 @model JomMalaysia.Presentation.ViewModels.Categories.NewCategoryViewModel
-
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -35,9 +36,19 @@
         <div class="col-sm-10 col-md-6">
             @Html.TextBoxFor(m => m.CategoryCode, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.CategoryCode)
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
+    @if (TempData["categoryId"]==null)
+    {
+        <div class="form-group row">
+            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
+            <div class="col-sm-10 col-md-6">
+                <select asp-for="CategoryType" asp-items="Html.GetEnumSelectList<CategoryType>()" class="form-control"></select>
+                @Html.ValidationMessageFor(m => m.CategoryType)
+            </div>
+        </div>
+    }
+    
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryName)</div>
         <div class="col-sm-10 col-md-6">
