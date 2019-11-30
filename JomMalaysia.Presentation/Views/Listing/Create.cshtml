@@ -1,4 +1,5 @@
-﻿@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
+﻿@using JomMalaysia.Presentation.Models.Categories
+@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
 <!--modal-->
 @{
     ViewData["Title"] = "Create new Listing";
@@ -41,7 +42,7 @@
         <div class="col-sm-10 col-md-6">
 
             <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
-            <span asp-validation-for="ListingName" class="text-danger" />
+            <span asp-validation-for="ListingName" class="text-danger"></span>
 
         </div>
     </div>
@@ -58,44 +59,35 @@
             </div>
         </div>
     </div>
+    @* Description *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
         <div class="col-sm-10 col-md-6">
             <textarea asp-for="Description" class="form-control"></textarea>
-            <span asp-validation-for="Description" class="text-danger" />
+            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
     </div>
+    @* Merchant *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.MerchantId)</div>
         <div class="col-sm-10 col-md-6">
             <select asp-for="MerchantId" asp-items="Model.MerchantList" class="form-control">
                 <option disabled selected>--- SELECT ---</option>
             </select>
-            <span asp-validation-for="MerchantId" class="text-danger" />
+            <span asp-validation-for="MerchantId" class="text-danger"></span>
         </div>
     </div>
-
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingType)</div>
-        <div class="col-sm-10 col-md-6">
-            <select asp-for="ListingType" id="type-select" asp-items="Model.ListingTypeList" class="form-control">
-                <option disabled selected>--- SELECT ---</option>
-            </select>
-            <span asp-validation-for="ListingType" class="text-danger" />
-        </div>
-    </div>
-
+    @* Address *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
         <div class="col-sm-10 col-md-6">
             @Html.TextBoxFor(m => m.FullAddress, new { @class = "form-control", @readonly = true, id = "txtAddress", data_toggle = "modal", data_target = "#modal-address" })
             @Html.ValidationMessageFor(m => m.FullAddress)
-            @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
     </div>
 
     <legend>Detailed Info</legend>
-
+    @* Cover Photo *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
         <div class="input-group col-sm-10 col-md-6">
@@ -104,18 +96,27 @@
             <input type="text" class="form-control" id="imageName" disabled />
             <div class="input-group-append">
                 <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
-                @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
             </div>
         </div>
     </div>
-
+    @* Type Dropdown *@
+    <div class="form-group row" >
+            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
+            <div class="col-sm-10 col-md-6">
+                <select id="type-input" asp-for="CategoryType" asp-items="Html.GetEnumSelectList<CategoryType>()" class="form-control">
+                    <option disabled selected>--- SELECT ---</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+        </div>
+     @* Category Dropdown *@
     <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-control">
+            <select asp-for="CategoryId" id="category-dropdown"  class="form-control">
                 <option disabled selected>--- SELECT ---</option>
             </select>
-            <span asp-validation-for="CategoryId" class="text-danger" />
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
     </div>
 
@@ -182,14 +183,40 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
 <script type="text/javascript">
+
+//populate category based on type
+$("#type-input").change(function() {
+        let filterValue = $("#type-input option:selected").text().toLowerCase();
+        if(filterValue!=null){
+            
+          $.ajax({  
+                     type: "GET",  
+                     url: "/Category/GetCategoryByType",  
+                     data: {type:filterValue},  
+                     success: function (data) {  
+                         debugger
+                          $("#category-dropdown").empty();
+                             let $prevGroup, prevGroupName;
+                             $.each(data, function () {
+                                 
+                                 if (prevGroupName !== this.group.name) {
+                                     $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
+                                 }
+                                 $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
+                                 prevGroupName = this.group.name;
+                             });
+                         
+                       
+                     },  
+                     error: function (err) {
+                        debugger
+                            },
+                 });  
+}
+    });
+
+
         $(document).ready(function () {
-
-            $("#category-input").hide();
-
-            $('#type-select').on('change', function () {
-                if (this.value == "Local" || this.value == "Event") $("#category-input").show();
-                else $("#category-input").hide();
-            });
 
             $("#btnSaveAddress").click(function () {
                 debugger;
@@ -214,8 +241,8 @@
                 ucloudname: 'jomn9-com',
                 uploadPreset: 'ox3azzqe',
                 apiKey: '731121621859821',
-                folder: 'category_thumbnail',
-                sources: ["local", "url", "image_search"],
+                folder: 'listing_images',
+                sources: ["local", "image_search"],
                 googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
                 searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
                 searchByRights: true,

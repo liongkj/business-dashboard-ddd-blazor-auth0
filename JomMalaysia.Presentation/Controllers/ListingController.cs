@@ -74,39 +74,11 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})", Value = m.MerchantId
             }).ToList();
-            //listing
-            var listingTypes = ListingTypeHelper.GetTypeList();
-            var _listingTypes = listingTypes.Select(m => new SelectListItem {Text = m, Value = m}).ToList();
-            //categories
-            var _categories = new List<SelectListItem>();
-            var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
-            var cats = categories.Where(x => x.CategoryPath.Subcategory != null).OrderBy(x => x.CategoryName)
-                .GroupBy(x => x.CategoryPath.Category);
-
-            foreach (var category in cats)
-            {
-                var groups = new SelectListGroup {Name = category.Key};
-                foreach (var sub in category)
-                {
-                    if (sub.CategoryPath.Subcategory != null)
-                    {
-                        _categories.Add(new SelectListItem
-                        {
-                            Text = $"{sub.CategoryPath.Subcategory}",
-                            Value = sub.CategoryId,
-                            Group = groups
-                        });
-                    }
-                }
-            }
-
-//create vm
+            
             var vm = new RegisterListingViewModel
             {
-                CategoryList = _categories,
+                
                 MerchantList = _merchants,
-
-                ListingTypeList = _listingTypes
             };
             return PartialView(vm);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -25,16 +26,15 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public IEnumerable<string> Tags { get; set; }
 
         public IEnumerable<OperatingHourViewModel> OperatingHours { get; set; }
-
+        
+        [Required]
+        [Display(Name = "Type")]
+        public CategoryType CategoryType { get; set; }
         [Display(Name = "Address")]
-        public String FullAddress { get; set; }
+        public string FullAddress { get; set; }
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
 
-        [Required]
-        [Display(Name = "Type Of Listing")]
-        public string ListingType { get; set; }
-        public IEnumerable<SelectListItem> ListingTypeList { get; set; }
         
         [Required]
         [Display(Name ="Merchant")]

@@ -12,6 +12,7 @@ using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -170,5 +171,34 @@ namespace JomMalaysia.Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
             return SweetDialogHelper.HandleResponse(response);
         }
+        [HttpGet]
+        public async Task<ActionResult> GetCategoryByType(CategoryType type)
+        {
+            //categories
+            var _categories = new List<SelectListItem>();
+            var categories = await GetCategories().ConfigureAwait(false);
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == type).OrderBy(x => x.CategoryName)
+                .GroupBy(x => x.CategoryPath.Category);
+
+            foreach (var category in cats)
+            {
+                var groups = new SelectListGroup {Name = category.Key};
+                foreach (var sub in category)
+                {
+                    if (sub.CategoryPath.Subcategory != null)
+                    {
+                        _categories.Add(new SelectListItem
+                        {
+                            Text = sub.CategoryPath.Subcategory.CapitalizeOrConvertNullToEmptyString(),
+                            Value = sub.CategoryId,
+                            Group = groups
+                        });
+                    }
+                }
+            }
+
+            return new JsonResult(_categories);
+        }
+        
     }
 }
