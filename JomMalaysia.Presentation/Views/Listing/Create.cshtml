@@ -21,7 +21,7 @@
 <div class="form-group col-md-12 no-padding d-sm-block d-md-none">
     <div class="btn-group col-sm-12 no-padding" role="group">
         <button type="button" class="btn btn-primary">Action</button>
-        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0; left: 0; will-change: transform;">
 
             <a class="dropdown-item" onclick="window.history.go(-1); return false;">Back</a>
         </div>
@@ -50,12 +50,11 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
         <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new { @class = "form-control", id = "imageUrl" })
-            @Html.HiddenFor(m => m.ImageUris.ListingLogo.ThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
-            <input type="text" class="form-control" id="imageName" disabled />
+            @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new { @class = "form-control listing-logo imageUrl", id = "" })
+            @Html.HiddenFor(m => m.ImageUris.ListingLogo.ThumbnailUrl, new { @class = "form-control listing-logo thumbnailUrl", id = "" })
+            <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled />
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
-                @*<input type="file" id="btnUpload_hidden" style="display: none;" accept="image/*"/>*@
+                <button type="button" class="btn btn-secondary btnUpload listing-logo" id="" onclick="uploadImageWidget('listing-logo');">Browse</button>
             </div>
         </div>
     </div>
@@ -91,11 +90,11 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
         <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control", id = "imageUrl" })
-            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.ThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
-            <input type="text" class="form-control" id="imageName" disabled />
+            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control cover-photo imageUrl", id = "" })
+            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.ThumbnailUrl, new { @class = "form-control cover-photo thumbnailUrl", id = "" })
+            <input type="text" class="form-control imageName" id="cover-photo" disabled />
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
+                <button type="button" class="btn btn-secondary btnUpload" id="listing-cover" onclick="uploadImageWidget('listing-cover');">Browse</button>
             </div>
         </div>
     </div>
@@ -113,7 +112,7 @@
     <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="CategoryId" id="category-dropdown"  class="form-control">
+            <select asp-for="CategoryId" id="category-dropdown" disabled class="form-control">
                 <option disabled selected>--- SELECT ---</option>
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
@@ -187,6 +186,8 @@
 //populate category based on type
 $("#type-input").change(function() {
         let filterValue = $("#type-input option:selected").text().toLowerCase();
+        let categoryDropdown = $("#category-dropdown");
+        categoryDropdown.attr('disabled', true); 
         if(filterValue!=null){
             
           $.ajax({  
@@ -194,22 +195,26 @@ $("#type-input").change(function() {
                      url: "/Category/GetCategoryByType",  
                      data: {type:filterValue},  
                      success: function (data) {  
-                         debugger
-                          $("#category-dropdown").empty();
+                          debugger
                              let $prevGroup, prevGroupName;
                              $.each(data, function () {
-                                 
+                                 if(data.length>0){
+                                     categoryDropdown.removeAttr("disabled","disabled");
                                  if (prevGroupName !== this.group.name) {
                                      $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
                                  }
                                  $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
                                  prevGroupName = this.group.name;
+                             }else{
+                                         
+                                     
+                                }
                              });
                          
                        
                      },  
                      error: function (err) {
-                        debugger
+                        categoryDropdown.attr('disabled', true);
                             },
                  });  
 }
@@ -220,12 +225,12 @@ $("#type-input").change(function() {
 
             $("#btnSaveAddress").click(function () {
                 debugger;
-                var addline1 = $("#Address_Add1").val();
-                var addline2 = $("#Address_Add2").val();
-                var city = $("#Address_City").val();
-                var postalCode = $("#Address_PostalCode").val();
-                var state = $("#Address_State").val();
-                var country = $("#Address_Country").val();
+                let addline1 = $("#Address_Add1").val();
+                let addline2 = $("#Address_Add2").val();
+                let city = $("#Address_City").val();
+                let postalCode = $("#Address_PostalCode").val();
+                let state = $("#Address_State").val();
+                let country = $("#Address_Country").val();
 
                 $("#txtAddress").val(addline1 + ", " + addline2 + ", " + city + " " + postalCode + ", " + state +  ", " + country);
 
@@ -236,15 +241,18 @@ $("#type-input").change(function() {
     <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
     <script>cloudinary.setCloudName("jomn9-com")</script>
     <script type="text/javascript">
-        var uploadImageWidget = cloudinary.createUploadWidget(
+    function uploadImageWidget(data, uploadMultiple){
+        let field = data;
+        debugger
+        cloudinary.openUploadWidget(
             {
-                ucloudname: 'jomn9-com',
+                cloudName: 'jomn9-com',
                 uploadPreset: 'ox3azzqe',
                 apiKey: '731121621859821',
                 folder: 'listing_images',
                 sources: ["local", "image_search"],
                 googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
-                searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
+                searchBySites: ["all", "unsplash.com", "freepik.com"],
                 searchByRights: true,
                 cropping: true,
                 croppingAspectRatio: 1,
@@ -260,16 +268,14 @@ $("#type-input").change(function() {
                 if (!error && result && result.event === "success") {
 
                     console.log("Image uploaded");
-                    $("#imageUrl").val(result.info.url);
-                    $("#thumbnailUrl").val(result.info.thumbnail_url);
-                    $("#imageName").val(result.info.original_filename + "." + result.info.format);
+                    $(".imageUrl."+ field).val(result.info.url);
+                    $(".thumbnailUrl."+ field).val(result.info.thumbnail_url);
+                    $(".imageName."+ field).val(result.info.original_filename + "." + result.info.format);
                 }
             }
         )
-
-        $("#btnUpload").on("click", function () {
-            uploadImageWidget.open();
-        });
+}
+       
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk&callback=initMap&libraries=places"

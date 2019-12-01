@@ -29,7 +29,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         
         [Required]
         [Display(Name = "Type")]
-        public CategoryType CategoryType { get; set; }
+        public CategoryType? CategoryType { get; set; }
         [Display(Name = "Address")]
         public string FullAddress { get; set; }
         public Address Address { get; set; }
