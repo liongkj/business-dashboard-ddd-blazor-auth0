@@ -77,7 +77,7 @@ namespace JomMalaysia.Presentation.Controllers
             
             var vm = new RegisterListingViewModel
             {
-                
+                ImageUris = new ListingImageViewModel(),
                 MerchantList = _merchants,
             };
             return PartialView(vm);

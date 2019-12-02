@@ -11,5 +11,11 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public Image ListingLogo { get; set; }
         public Image CoverPhoto { get; set; }
         public List<Image> ListingDetails { get; set; }
+
+        public ListingImageViewModel()
+        {
+            ListingLogo = new Image();
+            CoverPhoto = new Image();
+        }
     }
 }

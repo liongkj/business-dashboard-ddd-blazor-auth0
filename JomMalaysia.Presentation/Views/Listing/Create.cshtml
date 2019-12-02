@@ -40,10 +40,8 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
         <div class="col-sm-10 col-md-6">
-
             <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
             <span asp-validation-for="ListingName" class="text-danger"></span>
-
         </div>
     </div>
     @*logo*@
@@ -51,13 +49,25 @@
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
         <div class="input-group col-sm-10 col-md-6">
             @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new { @class = "form-control listing-logo imageUrl", id = "" })
-            @Html.HiddenFor(m => m.ImageUris.ListingLogo.ThumbnailUrl, new { @class = "form-control listing-logo thumbnailUrl", id = "" })
+            <img src= "@Model.ImageUris.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
             <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled />
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary btnUpload listing-logo"  onclick="uploadImageWidget('listing-logo');">Browse</button>
+                <button type="button" class="btn btn-secondary btnUpload listing-logo"  onclick="uploadImageWidget('listing_images','listing-logo');">Browse</button>
             </div>
         </div>
     </div>
+    @* Cover Photo *@
+        <div class="form-group row">
+            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
+            <div class="input-group col-sm-10 col-md-6">
+                @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control listing-cover imageUrl", id = "" })
+                <img src= "@Model.ImageUris.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
+                <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');">Browse</button>
+                </div>
+            </div>
+        </div>
     @* Description *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
@@ -86,18 +96,7 @@
     </div>
 
     <legend>Detailed Info</legend>
-    @* Cover Photo *@
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
-        <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control listing-cover imageUrl", id = "" })
-            @Html.HiddenFor(m => m.ImageUris.CoverPhoto.ThumbnailUrl, new { @class = "form-control listing-cover thumbnailUrl", id = "" })
-            <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled />
-            <div class="input-group-append">
-                <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing-cover');">Browse</button>
-            </div>
-        </div>
-    </div>
+    
     @* Type Dropdown *@
     <div class="form-group row" >
             <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
@@ -178,92 +177,50 @@
 </div>
 
 @section Scripts{
-
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
- <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-    <script>cloudinary.setCloudName("jomn9-com")</script>
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_CloudinaryPartial");}
 <script type="text/javascript">
 
-//populate category based on type
-$("#type-input").change(function() {
-        let filterValue = $("#type-input option:selected").text().toLowerCase();
-        let categoryDropdown = $("#category-dropdown");
-        categoryDropdown.prop('disabled', true); 
-        if(filterValue!=null){
-            
-          $.ajax({  
-                     type: "GET",  
-                     url: "/Category/GetCategoryByType",  
-                     data: {type:filterValue},  
-                     complete: function (data) {
-                         let result =data.responseJSON;
-                         categoryDropdown.empty();
+    //populate category based on type
+    $("#type-input").change(function() {
+            let filterValue = $("#type-input option:selected").text().toLowerCase();
+            let categoryDropdown = $("#category-dropdown");
+            categoryDropdown.prop('disabled', true); 
+            if(filterValue!=null){
+                
+              $.ajax({  
+                         type: "GET",  
+                         url: "/Category/GetCategoryByType",  
+                         data: {type:filterValue},  
+                         complete: function (data) {
+                             let result =data.responseJSON;
+                             categoryDropdown.empty();
+                             
+                             if(result.length === 0){
+                                 categoryDropdown.append($('<option>', {
+                                    value: -1,
+                                    text: '--- This type do not have category yet ---',
+                                    selected: true
+                                    }));
+                             }else {
+                                    let $prevGroup, prevGroupName;
+                                    $.each(result, function () {
+                                        debugger
+                                    categoryDropdown.prop("disabled",false);
+                                    if (prevGroupName !== this.group.name) {
+                                        $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
+                                    }
+                                     $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
+                                     prevGroupName = this.group.name;
+                                      });
+                             }
                          
-                         if(result.length === 0){
-                             categoryDropdown.append($('<option>', {
-                                value: -1,
-                                text: '--- This type do not have category yet ---',
-                                selected: true
-                                }));
-                         }else {
-                                let $prevGroup, prevGroupName;
-                                $.each(result, function () {
-                                    debugger
-                                categoryDropdown.prop("disabled",false);
-                                if (prevGroupName !== this.group.name) {
-                                    $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
-                                }
-                                 $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
-                                 prevGroupName = this.group.name;
-                                  });
-                         }
-                     
-                     },
-                     
-                     
-                 });  
-}
-    });
+                         }, 
+                     });  
+    }
+        });
 
-function uploadImageWidget(data, uploadMultiple){
-        let field = data;
-        let submitButton = $(".submitButton"); 
-        let backButton = $(".cancelButton");
-        
-        cloudinary.openUploadWidget(
-            {
-                cloudName: 'jomn9-com',
-                uploadPreset: 'ox3azzqe',
-                apiKey: '731121621859821',
-                folder: 'listing_images',
-                sources: ["local", "image_search"],
-                googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
-                searchBySites: ["all", "unsplash.com", "freepik.com"],
-                searchByRights: true,
-                cropping: true,
-                croppingAspectRatio: 1,
-                resourceType: ["image"],
-                clientAllowedFormats: ["png", "jpg", "jpeg"],
-                minImageWidth: 100,
-                minImageHeight: 100,
-                autoMinimize: true,
-                showSkipCropButton: true,
-            }, (error, result) => {
-                if(result.event === "upload-added"){
-                    submitButton.attr("disabled",true);
-                    backButton.attr("disabled",true);
-                }
-                if (!error && result && result.event === "success") {
-                    submitButton.prop("disabled",false);
-                    backButton.prop("disabled",false);
-                    console.log("Image uploaded");
-                    $(".imageUrl."+ field).val(result.info.url);
-                    $(".thumbnailUrl."+ field).val(result.info.thumbnail_url);
-                    $(".imageName."+ field).val(result.info.original_filename + "." + result.info.format);
-                }
-            }
-        )
-}
+
         $(document).ready(function () {
 
             $("#btnSaveAddress").click(function () {
