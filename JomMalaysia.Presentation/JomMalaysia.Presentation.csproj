@@ -105,6 +105,7 @@
         <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.full.min.js" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.js" />
         <_ContentIncludedByDefault Remove="wwwroot\lib\select2\js\select2.min.js" />
+        <_ContentIncludedByDefault Remove="Views\Shared\EditorTemplates\Address.cshtml" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Pages\Shared" />

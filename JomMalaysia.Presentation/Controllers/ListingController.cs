@@ -8,6 +8,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
+using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
 using Microsoft.AspNetCore.Mvc;
@@ -86,21 +87,25 @@ namespace JomMalaysia.Presentation.Controllers
         // POST: Listing/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(RegisterListingViewModel vm)
+        public async Task<Tuple<int, string>> Create(RegisterListingViewModel vm)
         {
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                // TODO: Add insert logic here
+                var response = await _gateway.Add(vm).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    refresh = true;
+                }
 
-                return RedirectToAction(nameof(Index));
+                return SweetDialogHelper.HandleResponse(response);
             }
-            catch (Exception)
+            catch (GatewayException e)
             {
-                return View();
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
         }
-
-
+       
         [HttpPost]
         public async Task<Tuple<int, string>> Publish(string id, int months)
         {

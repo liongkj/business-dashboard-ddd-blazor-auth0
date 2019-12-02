@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
+using JomMalaysia.Presentation.Models.Listings;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JomMalaysia.Presentation.ViewModels.Listings
@@ -34,6 +35,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public string FullAddress { get; set; }
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
+        public OfficialContact Contact { get; set; }
 
         
         [Required]

@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
-using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
-using JomMalaysia.Presentation.Models;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace JomMalaysia.Presentation.Gateways.Listings
@@ -20,16 +14,15 @@ namespace JomMalaysia.Presentation.Gateways.Listings
     public class ListingGateway : IListingGateway
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
-        private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
         private readonly string auth;
 
         public ListingGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
-            _authorizationManagers = authorizationManagers;
+            var authorizationManagers1 = authorizationManagers;
             _apiBuilder = apiBuilder;
-            if (_authorizationManagers != null) auth = _authorizationManagers.accessToken;
+            if (authorizationManagers1 != null) auth = authorizationManagers1.accessToken;
         }
 
         public async Task<IWebServiceResponse> Add(RegisterListingViewModel vm)
@@ -39,7 +32,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
 
-                var method = Method.POST;
+                const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth).ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -60,7 +53,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             try
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
-                var method = Method.GET;
+                const Method method = Method.GET;
                 var queries = new Dictionary<string, string>
                 {
                     {"status","all"}
@@ -92,7 +85,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             try
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.Publish, ListingId, months.ToString());
-                var method = Method.POST;
+                const Method method = Method.POST;
 
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
 

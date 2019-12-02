@@ -21,21 +21,16 @@ namespace JomMalaysia.Presentation.Models.Listings
         public List<string> Tags { get; set; }
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
+        public OfficialContact Contact { get; set; }
         public PublishStatus PublishStatus { get; set; }
         public ListingTypeEnum ListingType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 
 
-        public class OperatingHour
-        {
-            public int DayOfWeek { get; set; }
-            public string OpenTime { get; set; }
-            public string CloseTime { get; set; }
-        }
+        
 
         
     }
-
-
+    
 }

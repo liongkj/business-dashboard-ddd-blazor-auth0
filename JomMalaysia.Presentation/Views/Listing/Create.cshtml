@@ -5,15 +5,9 @@
     ViewData["Title"] = "Create new Listing";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
-    #map {
-        height: 400px;
-        width: 400px;
-    }
-</style>
 <!--HEADER-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2 submitButton" onclick="$('#btnListingSubmit').click">Save</button>
+    <button type="button" class="btn btn-success col-md-2 submitButton" id="btnListingSubmit">Save</button>
     <button type="button" class="btn btn-danger col-md-2 cancelButton" onclick="window.history.go(-1); return false;">Back</button>
 </div>
 
@@ -40,40 +34,8 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
         <div class="col-sm-10 col-md-6">
-            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
+            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
             <span asp-validation-for="ListingName" class="text-danger"></span>
-        </div>
-    </div>
-    @*logo*@
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
-        <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new { @class = "form-control listing-logo imageUrl", id = "" })
-            <img src= "@Model.ImageUris.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
-            <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled />
-            <div class="input-group-append">
-                <button type="button" class="btn btn-secondary btnUpload listing-logo"  onclick="uploadImageWidget('listing_images','listing-logo');">Browse</button>
-            </div>
-        </div>
-    </div>
-    @* Cover Photo *@
-        <div class="form-group row">
-            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
-            <div class="input-group col-sm-10 col-md-6">
-                @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new { @class = "form-control listing-cover imageUrl", id = "" })
-                <img src= "@Model.ImageUris.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
-                <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled />
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');">Browse</button>
-                </div>
-            </div>
-        </div>
-    @* Description *@
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
-        <div class="col-sm-10 col-md-6">
-            <textarea asp-for="Description" class="form-control"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
     </div>
     @* Merchant *@
@@ -86,28 +48,17 @@
             <span asp-validation-for="MerchantId" class="text-danger"></span>
         </div>
     </div>
-    @* Address *@
+    @* Type Dropdown *@
     <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.FullAddress, new { @class = "form-control", @readonly = true, id = "txtAddress", data_toggle = "modal", data_target = "#modal-address" })
-            @Html.ValidationMessageFor(m => m.FullAddress)
+            <select id="type-input" asp-for="CategoryType" asp-items="Html.GetEnumSelectList<CategoryType>()" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
     </div>
-
-    <legend>Detailed Info</legend>
-    
-    @* Type Dropdown *@
-    <div class="form-group row" >
-            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
-            <div class="col-sm-10 col-md-6">
-                <select id="type-input" asp-for="CategoryType" asp-items="Html.GetEnumSelectList<CategoryType>()" class="form-control">
-                    <option disabled selected>--- SELECT ---</option>
-                </select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-        </div>
-     @* Category Dropdown *@
+    @* Category Dropdown *@
     <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
@@ -118,7 +69,65 @@
         </div>
     </div>
 
-    <button type="submit" id="btnListingSubmit">Register</button>
+    @* Address *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
+        <div class="col-sm-10 col-md-6">
+            @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtAddress", data_toggle = "modal", data_target = "#modal-address"})
+            @Html.ValidationMessageFor(m => m.FullAddress)
+        </div>
+    </div>
+
+    <legend>Public Info</legend>
+    @*logo*@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
+        <div class="col-sm-10 col-md-6">
+            <img src="@Model.ImageUris.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
+
+            <div class="form-group row">
+                <div class="input-group col-sm-10 col-md-12">
+                    @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl", id = ""})
+
+                    <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">Browse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Cover Photo *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
+        <div class="col-sm-10 col-md-6">
+            <img src="@Model.ImageUris.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
+            <div class="form-group row">
+                <div class="input-group col-sm-10 col-md-12">
+                    @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
+
+                    <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');">Browse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* Description *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
+        <div class="col-sm-10 col-md-6">
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    @* <button type="submit" id="btnListingSubmit" class="btn btn-success col-md-2 submitButton" >Register</button> *@
 </form>
 
 <div class="modal" id="modal-address">
@@ -135,34 +144,36 @@
                     <div class="form-group row">
                         <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add1)</div>
                         <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Address.Add1, new { @class = "form-control"})
+                            @Html.TextBoxFor(m => m.Address.Add1, new {@class = "form-control"})
                             @Html.ValidationMessageFor(m => m.Address.Add1)
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add2)</div>
                         <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Address.Add2, new { @class = "form-control"})
+                            @Html.TextBoxFor(m => m.Address.Add2, new {@class = "form-control"})
                             @Html.ValidationMessageFor(m => m.Address.Add2)
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.City)</div>
                         <div class="col-md-5">
-                            @Html.TextBoxFor(m => m.Address.City, new { @class = "form-control" })
+                            @Html.TextBoxFor(m => m.Address.City, new {@class = "form-control"})
                             @Html.ValidationMessageFor(m => m.Address.City)
-                        </div> <div class="col-md-4">
-                            @Html.TextBoxFor(m => m.Address.PostalCode, new { @class = "form-control", placeholder = "Postal Code" })
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(m => m.Address.PostalCode, new {@class = "form-control", placeholder = "Postal Code"})
                             @Html.ValidationMessageFor(m => m.Address.PostalCode)
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.State)</div>
                         <div class="col-md-5">
-                            @Html.TextBoxFor(m => m.Address.State, new { @class = "form-control"})
+                            @Html.TextBoxFor(m => m.Address.State, new {@class = "form-control"})
                             @Html.ValidationMessageFor(m => m.Address.State)
-                        </div> <div class="col-md-4">
-                            @Html.TextBoxFor(m => m.Address.Country, new { @class = "form-control", placeholder = "Country"})
+                        </div>
+                        <div class="col-md-4">
+                            @Html.TextBoxFor(m => m.Address.Country, new {@class = "form-control", placeholder = "Country"})
                             @Html.ValidationMessageFor(m => m.Address.Country)
                         </div>
                     </div>
@@ -179,7 +190,13 @@
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{ await Html.RenderPartialAsync("_CloudinaryPartial");}
-<script type="text/javascript">
+    <script type="text/javascript">
+
+    var form = document.getElementById("FormCreate");
+    
+    document.getElementById("btnListingSubmit").addEventListener("click", function () {
+      form.submit();
+    });
 
     //populate category based on type
     $("#type-input").change(function() {
@@ -238,8 +255,7 @@
 
         });
 </script>
-   
-   
+
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk&callback=initMap&libraries=places"
             async defer></script>
