@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
-using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Manager;
-using JomMalaysia.Presentation.Models;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using RestSharp;
 
 namespace JomMalaysia.Presentation.Gateways.Categories

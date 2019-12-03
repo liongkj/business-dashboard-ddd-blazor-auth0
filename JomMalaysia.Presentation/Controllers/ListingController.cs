@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
@@ -73,13 +74,39 @@ namespace JomMalaysia.Presentation.Controllers
             var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
             var _merchants = merchants.Select(m => new SelectListItem
             {
-                Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})", Value = m.MerchantId
+                Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
+                Value = m.MerchantId
             }).ToList();
+
+            var _country = new List<SelectListItem>();
+            foreach (Enum country in Enum.GetValues(typeof(CountryEnum)))
+            {
+                _country.Add(new SelectListItem
+                {
+                    Text = country.GetDescription(),
+                    Value = country.ToString(),
+                });
+            }
+            
+            var _states = new List<SelectListItem>();
+            foreach (Enum state in Enum.GetValues(typeof(StateEnum)))
+            {
+                _states.Add(new SelectListItem
+                {
+                    Text = state.GetDescription(),
+                    Value = state.ToString(),
+                });
+            }
             
             var vm = new RegisterListingViewModel
             {
                 ImageUris = new ListingImageViewModel(),
                 MerchantList = _merchants,
+                Address = new Address
+                {
+                    StateList =  _states,
+                    CountryList = _country
+                }
             };
             return PartialView(vm);
         }

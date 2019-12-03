@@ -44,5 +44,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 
         public IEnumerable<SelectListItem> MerchantList { get; set; }
 
+
+        
     }
 }

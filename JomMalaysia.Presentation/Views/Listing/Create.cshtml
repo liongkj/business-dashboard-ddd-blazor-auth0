@@ -73,7 +73,7 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtAddress", data_toggle = "modal", data_target = "#modal-address"})
+            @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress", data_toggle = "modal", data_target = "#modal-address"})
             @Html.ValidationMessageFor(m => m.FullAddress)
         </div>
     </div>
@@ -87,7 +87,7 @@
 
             <div class="form-group row">
                 <div class="input-group col-sm-10 col-md-12">
-                    @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl", id = ""})
+                    @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl"})
 
                     <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled/>
                     <div class="input-group-append">
@@ -126,10 +126,6 @@
         </div>
     </div>
 
-
-    @* <button type="submit" id="btnListingSubmit" class="btn btn-success col-md-2 submitButton" >Register</button> *@
-</form>
-
 <div class="modal" id="modal-address">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -140,44 +136,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-controller="Listing" asp-action="Create" id="formAddress" class="form-m-gap-top" method="post">
-                    <div class="form-group row">
-                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add1)</div>
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Address.Add1, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Address.Add1)
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add2)</div>
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(m => m.Address.Add2, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Address.Add2)
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.City)</div>
-                        <div class="col-md-5">
-                            @Html.TextBoxFor(m => m.Address.City, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Address.City)
-                        </div>
-                        <div class="col-md-4">
-                            @Html.TextBoxFor(m => m.Address.PostalCode, new {@class = "form-control", placeholder = "Postal Code"})
-                            @Html.ValidationMessageFor(m => m.Address.PostalCode)
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.State)</div>
-                        <div class="col-md-5">
-                            @Html.TextBoxFor(m => m.Address.State, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(m => m.Address.State)
-                        </div>
-                        <div class="col-md-4">
-                            @Html.TextBoxFor(m => m.Address.Country, new {@class = "form-control", placeholder = "Country"})
-                            @Html.ValidationMessageFor(m => m.Address.Country)
-                        </div>
-                    </div>
-                </form>
+                 @Html.EditorFor(x => x.Address)
+             
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btnSaveAddress">Save changes</button>
@@ -186,10 +146,15 @@
         </div>
     </div>
 </div>
+    @* <button type="submit" id="btnListingSubmit" class="btn btn-success col-md-2 submitButton" >Register</button> *@
+</form>
+<div id="service-helper"></div>
+
 
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{ await Html.RenderPartialAsync("_CloudinaryPartial");}
+    @{ await Html.RenderPartialAsync("_PlacesApiPartial");}
     <script type="text/javascript">
 
     var form = document.getElementById("FormCreate");
@@ -257,7 +222,6 @@
 </script>
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk&callback=initMap&libraries=places"
-            async defer></script>
+  
 
 }

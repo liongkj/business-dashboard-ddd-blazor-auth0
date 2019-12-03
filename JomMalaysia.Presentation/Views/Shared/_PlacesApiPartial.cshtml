@@ -1,0 +1,52 @@
+<script type="text/javascript" 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk&libraries=places"></script>
+
+
+<script>
+let apikey ="AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk";
+
+let api = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={0}&inputtype=textquery&fields={1}&components=country:MY&key={2}";
+let fields = 'name,address_component';
+let nameField = $("#listing-name-autocomplete");
+nameField.focusout(function(){
+  AutofillAddress(nameField.val())
+});
+
+function AutofillAddress(PlacesName) {
+    let service = new google.maps.places.PlacesService(document.getElementById('service-helper'));
+  let request = {
+      query: PlacesName,
+      locationBias: google.maps.LatLngBounds(google.maps.LatLng(100.085756871, 0.773131415201), google.maps.LatLng(119.181903925, 6.92805288332)),
+      fields: ['name', 'geometry','formatted_address','place_id'],
+      };
+  
+   
+   service.findPlaceFromQuery(request, function (basicInfo, status) {
+                
+             if (status === google.maps.places.PlacesServiceStatus.OK) {   
+                 var detailRequest = {
+                         placeId : basicInfo[0].place_id,
+                         fields: ['address_component'],
+                     };
+                 $("#txtFullAddress").val(basicInfo[0].formatted_address);
+                  debugger
+                 service.getDetails(detailRequest,function (detail,status){
+                     if (status === google.maps.places.PlacesServiceStatus.OK) {
+                         console.log(detail);
+                    
+                   
+                 }
+                 else{
+                     alert("fail loading address");
+                 }}
+                 )
+            }  
+             else{
+                 alert("Listing not found")
+             }
+            
+          
+});
+}
+
+</script>

@@ -36,7 +36,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
 
                 var method = Method.POST;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth,vm);
+                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth,vm).ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
@@ -57,7 +57,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method, auth);
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method, auth).ConfigureAwait(false);
 
             }
             catch (GatewayException ex)
@@ -71,8 +71,6 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
                 {
                     result.Add(list);
                 }
-
-
             }
             //handle exception
             return result;
