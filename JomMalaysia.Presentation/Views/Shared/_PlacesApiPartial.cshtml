@@ -75,10 +75,7 @@ function AutofillAddress(PlacesName) {
     if(parts==="state"){
         let stateName = MapAddress(address,"administrative_area_level_1").toLowerCase();
         let enumList = @Html.Raw(Json.Serialize(ViewBag.States));
-        let stateCode = enumList[stateName];
-        console.log(JSON.parse(JSON.stringify(enumList)));
-        debugger
-       return stateCode;
+       return enumList[stateName];
     }
     
     if(parts==="postal"){
