@@ -8,6 +8,7 @@ let apikey ="AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk";
 let api = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={0}&inputtype=textquery&fields={1}&components=country:MY&key={2}";
 let fields = 'name,address_component';
 let nameField = $("#listing-name-autocomplete");
+
 nameField.focusout(function(){
   AutofillAddress(nameField.val())
 });
@@ -23,18 +24,24 @@ function AutofillAddress(PlacesName) {
    
    service.findPlaceFromQuery(request, function (basicInfo, status) {
                 
-             if (status === google.maps.places.PlacesServiceStatus.OK) {   
+             if (status === google.maps.places.PlacesServiceStatus.OK) {
+                 nameField.val(basicInfo[0].name);
                  var detailRequest = {
                          placeId : basicInfo[0].place_id,
-                         fields: ['address_component'],
+                         fields: ['address_component',"geometry"],
                      };
                  $("#txtFullAddress").val(basicInfo[0].formatted_address);
-                  debugger
+                 
                  service.getDetails(detailRequest,function (detail,status){
                      if (status === google.maps.places.PlacesServiceStatus.OK) {
                          console.log(detail);
-                    
-                   
+                         let address = detail.address_components;
+                         $("#Address_Add1").val(GetAddressPart(address,"add1"));
+                         $("#Address_Add2").val(GetAddressPart(address,"add2"));
+                        $("#Address_City").val(GetAddressPart(address,"city"));
+                        $("#Address_PostalCode").val(GetAddressPart(address,"postal"));
+                        $("#Address_State").val(GetAddressPart(address,"state"));
+                        $("#Address_Country").val(GetAddressPart(address,"country"));
                  }
                  else{
                      alert("fail loading address");
@@ -43,10 +50,48 @@ function AutofillAddress(PlacesName) {
             }  
              else{
                  alert("Listing not found")
-             }
-            
-          
+             }      
 });
+}
+
+ function GetAddressPart(address,parts){
+    if(parts === "add1"){
+        let premise = MapAddress(address,"premise");
+        let subpremise = MapAddress(address,"subpremise");
+        let streetNo = MapAddress(address,"street_number");
+        let street = MapAddress(address,"route");
+        return [premise, subpremise, streetNo, street].filter(Boolean).join(" ");
+    }
+    if(parts === "add2"){
+       return MapAddress(address,"sublocality_level_1");
+    
+    }
+    if(parts === "city"){
+        return MapAddress(address,"locality");
+        }
+    if(parts === "country"){
+        return MapAddress(address,parts,true);
+    }
+    if(parts==="state"){
+        let stateName = MapAddress(address,"administrative_area_level_1").toLowerCase();
+        let enumList = @Html.Raw(Json.Serialize(ViewBag.States));
+        let stateCode = enumList[stateName];
+        console.log(JSON.parse(JSON.stringify(enumList)));
+        debugger
+       return stateCode;
+    }
+    
+    if(parts==="postal"){
+        return MapAddress(address,"postal_code");
+    }
+    return "";
+}
+
+function MapAddress(address,parts,getShort){
+    if(getShort){
+        return address.filter(add=>add.types[0] === parts).map(add=>add.short_name)[0];
+    }
+     return address.filter(add=>add.types[0] === parts).map(add=>add.long_name)[0];
 }
 
 </script>

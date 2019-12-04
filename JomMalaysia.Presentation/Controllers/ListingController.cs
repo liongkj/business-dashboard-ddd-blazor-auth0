@@ -89,13 +89,17 @@ namespace JomMalaysia.Presentation.Controllers
             }
             
             var _states = new List<SelectListItem>();
+            var dicState = new Dictionary<string,string>();
             foreach (Enum state in Enum.GetValues(typeof(StateEnum)))
             {
+                var fullName = state.GetDescription();
                 _states.Add(new SelectListItem
                 {
-                    Text = state.GetDescription(),
+                    Text = fullName,
                     Value = state.ToString(),
                 });
+
+                if (fullName != null) dicState.Add(key: fullName.ToLower(), value: state.ToString());
             }
             
             var vm = new RegisterListingViewModel
@@ -108,6 +112,7 @@ namespace JomMalaysia.Presentation.Controllers
                     CountryList = _country
                 }
             };
+            ViewBag.States = dicState;
             return PartialView(vm);
         }
 

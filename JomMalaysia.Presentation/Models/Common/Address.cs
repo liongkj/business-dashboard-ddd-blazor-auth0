@@ -33,8 +33,7 @@ namespace JomMalaysia.Presentation.Models.Common
         public override string ToString()
         {
             var formatted = String.Format("{0} {1} \n{2} {3} {4} {5}",
-                Add1,
-                (!string.IsNullOrEmpty(Add2) ? Add2 : ""),
+                Add1, (!string.IsNullOrEmpty(Add2) ? Add2 : ""),
                 PostalCode, City, State, Country
                 );
             return formatted;
