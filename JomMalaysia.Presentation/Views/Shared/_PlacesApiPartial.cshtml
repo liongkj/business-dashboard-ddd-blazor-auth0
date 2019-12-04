@@ -11,6 +11,7 @@ let nameField = $("#listing-name-autocomplete");
 
 nameField.focusout(function(){
   AutofillAddress(nameField.val())
+  $(this).unbind('focusout');
 });
 
 function AutofillAddress(PlacesName) {
