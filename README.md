@@ -1,7 +1,8 @@
 # JomMalaysiaWebFrontend
 
 Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
-[![Build Status](https://dev.azure.com/busylikedog/biscat/_apis/build/status/portal-jommalaysia%20-%20CI)
+
+![Build Status](https://dev.azure.com/busylikedog/biscat/_apis/build/status/portal-jommalaysia%20-%20CI)
 
 - [x] Add cloudinary jqeury upload https://cloudinary.com/documentation/jquery_integration
 - [ ] refactor cloudinary code
