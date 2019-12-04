@@ -10,14 +10,14 @@ let fields = 'name,address_component';
 let nameField = $("#listing-name-autocomplete");
 
 nameField.focusout(function(){
-  AutofillAddress(nameField.val())
+  AutofillAddress();
   $(this).unbind('focusout');
 });
 
-function AutofillAddress(PlacesName) {
+function AutofillAddress() {
     let service = new google.maps.places.PlacesService(document.getElementById('service-helper'));
   let request = {
-      query: PlacesName,
+      query: nameField.val(),
       locationBias: google.maps.LatLngBounds(google.maps.LatLng(100.085756871, 0.773131415201), google.maps.LatLng(119.181903925, 6.92805288332)),
       fields: ['name', 'geometry','formatted_address','place_id'],
       };
@@ -43,6 +43,12 @@ function AutofillAddress(PlacesName) {
                         $("#Address_PostalCode").val(GetAddressPart(address,"postal"));
                         $("#Address_State").val(GetAddressPart(address,"state"));
                         $("#Address_Country").val(GetAddressPart(address,"country"));
+                        
+                        let coordinates = detail.geometry.location;
+                        $("#Address_Coordinates_Latitude").val(coordinates.lat);
+                        $("#Address_Coordinates_Longitude").val(coordinates.lng);
+                        
+                        let viewport = detail.geometry.viewport;
                  }
                  else{
                      alert("fail loading address");

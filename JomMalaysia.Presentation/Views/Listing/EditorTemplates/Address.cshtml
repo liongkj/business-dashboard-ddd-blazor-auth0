@@ -35,6 +35,26 @@
     </div>
     <div class="col-md-4">
         <select asp-for="Country" asp-items="Model.CountryList" class="form-control"></select>
-                <span asp-validation-for="Country" class="text-danger"></span>
+        <span asp-validation-for="Country" class="text-danger"></span>
     </div>
 </div>
+
+<div class="form-group row">
+    <div class="col-md-3">@Html.DisplayNameFor(m => m.Coordinates)</div>
+    <div class="col-md-5">
+        <input asp-for="Coordinates.Latitude" class="form-control"></input>
+        <span asp-validation-for="Coordinates.Latitude" class="text-danger"></span>
+
+    </div>
+    <div class="col-md-4">
+        <input asp-for="Coordinates.Longitude" class="form-control"></input>
+        <span asp-validation-for="Coordinates.Longitude" class="text-danger"></span>
+
+    </div>
+</div>
+
+
+<div class="form-group row">
+    <div id="listingMap"></div>
+</div>
+
