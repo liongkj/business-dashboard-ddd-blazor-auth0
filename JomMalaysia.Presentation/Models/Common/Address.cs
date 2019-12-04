@@ -9,8 +9,9 @@ namespace JomMalaysia.Presentation.Models.Common
 {
     public class Address
     {
-        [Required]
+        [Required(ErrorMessage = "Please complete the address")]
         [Display(Name = "Street 1")]
+        
         public string Add1 { get; set; }
         [Display(Name = "Street 2 (Optional)")]
         public string Add2 { get; set; }

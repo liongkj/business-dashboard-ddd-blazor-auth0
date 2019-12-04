@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
@@ -33,6 +30,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public CategoryType? CategoryType { get; set; }
         [Display(Name = "Address")]
         public string FullAddress { get; set; }
+        [Required]
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
         public OfficialContact Contact { get; set; }
