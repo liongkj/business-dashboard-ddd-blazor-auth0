@@ -34,11 +34,11 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
         <div class="input-group col-sm-10 col-md-6">
-            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
+            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
             <span asp-validation-for="ListingName" class="text-danger"></span>
-             <div class="input-group-append">
-                  <button type="button" class="btn btn-secondary" onclick="AutofillAddress();">Autofill Address</button>
-              </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-secondary" onclick="AutofillAddress();" >Autocomplete</button>
+            </div>
         </div>
     </div>
     @* Merchant *@
@@ -75,9 +75,13 @@
     @* Address *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress", data_toggle = "modal", data_target = "#modal-address"})
+        <div class="col-sm-10 col-md-6 input-group">
+            @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)),new{id="StateList"})
+            @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress",})
             @Html.ValidationMessageFor(m => m.FullAddress)
+            <div class="input-group-append">
+                <button type="button" class="btn btn-secondary btnUpload listing-logo" data-toggle="modal" data-target="#modal-address">Complete Address</button>
+            </div>
         </div>
     </div>
 
@@ -129,35 +133,36 @@
         </div>
     </div>
 
-<div class="modal" id="modal-address">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Address Info</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                 @Html.EditorFor(x => x.Address)
-             
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveAddress">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <div class="modal" id="modal-address">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Address Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.EditorFor(x => x.Address)
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSaveAddress">Save changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     @* <button type="submit" id="btnListingSubmit" class="btn btn-success col-md-2 submitButton" >Register</button> *@
 </form>
 <div id="service-helper"></div>
 
 
 @section Scripts{
+    @{ await Html.RenderPartialAsync("_PlacesApiPartial");}
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{ await Html.RenderPartialAsync("_CloudinaryPartial");}
-    @{ await Html.RenderPartialAsync("_PlacesApiPartial");}
+    
     <script type="text/javascript">
 
     var form = document.getElementById("FormCreate");
@@ -205,26 +210,25 @@
     }
         });
 
-
-        $(document).ready(function () {
-
             $("#btnSaveAddress").click(function () {
-                debugger;
-                let addline1 = $("#Address_Add1").val();
-                let addline2 = $("#Address_Add2").val();
-                let city = $("#Address_City").val();
-                let postalCode = $("#Address_PostalCode").val();
-                let state = $("#Address_State").val();
-                let country = $("#Address_Country").val();
-
-                $("#txtAddress").val(addline1 + ", " + addline2 + ", " + city + " " + postalCode + ", " + state +  ", " + country);
-
+                let fulladd = [];
+                const validator = $("form").validate();
+                let fullAddTextBox = $("#txtFullAddress");
+                fullAddTextBox.val("");
+                if(validator.element(".add_field")){
+                    $(".add_field").each(function(){
+                        let component = $(this).val().trim();
+                       fulladd.push(component); 
+                    });
+                    fullAddTextBox.val(fulladd);
+                     $('#modal-address').modal('hide');
+                }else{
+                    fullAddTextBox.val("Address not complete");
+                }
+                
             });
 
-        });
 </script>
 
-
-  
 
 }

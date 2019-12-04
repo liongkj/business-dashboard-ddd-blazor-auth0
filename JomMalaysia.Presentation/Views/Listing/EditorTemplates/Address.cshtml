@@ -1,60 +1,85 @@
-﻿@using JomMalaysia.Presentation.Models.Common
-@model JomMalaysia.Presentation.Models.Common.Address
-
+﻿@model JomMalaysia.Presentation.Models.Common.Address
+<style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #listingMap {
+        height: 600px;
+        width: 600px;
+        margin:0 auto;
+      }
+</style>
 <div class="form-group row">
+    <input type="hidden" id="latValue" asp-for="Coordinates.Latitude" class="form-control"/>
+     <input type="hidden" id="lngValue" asp-for="Coordinates.Longitude" class="form-control"/>
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Add1)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Add1, new {@class = "form-control", placeholder = "Address Line 1"})
+        @Html.TextBoxFor(m => m.Add1, new {@class = "form-control add_field", placeholder = "Address Line 1"})
         @Html.ValidationMessageFor(m => m.Add1)
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Add2)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Add2, new {@class = "form-control", placeholder = "Address Line 2"})
+        @Html.TextBoxFor(m => m.Add2, new {@class = "form-control add_field", placeholder = "Address Line 2"})
         @Html.ValidationMessageFor(m => m.Add2)
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.City)</div>
     <div class="col-md-5">
-        @Html.TextBoxFor(m => m.City, new {@class = "form-control", placeholder = "City"})
+        @Html.TextBoxFor(m => m.City, new {@class = "form-control add_field", placeholder = "City"})
         @Html.ValidationMessageFor(m => m.City)
     </div>
     <div class="col-md-4">
-        @Html.TextBoxFor(m => m.PostalCode, new {@class = "form-control", placeholder = "Postal Code"})
+        @Html.TextBoxFor(m => m.PostalCode, new {@class = "form-control add_field", placeholder = "Postal Code"})
         @Html.ValidationMessageFor(m => m.PostalCode)
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.State)</div>
     <div class="col-md-5">
-        <select asp-for="State" asp-items="Model.StateList" class="form-control"></select>
+        <select asp-for="State" asp-items="Model.StateList" class="form-control add_field"></select>
         <span asp-validation-for="State" class="text-danger"></span>
 
     </div>
     <div class="col-md-4">
-        <select asp-for="Country" asp-items="Model.CountryList" class="form-control"></select>
+        <select asp-for="Country" asp-items="Model.CountryList" class="form-control add_field" ></select>
         <span asp-validation-for="Country" class="text-danger"></span>
     </div>
 </div>
 
 <div class="form-group row">
-    <div class="col-md-3">@Html.DisplayNameFor(m => m.Coordinates)</div>
-    <div class="col-md-5">
-        <input asp-for="Coordinates.Latitude" class="form-control"></input>
-        <span asp-validation-for="Coordinates.Latitude" class="text-danger"></span>
-
-    </div>
-    <div class="col-md-4">
-        <input asp-for="Coordinates.Longitude" class="form-control"></input>
-        <span asp-validation-for="Coordinates.Longitude" class="text-danger"></span>
-
-    </div>
-</div>
-
-
-<div class="form-group row">
     <div id="listingMap"></div>
 </div>
 
+<script>
+      // In this example, we center the map, and add a marker, using a LatLng object
+      // literal instead of a google.maps.LatLng object. LatLng object literals are
+      // a convenient way to add a LatLng coordinate and, in most cases, can be used
+      // in place of a google.maps.LatLng object.
+        
+      var map;
+      let lat = parseFloat(document.getElementById("latValue").value);
+      let lng = parseFloat(document.getElementById("lngValue").value);
+     
+      function initialize() {
+         
+        var mapOptions = {
+          zoom: 15,
+          center: {lat: lat?lat : 2.7119454, lng: lng? lng : 101.812422}
+        };
+        map = new google.maps.Map(document.getElementById('listingMap'),
+            mapOptions);
+
+        var marker = new google.maps.Marker({
+          // The below line is equivalent to writing:
+          // position: new google.maps.LatLng(-34.397, 150.644)
+          position: {lat: lat, lng: lng},
+          map: map
+        });
+
+        
+      }
+
+      
+    </script>
