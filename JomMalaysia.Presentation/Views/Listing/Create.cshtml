@@ -42,14 +42,19 @@
 
 
     </div>
-    <div class="form-group row offset-md-3">
+    <div class="form-group offset-md-3">
         <div class="form-check input-group">
-            <input class="form-check-input" type="checkbox" id="autofill">
+            <input class="form-check-input" type="checkbox" id="autofill" checked>
             <label class="form-check-label" for="autofill">
                 Autofill mode
             </label>
-            <span class="text-danger">(Autofill will override your input below.)</span>
+            
         </div>
+        <small id="passwordHelpBlock" class="form-text text-muted text-danger">
+                      Caution! Autofill will override your input below.
+                    </small>
+        
+           
     </div>
     @* Merchant *@
     <div class="form-group row">
@@ -142,7 +147,17 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
     </div>
-
+    @* Tags *@
+    <div class="form-group row">
+            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+            <div class="col-sm-10 col-md-6">
+                <select asp-for="Tags" id="tags-select2" class="form-control"></select>
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+        </div>
+        
+    
+    @* Address Modal *@
     <div class="modal" id="modal-address">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -174,6 +189,11 @@
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
 
     <script type="text/javascript">
+
+    $("#tags-select2").select2({
+                           tags: true,
+                           tokenSeparators: [',', ' ']
+                       });
 
     var form = document.getElementById("FormCreate");
     

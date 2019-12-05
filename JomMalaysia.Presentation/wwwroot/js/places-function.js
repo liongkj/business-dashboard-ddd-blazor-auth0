@@ -1,6 +1,14 @@
 ﻿
 let nameField = $("#listing-name-autocomplete");
 let autofillField = $("#autofill");
+
+autofillField.click(function(){
+    if(autofillField.is(":checked")) {
+        AutofillAddress();
+    }
+});
+
+
 nameField.focusout(function(){
     if(autofillField.is(":checked")) {
         AutofillAddress();
@@ -39,8 +47,8 @@ function AutofillAddress() {
                     $("#Address_Country").val(GetAddressPart(address,"country"));
 
                     let coordinates = detail.geometry.location;
-                    $("#latValue").val(coordinates.lat);
-                    $("#lngValue").val(coordinates.lng);
+                    $("#Address_Coordinates_Latitude").val(coordinates.lat);
+                    $("#Address_Coordinates_Longitude").val(coordinates.lng);
                     let viewport = detail.geometry.viewport;
                     autofillField.prop("checked", false);
                     

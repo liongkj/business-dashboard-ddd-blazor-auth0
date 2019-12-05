@@ -1,4 +1,5 @@
 ﻿@model JomMalaysia.Presentation.Models.Common.Address
+
 <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -9,9 +10,7 @@
       }
 </style>
 <div class="form-group row">
-    <input type="hidden" id="latValue" asp-for="Coordinates.Latitude"  class="form-control"/>
-     <input type="hidden" id="lngValue" asp-for="Coordinates.Longitude"  class="form-control"/>
-    <div class="col-md-3">@Html.DisplayNameFor(m => m.Add1)</div>
+   <div class="col-md-3">@Html.DisplayNameFor(m => m.Add1)</div>
     <div class="col-md-9">
         @Html.TextBoxFor(m => m.Add1, new {@class = "form-control add_field", placeholder = "Address Line 1"})
         @Html.ValidationMessageFor(m => m.Add1)
@@ -43,14 +42,27 @@
 
     </div>
     <div class="col-md-4">
-        <select asp-for="Country" asp-items="Model.CountryList" class="form-control add_field" ></select>
+        <select asp-for="Country" asp-items="Model.CountryList" class="form-control add_field"></select>
         <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-md-3">@Html.DisplayNameFor(m => m.Coordinates)</div>
+    <div class="col-md-4">
+        <input type="text" asp-for="Coordinates.Latitude" class="form-control" placeholder="Latitude"/>
+        <span asp-validation-for="Coordinates.Latitude" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <input type="text" asp-for="Coordinates.Longitude" class="form-control" placeholder="Longitude"/>
+        <span asp-validation-for="Coordinates.Longitude" class="text-danger"></span>
     </div>
 </div>
 
 <div class="form-group row">
     <div id="listingMap"></div>
 </div>
+
 @section Scripts{
     <script type="text/javascript">
 
