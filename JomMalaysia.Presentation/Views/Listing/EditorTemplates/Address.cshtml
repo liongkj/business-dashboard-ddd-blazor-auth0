@@ -9,8 +9,8 @@
       }
 </style>
 <div class="form-group row">
-    <input type="hidden" id="latValue" asp-for="Coordinates.Latitude" class="form-control"/>
-     <input type="hidden" id="lngValue" asp-for="Coordinates.Longitude" class="form-control"/>
+    <input type="hidden" id="latValue" asp-for="Coordinates.Latitude"  class="form-control"/>
+     <input type="hidden" id="lngValue" asp-for="Coordinates.Longitude"  class="form-control"/>
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Add1)</div>
     <div class="col-md-9">
         @Html.TextBoxFor(m => m.Add1, new {@class = "form-control add_field", placeholder = "Address Line 1"})
@@ -51,35 +51,10 @@
 <div class="form-group row">
     <div id="listingMap"></div>
 </div>
+@section Scripts{
+    <script type="text/javascript">
 
-<script>
-      // In this example, we center the map, and add a marker, using a LatLng object
-      // literal instead of a google.maps.LatLng object. LatLng object literals are
-      // a convenient way to add a LatLng coordinate and, in most cases, can be used
-      // in place of a google.maps.LatLng object.
-        
-      var map;
-      let lat = parseFloat(document.getElementById("latValue").value);
-      let lng = parseFloat(document.getElementById("lngValue").value);
      
-      function initialize() {
-         
-        var mapOptions = {
-          zoom: 15,
-          center: {lat: lat?lat : 2.7119454, lng: lng? lng : 101.812422}
-        };
-        map = new google.maps.Map(document.getElementById('listingMap'),
-            mapOptions);
 
-        var marker = new google.maps.Marker({
-          // The below line is equivalent to writing:
-          // position: new google.maps.LatLng(-34.397, 150.644)
-          position: {lat: lat, lng: lng},
-          map: map
-        });
-
-        
-      }
-
-      
     </script>
+}

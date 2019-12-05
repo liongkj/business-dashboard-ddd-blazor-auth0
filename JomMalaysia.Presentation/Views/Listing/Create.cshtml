@@ -32,13 +32,23 @@
     <legend>Basic Info</legend>
     @* Listing Name *@
     <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingName)</div>
+        <div class="col-sm-2 col-md-3 col-form-label">
+            @Html.DisplayNameFor(m => m.ListingName)
+        </div>
         <div class="input-group col-sm-10 col-md-6">
-            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
-            <span asp-validation-for="ListingName" class="text-danger"></span>
-            <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" onclick="AutofillAddress();" >Autocomplete</button>
-            </div>
+            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
+        </div>
+        <span asp-validation-for="ListingName" class="text-danger"></span>
+
+
+    </div>
+    <div class="form-group row offset-md-3">
+        <div class="form-check input-group">
+            <input class="form-check-input" type="checkbox" id="autofill">
+            <label class="form-check-label" for="autofill">
+                Autofill mode
+            </label>
+            <span class="text-danger">(Autofill will override your input below.)</span>
         </div>
     </div>
     @* Merchant *@
@@ -76,7 +86,7 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
         <div class="col-sm-10 col-md-6 input-group">
-            @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)),new{id="StateList"})
+            @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)), new {id = "StateList"})
             @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress",})
             @Html.ValidationMessageFor(m => m.FullAddress)
             <div class="input-group-append">
@@ -159,10 +169,10 @@
 
 
 @section Scripts{
-    @{ await Html.RenderPartialAsync("_PlacesApiPartial");}
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    @{ await Html.RenderPartialAsync("_CloudinaryPartial");}
-    
+    @{ await Html.RenderPartialAsync("_PlacesApiPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
+
     <script type="text/javascript">
 
     var form = document.getElementById("FormCreate");
