@@ -20,6 +20,7 @@ namespace JomMalaysia.Presentation.Models.Common
         [Required]
         public StateEnum State { get; set; }
         [Required]
+        [DataType(DataType.PostalCode)]
         public string PostalCode { get; set; }
         [Required]
         public CountryEnum Country { get; set; }

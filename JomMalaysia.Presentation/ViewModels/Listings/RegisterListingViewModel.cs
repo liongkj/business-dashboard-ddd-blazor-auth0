@@ -33,6 +33,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
+        [Required]
         public OfficialContact Contact { get; set; }
 
         

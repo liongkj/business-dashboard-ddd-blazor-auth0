@@ -39,8 +39,6 @@
             <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
         </div>
         <span asp-validation-for="ListingName" class="text-danger"></span>
-
-
     </div>
     <div class="form-group offset-md-3">
         <div class="form-check input-group">
@@ -48,14 +46,23 @@
             <label class="form-check-label" for="autofill">
                 Autofill mode
             </label>
-            
+
         </div>
         <small id="passwordHelpBlock" class="form-text text-muted text-danger">
-                      Caution! Autofill will override your input below.
-                    </small>
-        
-           
+            Caution! Autofill will override your input below.
+        </small>
     </div>
+
+    @* Tags *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="Tags" id="tags-select2" class="form-control"></select>
+            <span asp-validation-for="Tags" class="text-danger"></span>
+        </div>
+    </div>
+
+
     @* Merchant *@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.MerchantId)</div>
@@ -95,7 +102,10 @@
             @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress",})
             @Html.ValidationMessageFor(m => m.FullAddress)
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary btnUpload listing-logo" data-toggle="modal" data-target="#modal-address">Complete Address</button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modal-address">
+                    <i class="fa fa-location-arrow fa-fw" aria-hidden="true"></i>
+                        Open
+                </button>
             </div>
         </div>
     </div>
@@ -113,7 +123,10 @@
 
                     <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled/>
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">Browse</button>
+                        <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">
+                            <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                                Browse
+                        </button>
                     </div>
                 </div>
             </div>
@@ -131,7 +144,7 @@
 
                     <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled/>
                     <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');">Browse</button>
+                        <button type="button" class="btn btn-secondary btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');"> <i class="fa fa-upload fa-fw" aria-hidden="true"></i>Browse</button>
                     </div>
                 </div>
             </div>
@@ -147,15 +160,57 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
     </div>
-    @* Tags *@
+    @* Contact *@
     <div class="form-group row">
-            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+            <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Contact)</div>
             <div class="col-sm-10 col-md-6">
-                <select asp-for="Tags" id="tags-select2" class="form-control"></select>
-                <span asp-validation-for="Tags" class="text-danger"></span>
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-contact">
+                  <i class="fa fa-external-link fa-fw" aria-hidden="true"></i> Open </button>
+                <span asp-validation-for="Contact" class="text-danger"></span>
             </div>
         </div>
-        
+
+    @* Ads Image *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingDetails)</div>
+        <div class="col-sm-10 col-md-6">
+            @for (int i = 0; i < @Model.ImageUris.ListingDetails.Count; i++)
+            {
+                <img src="@Model.ImageUris.ListingDetails" class="img-thumbnail listing-logo" alt="placeholder"/>
+
+                <div class="form-group row">
+                    <div class="input-group col-sm-10 col-md-12">
+                        @Html.HiddenFor(m => m.ImageUris.ListingDetails[i].Url, new {@class = "form-control listing-logo imageUrl"})
+
+                        <input type="text" class="form-control listing-logo imageName" id="detail-photo" disabled/>
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');"> <i class="fa fa-upload fa-fw" aria-hidden="true"></i>Browse</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+@* Contacts Modal *@
+    <div class="modal" id="modal-contact">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Contact Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.EditorFor(x => x.Contact)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="btnSaveContact">Save changes</button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     @* Address Modal *@
     <div class="modal" id="modal-address">
@@ -169,7 +224,6 @@
                 </div>
                 <div class="modal-body">
                     @Html.EditorFor(x => x.Address)
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="btnSaveAddress">Save changes</button>
@@ -178,7 +232,7 @@
             </div>
         </div>
     </div>
-    @* <button type="submit" id="btnListingSubmit" class="btn btn-success col-md-2 submitButton" >Register</button> *@
+
 </form>
 <div id="service-helper"></div>
 
@@ -189,6 +243,41 @@
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
 
     <script type="text/javascript">
+
+    $(function() {
+      const validator = $("form").validate();
+      debugger
+      $("#btnSaveAddress").click(function () {
+                      let fulladd = [];
+                      
+                      let fullAddTextBox = $("#txtFullAddress");
+                      fullAddTextBox.val("");
+                      var isValid = validator.element(".add_field");
+                      debugger
+                      if(isValid){
+                          $(".add_field").each(function(){
+                              let component = $(this).val().trim();
+                             fulladd.push(component); 
+                          });
+                          fullAddTextBox.val(fulladd);
+                           $('#modal-address').modal('hide');
+                      }else{
+                          fullAddTextBox.val("Address not complete");
+                      }
+                  });
+           
+           $("#btnSaveContact").click(function () {
+             
+               var isValid = validator.element(".contact_field");
+               debugger
+               if(isValid){
+                   
+                   $('#modal-contact').modal('hide');
+                }else{
+                   alert("Not complete");
+                }
+           });
+    });
 
     $("#tags-select2").select2({
                            tags: true,
@@ -239,24 +328,10 @@
                      });  
     }
         });
-
-            $("#btnSaveAddress").click(function () {
-                let fulladd = [];
-                const validator = $("form").validate();
-                let fullAddTextBox = $("#txtFullAddress");
-                fullAddTextBox.val("");
-                if(validator.element(".add_field")){
-                    $(".add_field").each(function(){
-                        let component = $(this).val().trim();
-                       fulladd.push(component); 
-                    });
-                    fullAddTextBox.val(fulladd);
-                     $('#modal-address').modal('hide');
-                }else{
-                    fullAddTextBox.val("Address not complete");
-                }
-                
-            });
+    
+    
+   
+     
 
 </script>
 
