@@ -3,6 +3,7 @@ let nameField = $("#listing-name-autocomplete");
 let autofillField = $("#autofill");
 
 autofillField.click(function(){
+    debugger
     if(autofillField.is(":checked")) {
         AutofillAddress();
     }
@@ -10,6 +11,7 @@ autofillField.click(function(){
 
 
 nameField.focusout(function(){
+    debugger
     if(autofillField.is(":checked")) {
         AutofillAddress();
     }

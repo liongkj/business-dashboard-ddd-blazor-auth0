@@ -22,15 +22,10 @@
             {
                 <tr>
                     <td>
-                        @*<input type="checkbox" asp-for="@item.selected" />*@
-                        @*<div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chkdt1" checked="">
-                                <label class="custom-control-label" for="customCheck1"></label>
-                            </div>*@
                     </td>
                     <td>@item.ListingName</td>
                     <td>@item.Merchant.RegistrationName</td>
-                    <td>@item.ListingType</td>
+                    <td>@item.CategoryType</td>
                     <td>@item.PublishStatus.Status</td>
                     <td><button onclick="publishListing('@item.ListingId')">Publish</button></td>
                 </tr>

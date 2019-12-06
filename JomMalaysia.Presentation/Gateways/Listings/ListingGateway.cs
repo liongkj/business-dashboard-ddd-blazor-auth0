@@ -33,7 +33,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
 
                 const Method method = Method.POST;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth).ConfigureAwait(false);
+                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth,vm).ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {

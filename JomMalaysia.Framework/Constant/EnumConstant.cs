@@ -6,13 +6,6 @@ namespace JomMalaysia.Framework.Constant
 {
     public class EnumConstant
     {
-        public enum ListingTypeEnum
-        {
-            local,
-            civic,
-            @event,
-            gover
-        }
 
         public enum PublishStatusEnum
         {

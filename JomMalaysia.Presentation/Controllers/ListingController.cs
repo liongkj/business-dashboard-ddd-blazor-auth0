@@ -9,6 +9,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
+using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
@@ -77,7 +78,7 @@ namespace JomMalaysia.Presentation.Controllers
                 Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
                 Value = m.MerchantId
             }).ToList();
-
+            //country
             var _country = new List<SelectListItem>();
             foreach (Enum country in Enum.GetValues(typeof(CountryEnum)))
             {
@@ -87,7 +88,17 @@ namespace JomMalaysia.Presentation.Controllers
                     Value = country.ToString(),
                 });
             }
-            
+            //category type
+            var _categoryType = new List<SelectListItem>();
+            foreach (Enum category in Enum.GetValues(typeof(CategoryType)))
+            {
+                _categoryType.Add(new SelectListItem
+                {
+                    Text = category.ToString(),
+                    Value = category.ToString(),
+                });
+            }
+            //states
             var _states = new List<SelectListItem>();
             var dicState = new Dictionary<string,string>();
             foreach (Enum state in Enum.GetValues(typeof(StateEnum)))
@@ -101,11 +112,24 @@ namespace JomMalaysia.Presentation.Controllers
 
                 if (fullName != null) dicState.Add(key: fullName.ToLower(), value: state.ToString());
             }
+
+            var _operatingHours = new List<OperatingHourViewModel>();
+            var days = Enum.GetValues(typeof(DayOfWeek));
+            foreach (var day in days)
+            {
+                _operatingHours.Add(new OperatingHourViewModel
+                {
+                    Enabled = false,
+                    Day = (DayOfWeek)day,
+                });
+            }
             
             var vm = new RegisterListingViewModel
             {
+                OperatingHours = _operatingHours,
                 ImageUris = new ListingImageViewModel(),
                 MerchantList = _merchants,
+                CategoryTypeList =  _categoryType,
                 Address = new Address
                 {
                     StateList =  _states,

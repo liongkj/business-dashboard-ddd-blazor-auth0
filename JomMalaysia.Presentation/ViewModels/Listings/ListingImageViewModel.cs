@@ -14,13 +14,13 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [DisplayName("Cover Photo")]
         public Image CoverPhoto { get; set; }
         [DisplayName("Ads Image")]
-        public List<Image> ListingDetails { get; }
+        public List<Image> Ads { get; }
 
         public ListingImageViewModel()
         {
             ListingLogo = new Image();
             CoverPhoto = new Image();
-            ListingDetails = new List<Image>();
+            Ads = new List<Image>();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         public List<OperatingHour> OperatingHours { get; set; }
         public OfficialContact Contact { get; set; }
         public PublishStatus PublishStatus { get; set; }
-        public ListingTypeEnum ListingType { get; set; }
+        public CategoryType? CategoryType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }
 

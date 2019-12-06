@@ -7,8 +7,9 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 {
     public class OperatingHourViewModel
     {
-        public int Day { get; set; }
+        public DayOfWeek Day { get; set; }
         public string StartTime { get; set; }
         public string CloseTime { get; set; }
+        public bool Enabled { get; set; } = false;
     }
 }

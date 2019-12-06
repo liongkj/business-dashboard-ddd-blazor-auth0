@@ -14,7 +14,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public string ListingName { get; set; }
 
         [MinLength(5)]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Description { get; set; }
         [Required]
         [Display(Name = "Category")]
@@ -23,11 +23,12 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 
         public IEnumerable<string> Tags { get; set; }
 
-        public IEnumerable<OperatingHourViewModel> OperatingHours { get; set; }
+        public List<OperatingHourViewModel> OperatingHours { get; set; }
         
         [Required]
         [Display(Name = "Type")]
         public CategoryType? CategoryType { get; set; }
+        public IEnumerable<SelectListItem> CategoryTypeList { get; set; }
         [Display(Name = "Address")]
         public string FullAddress { get; set; }
         [Required]

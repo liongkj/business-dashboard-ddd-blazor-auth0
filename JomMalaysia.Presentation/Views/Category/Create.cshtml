@@ -74,11 +74,11 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryImageUrl)</div>
         <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.CategoryImageUrl, new { @class = "form-control", id = "imageUrl" })
-            @Html.HiddenFor(m => m.CategoryThumbnailUrl, new { @class = "form-control", id = "thumbnailUrl" })
-            <input type="text" class="form-control" id="imageName" disabled />
+            @Html.HiddenFor(m => m.CategoryImageUrl, new { @class = "form-control category-logo imageUrl" })
+            
+            <input type="text" class="form-control category-logo imageName" id="imageName" disabled />
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Browse</button>
+                <button type="button" class="btn btn-secondary category-logo btnUpload"  onclick="uploadImageWidget('category_images','category-logo');">Browse</button>
                  @Html.ValidationMessageFor(m => m.CategoryThumbnailUrl)
             </div>
         </div>
@@ -88,48 +88,11 @@
 @section Scripts{
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-    <!-- cloudinary api -->
-    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-    <script>cloudinary.setCloudName("jomn9-com")</script>
-    
+    @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
+  
+  
     <script type="text/javascript">
      
-        let uploadImageWidget = cloudinary.createUploadWidget(
-            {
-                ucloudname: 'jomn9-com',
-                uploadPreset: 'ox3azzqe',
-                apiKey: '731121621859821',
-                folder: 'category_thumbnail',
-                sources: ["local", "url", "image_search"],
-                googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
-                searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
-                searchByRights: true,
-                cropping: true,
-                croppingAspectRatio: 1,
-                resourceType: ["image"],
-                clientAllowedFormats: ["png", "jpg", "jpeg"],
-                minImageWidth: 100,
-                minImageHeight: 100,
-                autoMinimize: true,
-                showSkipCropButton: true,
-
-
-            }, (error, result) => {
-                if (!error && result && result.event === "success") {
-                    
-                    console.log("Image uploaded");
-                    $("#imageUrl").val(result.info.url); 
-                    $("#thumbnailUrl").val(result.info.thumbnail_url);
-                    $("#imageName").val(result.info.original_filename + "." + result.info.format);
-                }
-            }
-        );
-
-        $("#btnUpload").on("click", function () {
-            uploadImageWidget.open();
-        });
-
         function createCategory() {
            
             let data = $('#FormCreate').serialize();
@@ -153,7 +116,8 @@
                         } else {
                               swal("Oops",item2,"error");
                         }
-                               }),  error: (function (data) {
+                               }), 
+                         error: (function (data) {
                         swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                     })
                 })
