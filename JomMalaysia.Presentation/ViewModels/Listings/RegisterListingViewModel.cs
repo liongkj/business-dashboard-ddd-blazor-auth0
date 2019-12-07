@@ -34,7 +34,8 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         public Address Address { get; set; }
         public ListingImageViewModel ImageUris{get;set;}
-        [Required]
+        
+        [Display(Name = "Public Contact Info")]
         public OfficialContact Contact { get; set; }
 
         

@@ -3,16 +3,15 @@ let nameField = $("#listing-name-autocomplete");
 let autofillField = $("#autofill");
 
 autofillField.click(function(){
-    debugger
-    if(autofillField.is(":checked")) {
+    if(autofillField.is(":checked")&& nameField.val()) {
         AutofillAddress();
     }
 });
 
 
 nameField.focusout(function(){
-    debugger
-    if(autofillField.is(":checked")) {
+    
+    if(autofillField.is(":checked") && nameField.val()) {
         AutofillAddress();
     }
 });

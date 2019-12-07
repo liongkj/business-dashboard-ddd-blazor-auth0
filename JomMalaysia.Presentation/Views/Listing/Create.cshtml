@@ -154,7 +154,6 @@
     </div>
 </div>
 
-
 @* Description *@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
@@ -235,7 +234,6 @@
                 <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
             </button>
             </div>
-
     <span asp-validation-for="Contact" class="text-danger"></span>
 </div>
 
@@ -279,14 +277,14 @@
                 @Html.EditorFor(x => x.Contact)
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveContact">Apply</button>
+                <button type="button" class="btn btn-primary" onclick="saveContact()" id="btnSaveContact">Apply</button>
                 <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-@* Address Modal *@
+@* Address Modal *@ 
 <div class="modal" id="modal-address">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -297,10 +295,12 @@
                 </button>
             </div>
             <div class="modal-body">
+                <form id="addressForm">
                 @Html.EditorFor(x => x.Address)
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveAddress">Apply</button>
+                <button type="button" class="btn btn-primary" onclick="saveAddress()" id="btnSaveAddress">Apply</button>
                 <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -310,51 +310,15 @@
 </form>
 <div id="service-helper"></div>
 
-
 @section Scripts{
     @{ await Html.RenderPartialAsync("_PlacesApiPartial"); }
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
+    <script src="~/js/Listings/ModalFunctionScripts.js"></script>
+    
 
     <script type="text/javascript">
-    let validator;
-    
-    $(function () {
-      validator = $("form").validate();
-    });
-    
-      $("#btnSaveAddress").click(function () {
-                      let fulladd = [];
-                      
-                      let fullAddTextBox = $("#txtFullAddress");
-                      fullAddTextBox.val("");
-                      var isValid = validator.element(".add_field");
-                      console.log(validator);
-                      debugger
-                      if(isValid){
-                          $(".add_field").each(function(){
-                              let component = $(this).val().trim();
-                             fulladd.push(component); 
-                          });
-                          fullAddTextBox.val(fulladd);
-                           $('#modal-address').modal('hide');
-                      }else{
-                          fullAddTextBox.val("Address not complete");
-                      }
-                  });
-           
-       $("#btnSaveContact").click(function () {
-               var isValid = validator.element(".contact_field");
-               console.log(validator);
-               debugger
-               if(isValid){
-                   
-                   $('#modal-contact').modal('hide');
-                }else{
-                   alert("Not complete");
-                }
-           });
-    
+   
 
     $("#tags-select2").select2({
                            tags: true,

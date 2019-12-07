@@ -3,7 +3,7 @@
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Email)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Email, new {@class = "form-control contact_field", placeholder = "Email Address"})
+        @Html.TextBoxFor(m => m.Email, new {@class = "form-control contact_field", placeholder = "hello@email.com"})
         @Html.ValidationMessageFor(m => m.Email)
     </div>
 </div>
@@ -35,10 +35,3 @@
         @Html.ValidationMessageFor(m => m.Fax)
     </div>
 </div>
-
-@section Scripts{
-    <script type="text/javascript">
-
-    
-    </script>
-}
