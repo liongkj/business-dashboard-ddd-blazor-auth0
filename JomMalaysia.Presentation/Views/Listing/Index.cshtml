@@ -95,7 +95,9 @@
                         type: 'GET',
                         url: '/Listing/Detail/' + id,
                         success: function (data) {
+                            
                             $modal.find('.modal-body').html(data);
+                            debugger
                         },
                         fail: function (error) {
                             $modal.hide();

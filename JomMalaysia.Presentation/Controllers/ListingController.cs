@@ -170,7 +170,7 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Detail(string id)
         {
             var vm = await _gateway.Detail(id).ConfigureAwait(false);
-            return PartialView("_Detail", vm);
+            return new JsonResult(vm);
         }
         
         [HttpPost]
