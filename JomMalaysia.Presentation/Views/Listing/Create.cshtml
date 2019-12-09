@@ -1,4 +1,5 @@
 ﻿@using JomMalaysia.Presentation.Models.Categories
+@using Newtonsoft.Json
 @using RestSharp.Extensions
 @model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
 <!--modal-->
@@ -8,7 +9,7 @@
 }
 <!--HEADER-->
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2 submitButton" id="btnListingSubmit">Save</button>
+    <button type="submit" form="FormCreate" class="btn btn-success col-md-2 submitButton" id="btnListingSubmit">Save</button>
     <button type="button" class="btn btn-danger col-md-2 cancelButton" onclick="window.history.go(-1); return false;">Back</button>
 </div>
 
@@ -27,7 +28,8 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-controller="Listing" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
+<form asp-controller="Listing" asp-action="Create" id="FormCreate" 
+      class="form-m-gap-top" method="post">
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <legend>Basic Info</legend>
@@ -36,10 +38,11 @@
     <div class="col-sm-2 col-md-3 col-form-label">
         @Html.DisplayNameFor(m => m.ListingName)
     </div>
-    <div class="input-group col-sm-10 col-md-6">
+    <div class="col-sm-10 col-md-6">
         <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
+        <span asp-validation-for="ListingName" class="text-danger"></span>
     </div>
-    <span asp-validation-for="ListingName" class="text-danger"></span>
+    
 </div>
 <div class="form-group offset-md-3">
     <div class="form-check input-group">
@@ -71,7 +74,7 @@
         <select asp-for="MerchantId" asp-items="Model.MerchantList" class="form-control">
             <option disabled selected>--- SELECT ---</option>
         </select>
-        <span asp-validation-for="MerchantId" class="text-danger"></span>
+       <span asp-validation-for="MerchantId" class="text-danger"></span>
     </div>
 </div>
 @* Type Dropdown *@
@@ -101,12 +104,14 @@
     <div class="col-sm-10 col-md-6 input-group">
         @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)), new {id = "StateList"})
         @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress",})
-        @Html.ValidationMessageFor(m => m.FullAddress)
+        
         <div class="input-group-append">
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-address">
                 <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
 
             </button>
+        </div><div class="col-md-12">
+        @Html.ValidationMessageFor(m => m.FullAddress)
         </div>
     </div>
 </div>
@@ -204,12 +209,12 @@
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.OperatingHours)</div>
 @* TODO Cheechuen fix grid *@
     <div class="col-sm-10 col-md-5 ">
-        <div class="container">
+        <div class="container" id="business-hours-list">
         @foreach (var t in Model.OperatingHours)
         {
             <div class="row">
-                <div class="label col-md-3">
-                    <label type="text" class="">@t.Day</label>
+                <div class="label col-md-4">
+                    <label type="text">@t.Day</label>
                 </div>
 
                 <div class="label col-md-4 ">
@@ -230,7 +235,8 @@
 </div>
     </div>
 <div class="col-md-1">
-            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-operating">
+    <button type="button" class="btn btn-info" 
+            data-toggle="modal" data-target="#modal-operating">
                 <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
             </button>
             </div>
@@ -249,14 +255,14 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 @for (var i = 0; i < Model.OperatingHours.Count; i++)
                 {
                     @Html.EditorFor(x => x.OperatingHours[i])
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnSaveOperating">Apply</button>
+                <button type="button" class="btn btn-primary" 
+                        onclick="saveOperating()" id="btnSaveOperating">Apply</button>
                 <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -310,10 +316,12 @@
 </form>
 <div id="service-helper"></div>
 
+
 @section Scripts{
     @{ await Html.RenderPartialAsync("_PlacesApiPartial"); }
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
+    @{ await Html.RenderPartialAsync("_TimePickerPartial");}
     <script src="~/js/Listings/ModalFunctionScripts.js"></script>
     
 
@@ -325,17 +333,21 @@
                            tokenSeparators: [',', ' ']
                        });
 
-    var form = document.getElementById("FormCreate");
-    
-    document.getElementById("btnListingSubmit").addEventListener("click", function () {
-          
-      let data = $('#FormCreate').serialize();
-                   //TODO KJ - create one more for create subcategory
-                  if ($("#FormCreate").valid()) {
+   
+   
+    $("#FormCreate").submit(function (e) {
+          e.preventDefault();
+      let data = $(this).serialize();
+        let token = $('input[name="__RequestVerificationToken"]').val();
+                  debugger
+                  if ($(this).valid()) {
                       $.ajax({
                           //TODO add [ValidateAntiForgeryToken]
                           url: "/Listing/Create/",
                           data: data,
+                           headers: {
+                           'RequestVerificationToken': token
+                           },
                           type: "POST",
                           success: (function ({ item1, item2 }) {
                                if (item1 === 1) {
@@ -383,7 +395,6 @@
                              }else {
                                     let $prevGroup, prevGroupName;
                                     $.each(result, function () {
-                                        debugger
                                     categoryDropdown.prop("disabled",false);
                                     if (prevGroupName !== this.group.name) {
                                         $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');

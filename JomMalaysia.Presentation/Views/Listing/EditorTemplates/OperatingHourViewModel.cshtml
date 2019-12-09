@@ -3,21 +3,22 @@
 
 <div class="form-group row @Model.Day">
 
-    <div class="col-sm-10 col-md-3">
+    <div class="col-sm-11 col-md-2">
         <label class="label">@Model.Day</label>
     </div>
     <div class="col-sm-2 col-md-2">
         <div class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input OperatingCb"
-                   id="@Model.Day-Cb" onclick="showHourField(this)" data-day="@Model.Day" checked="@Model.Enabled">
-            <label class="custom-control-label" for="@Model.Day-Cb"></label>
+                   asp-for="Enabled" onclick="showHourField(this)" data-day="@((int)Model.Day)">
+            <label class="custom-control-label" type="hidden" asp-for="Enabled" 
+                   >Closed</label>
         </div>
     </div>
    
-        <div class="col-sm-12 col-md-6 row" id="hour-field-@Model.Day" style="display:none">
-            <input type="time" asp-for="StartTime" class="col-md-4"/>
+        <div class="col-sm-10 col-md-8 row justify-content-center" id="hour-field-@((int)Model.Day)" style="display:none">
+            <input asp-for="StartTime" class="col-md-4 timepicker start-time"/>
             <label class="label col-md-2"> - </label>
-            <input type="time" asp-for="CloseTime" class="col-md-4"/>
+            <input asp-for="CloseTime" class="col-md-4 timepicker close-time"/>
         </div>
     
 </div>

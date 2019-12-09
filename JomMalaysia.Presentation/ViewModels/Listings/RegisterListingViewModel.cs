@@ -19,8 +19,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         [Display(Name = "Category")]
         public string CategoryId { get; set; }
-        public IEnumerable<SelectListItem> CategoryList { get; set; }
-
+        
         public IEnumerable<string> Tags { get; set; }
 
         public List<OperatingHourViewModel> OperatingHours { get; set; }
@@ -28,11 +27,15 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         [Display(Name = "Type")]
         public CategoryType? CategoryType { get; set; }
-        public IEnumerable<SelectListItem> CategoryTypeList { get; set; }
+       
+        
+        [Required]
         [Display(Name = "Address")]
         public string FullAddress { get; set; }
+        
         [Required]
         public Address Address { get; set; }
+        
         public ListingImageViewModel ImageUris{get;set;}
         
         [Display(Name = "Public Contact Info")]
@@ -42,10 +45,10 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         [Display(Name ="Merchant")]
         public string MerchantId { get; set; }
-
+        //for populate select options
         public IEnumerable<SelectListItem> MerchantList { get; set; }
-
-
+        public IEnumerable<SelectListItem> CategoryTypeList { get; set; }
+        public IEnumerable<SelectListItem> CategoryList { get; set; }
         
     }
 }
