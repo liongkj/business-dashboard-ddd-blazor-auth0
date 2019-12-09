@@ -62,8 +62,8 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             IWebServiceResponse<ListViewModel<WorkflowModel>> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Workflow));
-                var method = Method.GET;
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Workflow);
+                const Method method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
 
             }
@@ -73,38 +73,11 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                Console.Error.WriteLine("called workflow api");
                 var workflows = response.Data.Data;
-                foreach (var work in workflows)
-                {
-                    result.Add(work);
-                }
-
-
+                result.AddRange(workflows);
             }
             //handle exception
             return result;
         }
-
-        //public async Task<IWebServiceResponse> Delete(string categoryId)
-        //{
-        //    IWebServiceResponse<Category> response;
-        //    try
-        //    {
-        //        var req = $"{_apiBuilder.GetApi((APIConstant.API.Path.Category))}/{categoryId}";
-
-        //        var method = Method.DELETE;
-        //        response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
-        //    }
-        //    catch (GatewayException ex)
-        //    {
-        //        throw ex;
-        //    }
-        //    return response;
-
-
-        //    //handle exception
-
-        //}
     }
 }

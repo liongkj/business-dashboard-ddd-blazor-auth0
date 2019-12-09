@@ -11,7 +11,7 @@
         <tr>
             <th scope="col"></th>
             <th scope="col">Listing Name</th>
-            <th scope="col">Requester</th>
+            <th scope="col">Requested by</th>
             <th scope="col">Type</th>
             <th scope="col">Status</th>
             <th scope="col">Created on</th>
@@ -23,11 +23,6 @@
         {
             <tr>
                 <td>
-                    @*<input type="checkbox" asp-for="@item.selected" />*@
-                    @*<div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="chkdt1" checked="">
-                                <label class="custom-control-label" for="customCheck1"></label>
-                            </div>*@
                 </td>
                 <td>
                     <a asp-controller="Listing" asp-action="Details" asp-route-id="@item.Listing.ListingId"> @item.Listing.ListingName</a>

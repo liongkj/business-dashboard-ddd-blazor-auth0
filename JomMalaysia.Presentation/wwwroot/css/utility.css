@@ -5,3 +5,5 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-appearance: textfield;
     margin: 0;
 }
+
+.line-breaks { white-space:pre-line; }

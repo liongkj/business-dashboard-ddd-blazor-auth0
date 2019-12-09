@@ -69,6 +69,7 @@ namespace JomMalaysia.Presentation.Controllers
 
 
         // GET: Listing/Create
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             //merchant
@@ -164,6 +165,14 @@ namespace JomMalaysia.Presentation.Controllers
             }
         }
        
+        
+        [HttpGet]
+        public async Task<IActionResult> Detail(string id)
+        {
+            var vm = await _gateway.Detail(id).ConfigureAwait(false);
+            return PartialView("_Detail", vm);
+        }
+        
         [HttpPost]
         public async Task<Tuple<int, string>> Publish(string id, int months)
         {

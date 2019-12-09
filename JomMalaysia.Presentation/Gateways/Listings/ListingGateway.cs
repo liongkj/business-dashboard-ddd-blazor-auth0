@@ -68,17 +68,36 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var listings = response.Data.Data;
-                foreach (var list in listings)
-                {
-                    result.Add(list);
-                }
-
-
+                result.AddRange(listings);
             }
             //handle exception
             return result;
         }
+        
+        public async Task<Listing> Detail(string id)
+        {
+            Listing result = null;
+            IWebServiceResponse<ViewModel<Listing>> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, id);
+                const Method method = Method.GET;
+                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
 
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+
+                result= response.Data.Data;
+            }
+            //handle exception
+            return result;
+        }
+        
         public async Task<IWebServiceResponse> Publish(string ListingId, int months)
         {
             IWebServiceResponse<ListViewModel<Listing>> response;

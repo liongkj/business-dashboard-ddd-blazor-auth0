@@ -15,5 +15,6 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         Task<List<Listing>> GetAll();
         Task<IWebServiceResponse> Add(RegisterListingViewModel vm);
         Task<IWebServiceResponse> Publish(string ListingId,int months);
+        Task<Listing> Detail(string id);
     }
 }

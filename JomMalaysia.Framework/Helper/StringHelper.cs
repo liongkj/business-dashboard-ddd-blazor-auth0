@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 namespace JomMalaysia.Framework.Helper
 {
     public static class StringHelper
@@ -10,6 +14,17 @@ namespace JomMalaysia.Framework.Helper
             char[] a = s.ToCharArray();
             a[0] = char.ToUpper(a[0]);
             return new string(a);
+        }
+
+        public static string ListToString(this IEnumerable<object> objects)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var obj in objects)
+            {
+                builder.Append(obj).Append(',');
+            }
+            return builder.ToString();
+
         }
     }
 }

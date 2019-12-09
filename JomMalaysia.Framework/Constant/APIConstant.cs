@@ -24,6 +24,7 @@
                 //listing
                 public const string Publish = "api/Listings/{0}/Publish/{1}";
                 public const string Listing = "api/Listings";
+                public const string ListingDetail = "api/Listings/{0}";
             }
         }
     }
