@@ -148,6 +148,8 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
+                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, StartTime = days.StartTime, CloseTime = days.CloseTime}).ToList();
+                vm.OperatingHours = OperatingHours;
                 var response = await _gateway.Add(vm).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {

@@ -8,10 +8,10 @@
     </div>
     <div class="col-sm-2 col-md-2">
         <div class="custom-control custom-switch">
+            <input type="hidden" asp-for="Day" value="@Model.Day"/>
             <input type="checkbox" class="custom-control-input OperatingCb"
-                   asp-for="Enabled" onclick="showHourField(this)" data-day="@((int)Model.Day)">
-            <label class="custom-control-label" type="hidden" asp-for="Enabled" 
-                   >Closed</label>
+                   asp-for="Enabled" onclick="showHourField(this)" data-day="@((int) Model.Day)">
+            <label class="custom-control-label" type="hidden" asp-for="Enabled">Closed</label>
         </div>
     </div>
    

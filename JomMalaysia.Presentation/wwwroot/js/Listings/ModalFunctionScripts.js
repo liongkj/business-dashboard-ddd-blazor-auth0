@@ -21,6 +21,8 @@ function saveContact() {
 
     if (to_validate_fields === fields.length) {
         $("#modal-contact").hide();
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     }
 }
 
@@ -30,6 +32,8 @@ function saveAddress() {
     fields.forEach(validate);
     if (to_validate_fields === fields.length) {
         $("#modal-address").hide();
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     }
 }
 
