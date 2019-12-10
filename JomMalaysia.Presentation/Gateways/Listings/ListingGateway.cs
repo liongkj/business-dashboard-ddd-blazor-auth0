@@ -103,6 +103,30 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             return result;
         }
         
+        public async Task<IWebServiceResponse> Edit(RegisterListingViewModel vm, string listingId)
+        {
+            IWebServiceResponse<Listing> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, listingId);
+
+                const Method method = Method.PUT;
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<Listing>(req, method, auth, vm)
+                    .ConfigureAwait(false);
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+
+            return response;
+
+
+            //handle exception
+        }
+        
+        
         public async Task<IWebServiceResponse> Publish(string ListingId, int months)
         {
             IWebServiceResponse<ListViewModel<Listing>> response;

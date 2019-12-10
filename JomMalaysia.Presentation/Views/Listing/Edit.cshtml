@@ -25,9 +25,9 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-controller="Listing" asp-action="Create" id="FormCreate"
+<form asp-controller="Listing" asp-action="Edit" id="FormCreate" 
       class="form-m-gap-top" method="post">
-
+    <input type="hidden" asp-for="@Model.ListingId" value="@Model.ListingId"/>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <legend>Basic Info</legend>
     @* Listing Name *@
@@ -90,8 +90,8 @@
     <div class="form-group row" id="category-input">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
         <div class="col-sm-10 col-md-6">
-            <select asp-for="CategoryId" id="category-dropdown" disabled class="form-control">
-                <option disabled selected>--- Please select a type first ---</option>
+            <select asp-for="CategoryId" id="category-dropdown" asp-items="Model.CategoryList" class="form-control">
+                
             </select>
             <span asp-validation-for="CategoryId" class="text-danger"></span>
         </div>
@@ -327,20 +327,18 @@
 
 
     <script type="text/javascript">
-    var tags =  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Tags));
-    var tagSelect = $("#tags-select2");
-    
-        tagSelect.select2({
-                                    
-                                  tags: true,
-                                  tokenSeparators: [',', ' ']
-                               });
+    let tags =  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Tags));
+    let tagSelect = $("#tags-select2");
+
+    tagSelect.select2({tags: true,tokenSeparators: [',', ' ']});
 
     tags.forEach(createTagObject);
     
     function createTagObject(name){
-        var option = new Option(name,null,true,true);
+        
+        var option = new Option(name,name,true,true);
         tagSelect.append(option).trigger('change');
+        
     }
     
 
@@ -349,12 +347,13 @@
     $("#FormCreate").submit(function (e) {
           e.preventDefault();
       let data = $(this).serialize();
+      // let listingId = $('input[name="ListingId"]').val();
         let token = $('input[name="__RequestVerificationToken"]').val();
                   debugger
                   if ($(this).valid()) {
                       $.ajax({
                           //TODO add [ValidateAntiForgeryToken]
-                          url: "/Listing/Create/",
+                          url: "/Listing/Edit/",
                           data: data,
                            headers: {
                            'RequestVerificationToken': token
@@ -363,8 +362,8 @@
                           success: (function ({ item1, item2 }) {
                                if (item1 === 1) {
                                   sweetAlert({
-                                      title: "Created",
-                                      text: "Listing has been created successfully!",
+                                      title: "Changes are saved",
+                                      text: "Listing info is updated successfully!",
                                       type: "success"
                                   },
                                       function () {
@@ -388,7 +387,7 @@
             let categoryDropdown = $("#category-dropdown");
             categoryDropdown.prop('disabled', true);
             if(filterValue!=null){
-
+                
               $.ajax({
                          type: "GET",
                          url: "/Category/GetCategoryByType",
@@ -406,6 +405,7 @@
                              }else {
                                     let $prevGroup, prevGroupName;
                                     $.each(result, function () {
+                                        debugger
                                     categoryDropdown.prop("disabled",false);
                                     if (prevGroupName !== this.group.name) {
                                         $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');

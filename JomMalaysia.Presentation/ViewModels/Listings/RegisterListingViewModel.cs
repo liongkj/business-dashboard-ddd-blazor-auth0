@@ -10,6 +10,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 {
     public class RegisterListingViewModel
     {
+        public string ListingId { get; set; }
         [Required]
         [Display(Name = "Business Name / Shop Name")]
         public string ListingName { get; set; }

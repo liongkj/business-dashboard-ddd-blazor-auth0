@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using JomMalaysia.Framework.Helper;
 
 namespace JomMalaysia.Presentation.Models.Common
 {
@@ -11,12 +13,23 @@ namespace JomMalaysia.Presentation.Models.Common
         public StateEnum State { get; set; }
         public string PostalCode { get; set; }
         public CountryEnum Country { get; set; }
-        public Location Location { get; set; }
+        public Coordinates Coordinates { get; set; }
+        
+        public override string ToString()
+        {
+            var formatted = String.Format("{0} {1} \n{2} {3} {4} {5}",
+                Add1, (!string.IsNullOrEmpty(Add2) ? Add2 : ""),
+                PostalCode, City, EnumHelper.GetDescription(State), EnumHelper.GetDescription(Country)
+            );
+            return formatted;
+        }
     }
     
     public class Location{
         public List<Coordinates> Coordinates { get; set; }
     }
+    
+    
     
     public enum CountryEnum
     {

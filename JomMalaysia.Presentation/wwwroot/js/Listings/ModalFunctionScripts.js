@@ -3,12 +3,13 @@ let to_validate_fields;
 $(function () {
 
     validator = $("form").validate();
-
+    
 });
 
 function validate(fields) {
-    
-    if (validator.element(fields)) {
+    let isValid = validator.element(fields);
+    debugger
+    if (isValid) {
         to_validate_fields += 1;
     }
 }
@@ -18,7 +19,7 @@ function saveContact() {
     to_validate_fields = 0;
     let fields = document.querySelectorAll(".contact_field");
     fields.forEach(validate);
-
+    
     if (to_validate_fields === fields.length) {
         $("#modal-contact").hide();
         $('body').removeClass('modal-open');
@@ -30,6 +31,7 @@ function saveAddress() {
     to_validate_fields = 0;
     let fields = document.querySelectorAll(".add_field");
     fields.forEach(validate);
+    
     if (to_validate_fields === fields.length) {
         $("#modal-address").hide();
         $('body').removeClass('modal-open');
@@ -62,7 +64,7 @@ function saveOperating() {
         let checked = enabled[0].checked;
 
         if (checked) {
-            let start = $("#OperatingHours_" + i + "__StartTime");
+            let start = $("#OperatingHours_" + i + "__OpenTime");
             let close = $("#OperatingHours_" + i + "__CloseTime");
             fields.push(start);
             fields.push(close);

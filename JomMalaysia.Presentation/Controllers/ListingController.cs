@@ -166,14 +166,35 @@ namespace JomMalaysia.Presentation.Controllers
                     });
                 }
             }
+            //category
+            var _categories = new List<SelectListItem>();
+            var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == m.CategoryType).OrderBy(x => x.CategoryName)
+                .GroupBy(x => x.CategoryPath.Category);
 
+            foreach (var category in cats)
+            {
+                var groups = new SelectListGroup {Name = category.Key};
+                foreach (var sub in category)
+                {
+                    if (sub.CategoryPath.Subcategory != null)
+                    {
+                        _categories.Add(new SelectListItem
+                        {
+                            Text = sub.CategoryPath.Subcategory.CapitalizeOrConvertNullToEmptyString(),
+                            Value = sub.CategoryId,
+                            Group = groups
+                        });
+                    }
+                }
+            }
             //populate fields
-            vm.MerchantList = init.MerchantList.Where(x => x.Value != m.Merchant.MerchantId);
+            vm.MerchantList = init.MerchantList;
             vm.CategoryTypeList = init.CategoryTypeList;
             vm.Address.CountryList = init.Address.CountryList;
             vm.Address.StateList = init.Address.StateList;
             vm.OperatingHours = _operatingHours;
-            
+            vm.CategoryList = _categories;
             ViewBag.States = init.StateDictionary;
             return View(vm);
         }
@@ -181,7 +202,23 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<Tuple<int, string>> Edit(RegisterListingViewModel vm, string listingId)
         {
-         throw new NotImplementedException();
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
+            { 
+                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
+                vm.OperatingHours = OperatingHours;
+                var response = await _gateway.Edit(vm, listingId).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    refresh = true;
+                }
+
+                return SweetDialogHelper.HandleResponse(response);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
         }
         
         [HttpPost]
