@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using JomMalaysia.Framework;
 using JomMalaysia.Presentation.Scope;
+using JomMalaysia.Presentation.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -115,7 +117,10 @@ namespace JomMalaysia.Presentation
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddHttpContextAccessor();
 
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
+            services.AddSingleton(new MapperConfiguration(cfg => { cfg.AddProfile<PresentationProfile>(); }).CreateMapper());
+            
+            
 
            
 

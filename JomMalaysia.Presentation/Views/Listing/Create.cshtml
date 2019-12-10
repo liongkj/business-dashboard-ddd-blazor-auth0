@@ -1,7 +1,4 @@
-﻿@using JomMalaysia.Presentation.Models.Categories
-@using Newtonsoft.Json
-@using RestSharp.Extensions
-@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
+﻿@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
 <!--modal-->
 @{
     ViewData["Title"] = "Create new Listing";
@@ -119,13 +116,13 @@
 <legend>Public Info</legend>
 @*logo*@
 <div class="form-group row">
-    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.ListingLogo)</div>
+    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.ListingLogo)</div>
     <div class="col-sm-10 col-md-6">
-        <img src="@Model.ImageUris.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
+        <img src="@Model.ListingImages.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
 
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
-                @Html.HiddenFor(m => m.ImageUris.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl"})
+                @Html.HiddenFor(m => m.ListingImages.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl"})
 
                 <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled/>
                 <div class="input-group-append">
@@ -141,12 +138,12 @@
 
 @* Cover Photo *@
 <div class="form-group row">
-    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.CoverPhoto)</div>
+    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.CoverPhoto)</div>
     <div class="col-sm-10 col-md-6">
-        <img src="@Model.ImageUris.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
+        <img src="@Model.ListingImages.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
-                @Html.HiddenFor(m => m.ImageUris.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
+                @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
 
                 <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled/>
                 <div class="input-group-append">
@@ -181,15 +178,15 @@
 @* Ads Image *@
 @* TODO *@
 <div class="form-group row">
-    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ImageUris.Ads)</div>
+    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.Ads)</div>
     <div class="col-sm-10 col-md-6">
-        @for (int i = 0; i < Model.ImageUris.Ads.Count; i++)
+        @for (int i = 0; i < Model.ListingImages.Ads.Count; i++)
         {
-            <img src="@Model.ImageUris.Ads" class="img-thumbnail listing-logo" alt="placeholder"/>
+            <img src="@Model.ListingImages.Ads" class="img-thumbnail listing-logo" alt="placeholder"/>
 
             <div class="form-group row">
                 <div class="input-group col-sm-10 col-md-12">
-                    @Html.HiddenFor(m => m.ImageUris.Ads[i].Url, new {@class = "form-control listing-logo imageUrl"})
+                    @Html.HiddenFor(m => m.ListingImages.Ads[i].Url, new {@class = "form-control listing-logo imageUrl"})
 
                     <input type="text" class="form-control listing-logo imageName" id="detail-photo" disabled/>
                     <div class="input-group-append">
@@ -221,7 +218,7 @@
                     <label type="text" class="label">
                         @if (t.Enabled)
                         {
-                            @($"{t.StartTime} - {t.CloseTime}")
+                            @("Open")
                         }
                         else
                         {

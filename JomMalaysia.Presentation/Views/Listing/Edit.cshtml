@@ -1,0 +1,430 @@
+﻿@model JomMalaysia.Presentation.ViewModels.Listings.RegisterListingViewModel
+<!--modal-->
+@{
+    ViewData["Title"] = "Edit Listing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!--HEADER-->
+<div class="form-group col-md-12 no-padding d-none d-md-block">
+    <button type="submit" form="FormCreate" class="btn btn-success col-md-2 submitButton" id="btnListingSubmit">Save</button>
+    <button type="button" class="btn btn-danger col-md-2 cancelButton" onclick="window.history.go(-1); return false;">Back</button>
+</div>
+
+<!--Mobile Buttons-->
+<div class="form-group col-md-12 no-padding d-sm-block d-md-none">
+    <div class="btn-group col-sm-12 no-padding" role="group">
+        <button type="button" class="btn btn-primary">Action</button>
+        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0; left: 0; will-change: transform;">
+
+            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Back</a>
+        </div>
+        <div id="action-button" class="btn-group" role="group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+        </div>
+    </div>
+</div>
+<!--END OF HEADER-->
+
+<form asp-controller="Listing" asp-action="Create" id="FormCreate"
+      class="form-m-gap-top" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <legend>Basic Info</legend>
+    @* Listing Name *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">
+            @Html.DisplayNameFor(m => m.ListingName)
+        </div>
+        <div class="col-sm-10 col-md-6">
+            <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control" />
+            <span asp-validation-for="ListingName" class="text-danger"></span>
+        </div>
+
+    </div>
+    <div class="form-group offset-md-3">
+        <div class="form-check input-group">
+            <input class="form-check-input" type="checkbox" id="autofill" checked>
+            <label class="form-check-label" for="autofill">
+                Autofill mode
+            </label>
+
+        </div>
+        <small id="passwordHelpBlock" class="form-text text-muted text-danger">
+            Caution! Autofill will override your input below.
+        </small>
+    </div>
+
+    @* Tags *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Tags)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="Tags" id="tags-select2" class="form-control">
+               
+            </select>
+            <span asp-validation-for="Tags" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    @* Merchant *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.MerchantId)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="MerchantId" asp-items="Model.MerchantList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="MerchantId" class="text-danger"></span>
+        </div>
+    </div>
+    @* Type Dropdown *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
+        <div class="col-sm-10 col-md-6">
+            <select id="type-input" asp-for="CategoryType" asp-items="Model.CategoryTypeList" class="form-control">
+                <option disabled selected>--- SELECT ---</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+    </div>
+    @* Category Dropdown *@
+    <div class="form-group row" id="category-input">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryId)</div>
+        <div class="col-sm-10 col-md-6">
+            <select asp-for="CategoryId" id="category-dropdown" disabled class="form-control">
+                <option disabled selected>--- Please select a type first ---</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+    </div>
+
+    @* Address *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
+        <div class="col-sm-10 col-md-6 input-group">
+            @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)), new { id = "StateList" })
+            @Html.TextBoxFor(m => m.FullAddress, new { @class = "form-control", @readonly = true, id = "txtFullAddress", })
+
+            <div class="input-group-append">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-address">
+                    <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+
+                </button>
+            </div><div class="col-md-12">
+                @Html.ValidationMessageFor(m => m.FullAddress)
+            </div>
+        </div>
+    </div>
+
+    <legend>Public Info</legend>
+    @*logo*@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.ListingLogo)</div>
+        <div class="col-sm-10 col-md-6">
+            <img src="@Model.ListingImages.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
+
+            <div class="form-group row">
+                <div class="input-group col-sm-10 col-md-12">
+                    @Html.HiddenFor(m => m.ListingImages.ListingLogo.Url, new { @class = "form-control listing-logo imageUrl" })
+
+                    <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-info btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">
+                            <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Cover Photo *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.CoverPhoto)</div>
+        <div class="col-sm-10 col-md-6">
+            <img src="@Model.ListingImages.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
+            <div class="form-group row">
+                <div class="input-group col-sm-10 col-md-12">
+                    @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new { @class = "form-control listing-cover imageUrl", id = "" })
+
+                    <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-info btnUpload listing-cover" onclick="uploadImageWidget('listing_images','listing-cover');">
+                            <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Description *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Description)</div>
+        <div class="col-sm-10 col-md-6">
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </div>
+    @* Contact *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.Contact)</div>
+        <div class="col-sm-10 col-md-6">
+            <button type="button" class="btn btn-info offset-11" data-toggle="modal" data-target="#modal-contact">
+                <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+            </button>
+            <span asp-validation-for="Contact" class="text-danger"></span>
+        </div>
+    </div>
+
+    @* Ads Image *@
+    @* TODO *@
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.Ads)</div>
+        <div class="col-sm-10 col-md-6">
+            @for (int i = 0; i < Model.ListingImages.Ads.Count; i++)
+            {
+                <img src="@Model.ListingImages.Ads" class="img-thumbnail listing-logo" alt="placeholder" />
+
+                <div class="form-group row">
+                    <div class="input-group col-sm-10 col-md-12">
+                        @Html.HiddenFor(m => m.ListingImages.Ads[i].Url, new { @class = "form-control listing-logo imageUrl" })
+
+                        <input type="text" class="form-control listing-logo imageName" id="detail-photo" disabled />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">
+                                <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @* Business hour *@
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.OperatingHours)</div>
+        @* TODO Cheechuen fix grid *@
+        <div class="col-sm-10 col-md-5 ">
+            <div class="container" id="business-hours-list">
+                @foreach (var t in Model.OperatingHours)
+                {
+                    <div class="row">
+                        <div class="label col-md-4">
+                            <label type="text">@t.Day</label>
+                        </div>
+
+                        <div class="label col-md-4 ">
+                            <label type="text" class="label">
+                                @if (t.Enabled)
+                                {
+                                    @("Open")
+                                }
+                                else
+                                {
+                                    @("Closed")
+                                }
+                            </label>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn btn-info"
+                    data-toggle="modal" data-target="#modal-operating">
+                <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+            </button>
+        </div>
+        <span asp-validation-for="Contact" class="text-danger"></span>
+    </div>
+
+
+    @* Operating hours Modal *@
+    <div class="modal" id="modal-operating">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Business Hours</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @for (var i = 0; i < Model.OperatingHours.Count; i++)
+                    {
+                        @Html.EditorFor(x => x.OperatingHours[i])
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary"
+                            onclick="saveOperating()" id="btnSaveOperating">
+                        Apply
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Contacts Modal *@
+    <div class="modal" id="modal-contact">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Contact Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.EditorFor(x => x.Contact)
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="saveContact()" id="btnSaveContact">Apply</button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Address Modal *@
+    <div class="modal" id="modal-address">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Address Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addressForm">
+                        @Html.EditorFor(x => x.Address)
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="saveAddress()" id="btnSaveAddress">Apply</button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+<div id="service-helper"></div>
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_PlacesApiPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
+    @{ await Html.RenderPartialAsync("_TimePickerPartial");}
+    <script src="~/js/Listings/ModalFunctionScripts.js"></script>
+
+
+    <script type="text/javascript">
+    var tags =  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Tags));
+    var tagSelect = $("#tags-select2");
+    
+        tagSelect.select2({
+                                    
+                                  tags: true,
+                                  tokenSeparators: [',', ' ']
+                               });
+
+    tags.forEach(createTagObject);
+    
+    function createTagObject(name){
+        var option = new Option(name,null,true,true);
+        tagSelect.append(option).trigger('change');
+    }
+    
+
+
+
+    $("#FormCreate").submit(function (e) {
+          e.preventDefault();
+      let data = $(this).serialize();
+        let token = $('input[name="__RequestVerificationToken"]').val();
+                  debugger
+                  if ($(this).valid()) {
+                      $.ajax({
+                          //TODO add [ValidateAntiForgeryToken]
+                          url: "/Listing/Create/",
+                          data: data,
+                           headers: {
+                           'RequestVerificationToken': token
+                           },
+                          type: "POST",
+                          success: (function ({ item1, item2 }) {
+                               if (item1 === 1) {
+                                  sweetAlert({
+                                      title: "Created",
+                                      text: "Listing has been created successfully!",
+                                      type: "success"
+                                  },
+                                      function () {
+                                          window.location.href = '/listing';
+                                      });
+                              } else {
+                                    swal("Oops",item2,"error");
+                              }
+                                     }),
+                               error: (function (data) {
+                              swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                          })
+                      })
+                  }
+
+    });
+
+    //populate category based on type
+    $("#type-input").change(function() {
+            let filterValue = $("#type-input option:selected").text().toLowerCase();
+            let categoryDropdown = $("#category-dropdown");
+            categoryDropdown.prop('disabled', true);
+            if(filterValue!=null){
+
+              $.ajax({
+                         type: "GET",
+                         url: "/Category/GetCategoryByType",
+                         data: {type:filterValue},
+                         complete: function (data) {
+                             let result =data.responseJSON;
+                             categoryDropdown.empty();
+
+                             if(result.length === 0){
+                                 categoryDropdown.append($('<option>', {
+                                    value: -1,
+                                    text: '--- This type do not have category yet ---',
+                                    selected: true
+                                    }));
+                             }else {
+                                    let $prevGroup, prevGroupName;
+                                    $.each(result, function () {
+                                    categoryDropdown.prop("disabled",false);
+                                    if (prevGroupName !== this.group.name) {
+                                        $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
+                                    }
+                                     $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
+                                     prevGroupName = this.group.name;
+                                      });
+                             }
+
+                         },
+                     });
+    }
+        });
+
+
+
+
+
+    </script>
+
+
+}

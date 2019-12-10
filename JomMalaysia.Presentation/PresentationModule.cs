@@ -23,6 +23,7 @@ namespace JomMalaysia.Presentation
                    .Where(gateway => gateway.Name.EndsWith("Gateway"))
                    .AsImplementedInterfaces()
                    .InstancePerLifetimeScope();
+            
         }
     }
 }

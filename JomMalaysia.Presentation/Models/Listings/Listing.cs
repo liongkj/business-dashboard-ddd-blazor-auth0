@@ -6,6 +6,7 @@ using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Merchants;
+using JomMalaysia.Presentation.ViewModels.Listings;
 using Newtonsoft.Json;
 using static JomMalaysia.Framework.Constant.EnumConstant;
 
@@ -22,6 +23,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
         public OfficialContact Contact { get; set; }
+        public ListingImages ListingImages{get;set;}
         public PublishStatus PublishStatus { get; set; }
         public CategoryType? CategoryType { get; set; }
         public DateTime CreatedAt { get; set; }
@@ -32,5 +34,11 @@ namespace JomMalaysia.Presentation.Models.Listings
 
         
     }
-    
+
+    public class ListingImages
+    {
+        public Image ListingLogo { get; set; }
+        public Image CoverPhoto { get; set; }
+        public List<Image> ListingDetails { get; set; }
+    }
 }

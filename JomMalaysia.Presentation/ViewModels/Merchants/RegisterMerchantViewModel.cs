@@ -27,7 +27,7 @@ namespace JomMalaysia.Presentation.ViewModels.Merchants
         public string CompanyRegistrationName { get; set; }
        
         [Display(Name = "Registered Address")]
-        public Address Address { get; set; }
+        public AddressViewModel Address { get; set; }
 
         //[Required]
         [Display(Name = "Contact")]

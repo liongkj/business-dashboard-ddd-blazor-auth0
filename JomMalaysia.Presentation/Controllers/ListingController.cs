@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using AutoMapper;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Gateways.Categories;
@@ -12,6 +13,7 @@ using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
+using JomMalaysia.Presentation.ViewModels.Common;
 using JomMalaysia.Presentation.ViewModels.Listings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,6 +25,7 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly IListingGateway _gateway;
         private readonly IMerchantGateway _merchantGateway;
         private readonly ICategoryGateway _categoryGateway;
+        private readonly IMapper _mapper;
 
         private List<Listing> ListingList { get; set; }
         private Boolean refresh;
@@ -30,12 +33,12 @@ namespace JomMalaysia.Presentation.Controllers
         #region gateway helper
 
         public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway,
-            ICategoryGateway categoryGateway)
+            ICategoryGateway categoryGateway,IMapper mapper)
         {
             _gateway = gateway;
             _merchantGateway = merchantGateway;
             _categoryGateway = categoryGateway;
-
+            _mapper = mapper;
             Refresh();
         }
 
@@ -71,6 +74,141 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: Listing/Create
         [HttpGet]
         public async Task<IActionResult> Create()
+        {
+            var init = await PopulateFields().ConfigureAwait(false);
+            var _operatingHours = new List<OperatingHourViewModel>();
+            
+            foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                _operatingHours.Add(new OperatingHourViewModel
+                {
+                    Enabled = false,
+                    Day = (DayOfWeek)day,
+                });
+            }
+            
+            var vm = new RegisterListingViewModel
+            {
+                OperatingHours = _operatingHours,
+                ListingImages = new ListingImageViewModel(),
+                MerchantList = init.MerchantList,
+                CategoryTypeList =  init.CategoryTypeList,
+                Address = init.Address
+            };
+            ViewBag.States = init.StateDictionary;
+            return View(vm);
+        }
+
+        // POST: Listing/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<Tuple<int, string>> Create(RegisterListingViewModel vm)
+        {
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
+            {
+                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
+                vm.OperatingHours = OperatingHours;
+                var response = await _gateway.Add(vm).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    refresh = true;
+                }
+
+                return SweetDialogHelper.HandleResponse(response);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
+        }
+       
+        
+        [HttpGet]
+        public async Task<ViewResult> Edit(string listingId)
+        {
+            Listing m;
+            var init = await PopulateFields().ConfigureAwait(false);
+            try
+            {
+                m = await _gateway.Detail(listingId).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+            var vm = _mapper.Map<RegisterListingViewModel>(m);
+            
+            //operating hours
+            var _operatingHours = new List<OperatingHourViewModel>();
+            var open = m.OperatingHours;
+            var count = 0;
+            foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
+            {
+                
+                if(open.FindIndex(x=>x.DayOfWeek==day)>=0){
+                    _operatingHours.Add(new OperatingHourViewModel
+                    {
+                        Enabled = true,
+                        Day = open[count].DayOfWeek,
+                        OpenTime = open[count].OpenTime,
+                        CloseTime = open[count].CloseTime
+                    });
+                    count++;
+                }
+                else
+                {
+                    _operatingHours.Add(new OperatingHourViewModel
+                    {
+                        Enabled = false,
+                        Day = day
+                    });
+                }
+            }
+
+            //populate fields
+            vm.MerchantList = init.MerchantList.Where(x => x.Value != m.Merchant.MerchantId);
+            vm.CategoryTypeList = init.CategoryTypeList;
+            vm.Address.CountryList = init.Address.CountryList;
+            vm.Address.StateList = init.Address.StateList;
+            vm.OperatingHours = _operatingHours;
+            
+            ViewBag.States = init.StateDictionary;
+            return View(vm);
+        }
+        
+        [HttpPost]
+        public async Task<Tuple<int, string>> Edit(RegisterListingViewModel vm, string listingId)
+        {
+         throw new NotImplementedException();
+        }
+        
+        [HttpPost]
+        public async Task<Tuple<int, string>> Publish(string id, int months)
+        {
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
+            {
+                var response = await _gateway.Publish(id, months).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    refresh = true;
+                }
+
+                return SweetDialogHelper.HandleResponse(response);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
+        }
+        
+        //helper functions
+
+
+    
+        private async Task<RegisterListingViewModel> PopulateFields()
         {
             //merchant
             var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
@@ -113,84 +251,18 @@ namespace JomMalaysia.Presentation.Controllers
 
                 if (fullName != null) dicState.Add(key: fullName.ToLower(), value: state.ToString());
             }
-
-            var _operatingHours = new List<OperatingHourViewModel>();
-            var days = Enum.GetValues(typeof(DayOfWeek));
-            foreach (var day in days)
-            {
-                _operatingHours.Add(new OperatingHourViewModel
-                {
-                    Enabled = false,
-                    Day = (DayOfWeek)day,
-                });
-            }
-            
             var vm = new RegisterListingViewModel
             {
-                OperatingHours = _operatingHours,
-                ImageUris = new ListingImageViewModel(),
                 MerchantList = _merchants,
                 CategoryTypeList =  _categoryType,
-                Address = new Address
+                Address = new AddressViewModel
                 {
                     StateList =  _states,
                     CountryList = _country
-                }
+                },
+                StateDictionary = dicState,
             };
-            ViewBag.States = dicState;
-            return PartialView(vm);
-        }
-
-        // POST: Listing/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<Tuple<int, string>> Create(RegisterListingViewModel vm)
-        {
-            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
-            try
-            {
-                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, StartTime = days.StartTime, CloseTime = days.CloseTime}).ToList();
-                vm.OperatingHours = OperatingHours;
-                var response = await _gateway.Add(vm).ConfigureAwait(false);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    refresh = true;
-                }
-
-                return SweetDialogHelper.HandleResponse(response);
-            }
-            catch (GatewayException e)
-            {
-                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
-            }
-        }
-       
-        
-        [HttpGet]
-        public async Task<IActionResult> Detail(string id)
-        {
-            var vm = await _gateway.Detail(id).ConfigureAwait(false);
-            return new JsonResult(vm);
-        }
-        
-        [HttpPost]
-        public async Task<Tuple<int, string>> Publish(string id, int months)
-        {
-            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
-            try
-            {
-                var response = await _gateway.Publish(id, months).ConfigureAwait(false);
-                if (response.StatusCode == HttpStatusCode.OK)
-                {
-                    refresh = true;
-                }
-
-                return SweetDialogHelper.HandleResponse(response);
-            }
-            catch (GatewayException e)
-            {
-                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
-            }
+            return vm;
         }
     }
 }

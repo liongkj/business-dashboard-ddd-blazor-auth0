@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
+using JomMalaysia.Presentation.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JomMalaysia.Presentation.ViewModels.Listings
@@ -34,9 +35,9 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public string FullAddress { get; set; }
         
         [Required]
-        public Address Address { get; set; }
+        public AddressViewModel Address { get; set; }
         
-        public ListingImageViewModel ImageUris{get;set;}
+        public ListingImageViewModel ListingImages{get;set;}
         
         [Display(Name = "Public Contact Info")]
         public OfficialContact Contact { get; set; }
@@ -49,6 +50,6 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public IEnumerable<SelectListItem> MerchantList { get; set; }
         public IEnumerable<SelectListItem> CategoryTypeList { get; set; }
         public IEnumerable<SelectListItem> CategoryList { get; set; }
-        
+        public Dictionary<string, string> StateDictionary { get; set; }
     }
 }

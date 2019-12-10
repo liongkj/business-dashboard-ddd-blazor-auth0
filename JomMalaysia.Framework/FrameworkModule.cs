@@ -11,8 +11,6 @@ namespace JomMalaysia.Framework
         protected override void Load(ContainerBuilder builder)
         {
 
-
-
             builder.RegisterType<WebServiceExecutor>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.RegisterType<WebServiceResponse>().AsImplementedInterfaces().InstancePerLifetimeScope();

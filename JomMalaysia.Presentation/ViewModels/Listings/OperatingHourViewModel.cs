@@ -12,7 +12,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public DayOfWeek Day { get; set; }
         [Required]
         [DisplayName("Opening hour")]
-        public string StartTime { get; set; }
+        public string OpenTime { get; set; }
         [Required]
         [DisplayName("Closing hour")]
         public string CloseTime { get; set; }

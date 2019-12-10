@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
@@ -82,18 +83,22 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, id);
                 const Method method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
-
+                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method, auth)
+                    .ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    result = response.Data.Data;
+                }
             }
             catch (GatewayException ex)
             {
                 throw ex;
             }
-            if (response.StatusCode == HttpStatusCode.OK)
+            catch (Exception e)
             {
-
-                result= response.Data.Data;
+                throw e;
             }
+            
             //handle exception
             return result;
         }

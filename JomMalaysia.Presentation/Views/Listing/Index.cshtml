@@ -48,10 +48,9 @@
                         <button class="btn btn-danger form-control" onclick="publishListing('@item.ListingId')">
                             <i class="fa fa-upload" aria-hidden="true"></i>
                         </button>
-                        <button data-toggle="modal" data-target="#ListingDetail" type="button" class="btn btn-info"
-                                data-id="@item.ListingId">
+                        <a type="button" class="btn btn-info" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
                             <i class="fa fa-info" aria-hidden="true"></i>
-                        </button>
+                        </a>
                     </div>
                 </td>
             </tr>
@@ -61,57 +60,13 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="ListingDetail" tabindex="-1" role="dialog" aria-labelledby="ListingModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    Fetching
-                </div>
-            </div>
 
-        </div>
-    </div>
-</div>
 
 @section SpecificScripts{
 
 
     <script type="text/javascript">
-    //fetch listing detail
-            $(function () {
-                $('#ListingDetail').on('show.bs.modal', function (e) {
-                    var id = e.relatedTarget.dataset.id;
-                    var $modal = $(this);
-                    $.ajax({
-                        cache: false,
-                        type: 'GET',
-                        url: '/Listing/Detail/' + id,
-                        success: function (data) {
-                            
-                            $modal.find('.modal-body').html(data);
-                            debugger
-                        },
-                        fail: function (error) {
-                            $modal.hide();
-                            swal("Oops",error,"error");
-                        }
-                    });
-                });
-            });
-            $(function () {
-                $('#ListingDetail').on('hidden.bs.modal', function () {
-                   
-                    $(this).find('.modal-body').empty();
-                });
-            });
+    
         //publish listing
         function publishListing(ListingId) {
 
