@@ -170,7 +170,7 @@ namespace JomMalaysia.Presentation.Controllers
         private List<SelectListItem> GetAssignableRole()
         {
             return RoleHelper.GetAssignableRoles(_auth.LoginInfo.Role)
-                .Select(role => new SelectListItem { Text = role, Value = role }).ToList();
+                .Select(role => new SelectListItem {Text = role, Value = role}).ToList();
         }
     }
 }

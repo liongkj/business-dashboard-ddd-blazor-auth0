@@ -23,12 +23,12 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
         private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
 
-        public WorkflowGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
+        public WorkflowGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
+            IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
             _authorizationManagers = authorizationManagers;
             _apiBuilder = apiBuilder;
-
         }
 
         public async Task<WorkflowModel> Detail(string id)
@@ -39,18 +39,20 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.WorkflowDetail, id);
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
-
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<ViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken)
+                    .ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
                 throw ex;
             }
+
             if (response.StatusCode == HttpStatusCode.OK)
             {
-
-               result= response.Data.Data;
+                result = response.Data.Data;
             }
+
             //handle exception
             return result;
         }
@@ -64,18 +66,21 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.Workflow);
                 const Method method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
-
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<ListViewModel<WorkflowModel>>(req, method, _authorizationManagers.accessToken)
+                    .ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
                 throw ex;
             }
+
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var workflows = response.Data.Data;
                 result.AddRange(workflows);
             }
+
             //handle exception
             return result;
         }

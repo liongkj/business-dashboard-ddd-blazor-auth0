@@ -12,8 +12,8 @@ namespace JomMalaysia.Framework.WebServices
 {
     public class RestSharpFactory
     {
-
-        public static IRestRequest ConstructRequest(string path, Method method, object[] objects, Dictionary<string, string> query=null)
+        public static IRestRequest ConstructRequest(string path, Method method, object[] objects,
+            Dictionary<string, string> query = null)
         {
             IRestRequest request = new RestRequest(path, method, DataFormat.Json)
             {
@@ -24,16 +24,15 @@ namespace JomMalaysia.Framework.WebServices
             {
                 foreach (var q in query)
                 {
-
                     request.AddQueryParameter(q.Key, q.Value);
                 }
-
             }
 
             foreach (var obj in objects)
             {
                 request.AddJsonBody(obj);
             }
+
             return request;
         }
 

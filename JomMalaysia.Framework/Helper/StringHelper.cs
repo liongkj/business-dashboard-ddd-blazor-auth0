@@ -23,8 +23,8 @@ namespace JomMalaysia.Framework.Helper
             {
                 builder.Append(obj).Append(',');
             }
-            return builder.ToString();
 
+            return builder.ToString();
         }
     }
 }

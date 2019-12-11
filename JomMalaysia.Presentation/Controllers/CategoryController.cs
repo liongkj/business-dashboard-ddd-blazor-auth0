@@ -68,9 +68,9 @@ namespace JomMalaysia.Presentation.Controllers
         {
             var categories = await GetCategories().ConfigureAwait(false);
             var vm = new List<Category>();
-            if (categories == null ) return View(vm);
+            if (categories == null) return View(vm);
             var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
-                
+
             foreach (var category in cats)
             {
                 var c = category.FirstOrDefault(x => x.IsCategory());
@@ -126,31 +126,29 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<ViewResult> Edit(string categoryId)
         {
             var category = await _gateway.GetCategory(categoryId).ConfigureAwait(false);
-           
+
             return View(category);
         }
 
         [HttpPost]
         public async Task<Tuple<int, string>> Edit(NewCategoryViewModel category, string categoryId)
         {
-            if (!ModelState.IsValid)return SweetDialogHelper.HandleResponse(null);
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             {
                 IWebServiceResponse response;
                 try
                 {
-                  
                     response = await _gateway.EditCategory(category, categoryId).ConfigureAwait(false);
-                 
                 }
                 catch (GatewayException e)
                 {
                     return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
                 }
+
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
                 return SweetDialogHelper.HandleResponse(response);
             }
-            
         }
 
         [HttpPost]
@@ -171,13 +169,15 @@ namespace JomMalaysia.Presentation.Controllers
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
             return SweetDialogHelper.HandleResponse(response);
         }
+
         [HttpGet]
         public async Task<ActionResult> GetCategoryByType(CategoryType type)
         {
             //categories
             var _categories = new List<SelectListItem>();
             var categories = await GetCategories().ConfigureAwait(false);
-            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == type).OrderBy(x => x.CategoryName)
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == type)
+                .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);
 
             foreach (var category in cats)
@@ -199,6 +199,5 @@ namespace JomMalaysia.Presentation.Controllers
 
             return new JsonResult(_categories);
         }
-        
     }
 }

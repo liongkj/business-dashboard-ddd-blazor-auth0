@@ -10,6 +10,7 @@ namespace JomMalaysia.Presentation.ViewModels.Workflows
     {
         public string Name { get; set; }
         public int Count { get; set; }
+
         public WorkflowStatus(string name)
         {
             Name = StringHelper.CapitalizeOrConvertNullToEmptyString(name);

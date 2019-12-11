@@ -11,7 +11,7 @@ namespace JomMalaysia.Presentation.Models.Categories
     {
         public string CategoryId { get; set; }
 
-        
+
         [StringLength(10, ErrorMessage = "{0} should not exceed 10 characters.")]
         [Display(Name = "Category Code")]
         public string CategoryCode { get; set; }
@@ -43,11 +43,11 @@ namespace JomMalaysia.Presentation.Models.Categories
         {
             return CategoryPath.Subcategory == null;
         }
+
         public bool IsDeleted { get; set; }
         public bool IsSelected { get; set; }
-
     }
-    
+
     public enum CategoryType
     {
         Professional,

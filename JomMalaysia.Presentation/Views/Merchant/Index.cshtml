@@ -10,31 +10,90 @@
     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
         <table id="tableData" class="table table-hover">
             <thead class="table-primary">
-                <tr>
+            <tr>
 
-                    <th scope="col">SSM ID</th>
-                    <th scope="col">Company Name</th>
-                    <th scope="col">Company Address</th>
-                    <th scope="col">No. of Listings</th>
-                    <th scope="col">Contact Number</th>
-                </tr>
+                <th scope="col">SSM ID</th>
+                <th scope="col">Company Name</th>
+                <th scope="col">Company Address</th>
+                <th scope="col">No. of Listings</th>
+                <th scope="col">Contact Number</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
+            @foreach (var item in Model)
+            {
+                <tr>
 
-                        <td>@item.CompanyRegistration.SsmId</td>
-                        <td>@item.CompanyRegistration.RegistrationName</td>
-                        <td>@item.Address.ToString()</td>
-                        <td>@item.Listings.Count</td>
-                        <td>@item.Contacts[0].ToString()</td>
-                    </tr>
-                }
+                    <td>@item.CompanyRegistration.SsmId</td>
+                    <td>@item.CompanyRegistration.RegistrationName</td>
+                    <td>@item.Address.ToString()</td>
+                    <td>@item.Listings.Count</td>
+                    <td>@item.Contacts[0].ToString()</td>
+                    <td>
+                                        <div class="btn-group" role="group">
+                                            
+                                            <a type="button" class="btn btn-info form-control" asp-controller="Merchant" asp-action="Edit" asp-route-merchantId="@item.MerchantId">
+                                                <i class="fa fa-info" aria-hidden="true"></i>
+                                            </a>
+                                            <a type="button" class="btn btn-danger form-control" onclick="deleteMerchant('@item.MerchantId','@item.CompanyRegistration.RegistrationName')">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                </tr>
+            }
         </table>
     </div>
 </form>
 
 @section SpecificScripts{
-
+ <script type="text/javascript">
+ //delete merchant
+                function deleteMerchant(MerchantId, MerchantName) {
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                    swal({
+                        title: 'Delete merchant',
+                        type: "warning",
+                        text: "Are you sure that you want to delete " + MerchantName + "?  Operation is not irreversible",
+                        showCancelButton: true,
+                        closeOnConfirm: false,
+                        confirmButtonText: "Yes",
+                        confirmButtonColor: "#ec6c62",
+                        dangerMode: true,
+                    },  
+                    function () {
+                            $.ajax({
+                                url: "/Merchant/ConfirmDelete",
+                                data: {
+                                    "id": MerchantId,
+                                },
+                                headers: {'RequestVerificationToken': token},
+                                type: "POST",
+                                success: (function ({ item1, item2 }) {
+                                    if (item1 === 1) {
+                                        sweetAlert({
+                                            title: "Operation Success",
+                                            text: "MerchantName is deleted successfully",
+                                            type: "success"
+                                        },
+                                            function () {
+                                                window.location.href = '/merchant';
+                                            });
+                                    } else {
+                                        swal(
+                                        "Oops",
+                                        item2,
+                                        "error"
+                                    );
+                                    }
+        
+                                }),
+                                error: (function (data) {
+                                    debugger
+                                    swal("Oops", "Error code: "+ data.status +". Please contact technical support.", "error");
+                                })
+                            })
+                    })
+                }
+    </script>
 }

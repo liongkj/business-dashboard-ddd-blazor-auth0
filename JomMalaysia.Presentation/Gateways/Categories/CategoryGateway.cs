@@ -33,7 +33,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId, CategoryId);
                 const Method method = Method.GET;
                 IWebServiceResponse<ViewModel<Category>> response = await _webServiceExecutor
-                    .ExecuteRequestAsync<ViewModel<Category>> (req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<ViewModel<Category>>(req, method, _authorizationManagers.accessToken)
                     .ConfigureAwait(false);
                 if (response.StatusCode != HttpStatusCode.OK) return null;
                 result = response.Data.Data;

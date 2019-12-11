@@ -9,14 +9,14 @@
     <div class="col-sm-2 col-md-2 col-form-label">Type:</div>
     <div class="col-sm-10 col-md-4">
         <select id="category-filter" class="form-control">
-            <option value="all" >All Types</option>
+            <option value="all">All Types</option>
             <option value="private">Private</option>
             <option value="professional">Professional</option>
             <option value="government">Government</option>
             <option value="nonprofit">Non Profit</option>
             <option value="attraction">Attractions</option>
         </select>
-        </div>
+    </div>
 </div>
 <br/>
 <form id="categoryForm" method="POST">
@@ -34,7 +34,7 @@
             </tr>
             </thead>
             <tbody>
-           
+
 
             @foreach (var item in Model)
             {
@@ -85,7 +85,7 @@
                         <td colspan="6" class="no-padding">
                             <br/>
                             <table id="subtabledata" class="table table-hover">
-                              
+
                                 <tbody>
                                 @{ var count1 = 0; }
 
@@ -123,8 +123,6 @@
                         </td>
                     </tr>
                 }
-
-               
             }
 
             </tbody>

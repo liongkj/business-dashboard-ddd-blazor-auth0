@@ -10,7 +10,8 @@ namespace JomMalaysia.Framework.WebServices
 {
     public class WebServiceExecutor : IWebServiceExecutor
     {
-        public virtual IWebServiceResponse ExecuteRequest(string url, Method method, string auth, params object[] objects)
+        public virtual IWebServiceResponse ExecuteRequest(string url, Method method, string auth,
+            params object[] objects)
         {
             //Create Client
             IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
@@ -26,11 +27,11 @@ namespace JomMalaysia.Framework.WebServices
                 StatusCode = response.StatusCode,
                 StatusDescription = response.StatusDescription
             };
-
         }
 
 
-        public IWebServiceResponse<T> ExecuteRequest<T>(string url, Method method, string auth, params object[] objects) where T : new()
+        public IWebServiceResponse<T> ExecuteRequest<T>(string url, Method method, string auth, params object[] objects)
+            where T : new()
         {
             //Create Client
             IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
@@ -49,12 +50,11 @@ namespace JomMalaysia.Framework.WebServices
                 StatusDescription = response.StatusDescription,
                 Data = response.Data
             };
-
         }
 
 
-
-        public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, string auth, params object[] objects) where T : new()
+        public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, string auth,
+            params object[] objects) where T : new()
         {
             //Create Client
             IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
@@ -71,7 +71,6 @@ namespace JomMalaysia.Framework.WebServices
                 StatusCode = response.StatusCode,
                 StatusDescription = response.StatusDescription,
                 Data = response.Data
-
             };
         }
 
@@ -90,7 +89,6 @@ namespace JomMalaysia.Framework.WebServices
             }
             else if (response.StatusCode != HttpStatusCode.OK)
             {
-
                 // Business Exceptions
                 if (response.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -125,21 +123,19 @@ namespace JomMalaysia.Framework.WebServices
                 {
                     // Do nothing.
                 }
+
                 if (badRequest != null && badRequest.message != null)
                 {
                     string msg = badRequest.message;
                     throw new GatewayException(response.StatusCode, msg);
                 }
+
                 if (badRequest != null && badRequest.errors != null)
                 {
                     string msg = badRequest.errors[0];
                     throw new GatewayException(response.StatusCode, msg);
                 }
-
-               
-
             }
-
         }
     }
 }

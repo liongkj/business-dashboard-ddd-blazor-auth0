@@ -7,6 +7,7 @@ namespace JomMalaysia.Presentation.Views.Workflow.Components.AllWorkflow
     public class AllWorkflowViewComponent : ViewComponent
     {
         private readonly IWorkflowGateway _gateway;
+
         public AllWorkflowViewComponent(IWorkflowGateway gateway)
         {
             _gateway = gateway;
@@ -15,10 +16,8 @@ namespace JomMalaysia.Presentation.Views.Workflow.Components.AllWorkflow
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var items = await _gateway.GetAll().ConfigureAwait(false);
-            
+
             return View(items);
         }
-
-
     }
 }

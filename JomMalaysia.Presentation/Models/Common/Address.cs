@@ -14,7 +14,7 @@ namespace JomMalaysia.Presentation.Models.Common
         public string PostalCode { get; set; }
         public CountryEnum Country { get; set; }
         public Coordinates Coordinates { get; set; }
-        
+
         public override string ToString()
         {
             var formatted = String.Format("{0} {1} \n{2} {3} {4} {5}",
@@ -24,22 +24,20 @@ namespace JomMalaysia.Presentation.Models.Common
             return formatted;
         }
     }
-    
-    public class Location{
+
+    public class Location
+    {
         public List<Coordinates> Coordinates { get; set; }
     }
-    
-    
-    
+
+
     public enum CountryEnum
     {
-        [Description("Malaysia")]
-        MY
+        [Description("Malaysia")] MY
     }
 
     public enum StateEnum
     {
-        [Description("Negeri Sembilan")]
-        NSN
+        [Description("Negeri Sembilan")] NSN
     }
 }

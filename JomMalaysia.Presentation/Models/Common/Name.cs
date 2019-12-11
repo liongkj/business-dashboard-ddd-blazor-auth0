@@ -2,7 +2,6 @@ using JomMalaysia.Framework.Helper;
 
 namespace JomMalaysia.Presentation.Models.Common
 {
-
     public class Name
     {
         public string FirstName { get; set; }
@@ -10,7 +9,8 @@ namespace JomMalaysia.Presentation.Models.Common
 
         public override string ToString()
         {
-            return StringHelper.CapitalizeOrConvertNullToEmptyString(FirstName) + " " + StringHelper.CapitalizeOrConvertNullToEmptyString(LastName);
+            return StringHelper.CapitalizeOrConvertNullToEmptyString(FirstName) + " " +
+                   StringHelper.CapitalizeOrConvertNullToEmptyString(LastName);
         }
     }
 }

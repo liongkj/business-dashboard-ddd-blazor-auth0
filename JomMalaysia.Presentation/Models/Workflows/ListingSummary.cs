@@ -16,6 +16,4 @@ namespace JomMalaysia.Presentation.Models.Workflows
         public CategoryType? CategoryType { get; set; }
         public string Status { get; set; }
     }
-
-    
 }

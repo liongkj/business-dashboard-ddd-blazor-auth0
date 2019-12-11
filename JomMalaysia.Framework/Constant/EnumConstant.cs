@@ -6,7 +6,6 @@ namespace JomMalaysia.Framework.Constant
 {
     public class EnumConstant
     {
-
         public enum PublishStatusEnum
         {
             pending,
@@ -37,7 +36,5 @@ namespace JomMalaysia.Framework.Constant
             approve,
             reject
         }
-
-
     }
 }

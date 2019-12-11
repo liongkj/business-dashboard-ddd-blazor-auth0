@@ -23,8 +23,8 @@ namespace JomMalaysia.Presentation.Manager
             get
             {
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
-                return claims.Where(c => c.Type == ConstantHelper.Claims.accessToken).Select(c => c.Value).FirstOrDefault();
-
+                return claims.Where(c => c.Type == ConstantHelper.Claims.accessToken).Select(c => c.Value)
+                    .FirstOrDefault();
             }
         }
 
@@ -33,7 +33,8 @@ namespace JomMalaysia.Presentation.Manager
             get
             {
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
-                return claims.Where(c => c.Type == ConstantHelper.Claims.refreshToken).Select(c => c.Value).FirstOrDefault();
+                return claims.Where(c => c.Type == ConstantHelper.Claims.refreshToken).Select(c => c.Value)
+                    .FirstOrDefault();
             }
         }
 
@@ -44,10 +45,12 @@ namespace JomMalaysia.Presentation.Manager
                 AppUser userInfo = new AppUser();
 
                 var claims = _httpContextAccessor.HttpContext.User.Claims;
-                userInfo.UserId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value).FirstOrDefault();
+                userInfo.UserId = claims.Where(c => c.Type == ConstantHelper.Claims.userId).Select(c => c.Value)
+                    .FirstOrDefault();
                 userInfo.Role = claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
 
-                userInfo.Name = claims.Where(c => c.Type == ConstantHelper.Claims.name).Select(c => c.Value).FirstOrDefault();
+                userInfo.Name = claims.Where(c => c.Type == ConstantHelper.Claims.name).Select(c => c.Value)
+                    .FirstOrDefault();
                 return userInfo;
             }
         }

@@ -9,12 +9,11 @@ namespace JomMalaysia.Framework.WebServices
     {
         public HttpStatusCode StatusCode { get; set; }
         public string StatusDescription { get; set; }
-        public string RawContent{get; set;}
+        public string RawContent { get; set; }
     }
 
-    public class WebServiceResponse<T> : WebServiceResponse,IWebServiceResponse<T>
+    public class WebServiceResponse<T> : WebServiceResponse, IWebServiceResponse<T>
     {
-        public T Data { get; set ; }
-       
+        public T Data { get; set; }
     }
 }

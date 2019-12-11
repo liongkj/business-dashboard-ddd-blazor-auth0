@@ -78,7 +78,6 @@ namespace JomMalaysia.Framework.Configuration
             {
                 _AdditionalClaimsRoles = _IConfiguration.GetValue<string>("Auth0:AdditionalClaims:Roles");
             }
-
         }
     }
 }

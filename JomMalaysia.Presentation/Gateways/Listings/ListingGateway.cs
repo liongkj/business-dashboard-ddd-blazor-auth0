@@ -18,7 +18,8 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         private readonly IApiBuilder _apiBuilder;
         private readonly string auth;
 
-        public ListingGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers, IApiBuilder apiBuilder)
+        public ListingGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
+            IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
             var authorizationManagers1 = authorizationManagers;
@@ -34,17 +35,18 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
 
                 const Method method = Method.POST;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth,vm).ConfigureAwait(false);
+                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth, vm)
+                    .ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
                 throw ex;
             }
+
             return response;
 
 
             //handle exception
-
         }
 
         public async Task<List<Listing>> GetAll()
@@ -57,24 +59,26 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 const Method method = Method.GET;
                 var queries = new Dictionary<string, string>
                 {
-                    {"status","all"}
+                    {"status", "all"}
                 };
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
-
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth)
+                    .ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
                 throw;
             }
+
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var listings = response.Data.Data;
                 result.AddRange(listings);
             }
+
             //handle exception
             return result;
         }
-        
+
         public async Task<Listing> Detail(string id)
         {
             Listing result = null;
@@ -98,11 +102,11 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             {
                 throw e;
             }
-            
+
             //handle exception
             return result;
         }
-        
+
         public async Task<IWebServiceResponse> Edit(RegisterListingViewModel vm, string listingId)
         {
             IWebServiceResponse<Listing> response;
@@ -125,7 +129,29 @@ namespace JomMalaysia.Presentation.Gateways.Listings
 
             //handle exception
         }
-        
+
+        public async Task<IWebServiceResponse> Delete(string listingId)
+        {
+            IWebServiceResponse<Listing> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, listingId);
+
+                const Method method = Method.DELETE;
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<Listing>(req, method, auth)
+                    .ConfigureAwait(false);
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+
+            return response;
+
+
+            //handle exception
+        }
         
         public async Task<IWebServiceResponse> Publish(string ListingId, int months)
         {
@@ -135,8 +161,8 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.Publish, ListingId, months.ToString());
                 const Method method = Method.POST;
 
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth).ConfigureAwait(false);
-
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth)
+                    .ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {

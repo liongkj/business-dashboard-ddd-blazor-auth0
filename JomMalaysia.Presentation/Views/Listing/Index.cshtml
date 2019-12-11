@@ -6,6 +6,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
+<form method="post">
 <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
     <table class="table table-hover">
         <thead class="table-primary">
@@ -27,7 +28,12 @@
                 <td>
                 </td>
                 <td>@item.ListingName</td>
-                <td>@item.Merchant.RegistrationName</td>
+                <td>
+                    <a asp-action="Detail"
+                       asp-controller="Merchant"
+                       asp-route-id="@item.Merchant.MerchantId"
+                       target="_blank">@item.Merchant.RegistrationName</a>
+                </td>
                 <td>
                     <strong class="line-breaks">@($"{item.CategoryType}")</strong> <br/>
                     @($"{item.Category.Category.CapitalizeOrConvertNullToEmptyString()}-" +
@@ -45,11 +51,14 @@
                 <td>@item.Address.ToString()</td>
                 <td>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-danger form-control" onclick="publishListing('@item.ListingId')">
-                            <i class="fa fa-upload" aria-hidden="true"></i>
+                        <button class="btn btn-success form-control" onclick="publishListing('@item.ListingId')">
+                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                         </button>
-                        <a type="button" class="btn btn-info" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
+                        <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
                             <i class="fa fa-info" aria-hidden="true"></i>
+                        </a>
+                        <a type="button" class="btn btn-danger form-control" onclick="deleteListing('@item.ListingId','@item.ListingName')">
+                            <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>
                     </div>
                 </td>
@@ -58,9 +67,7 @@
         </tbody>
     </table>
 </div>
-
-
-
+</form>
 
 @section SpecificScripts{
 
@@ -69,7 +76,7 @@
     
         //publish listing
         function publishListing(ListingId) {
-
+        let token = $('input[name="__RequestVerificationToken"]').val();
             swal({
                 title: 'Do you want to publish this listing?',
                 icon: 'question',
@@ -86,9 +93,10 @@
                             "id": ListingId,
                             "months": inputValue,
                         },
+                        headers: {'RequestVerificationToken': token},
                         type: "POST",
                         success: (function ({ item1, item2 }) {
-                            if (item1 == 1) {
+                            if (item1 === 1) {
                                 sweetAlert({
                                     title: "Pending Approval",
                                     text: "Listing is sent to approval.",
@@ -112,5 +120,53 @@
                     });
             })
         }
+        
+        //delete listing
+                function deleteListing(ListingId, ListingName) {
+                let token = $('input[name="__RequestVerificationToken"]').val();
+                    swal({
+                        title: 'Delete listing',
+                        type: "warning",
+                        text: "Are you sure that you want to delete " + ListingName + "?  Operation is not irreversible",
+                        showCancelButton: true,
+                        closeOnConfirm: false,
+                        confirmButtonText: "Yes",
+                        confirmButtonColor: "#ec6c62",
+                        dangerMode: true,
+                    },  
+                    function () {
+                            $.ajax({
+                                url: "/Listing/ConfirmDelete",
+                                data: {
+                                    "id": ListingId,
+                                },
+                                headers: {'RequestVerificationToken': token},
+                                type: "POST",
+                                success: (function ({ item1, item2 }) {
+                                    if (item1 === 1) {
+                                        sweetAlert({
+                                            title: "Operation Success",
+                                            text: "Listing is deleted successfully",
+                                            type: "success"
+                                        },
+                                            function () {
+                                                window.location.href = '/listing';
+                                            });
+                                    } else {
+                                        swal(
+                                        "Oops",
+                                        item2,
+                                        "error"
+                                    );
+                                    }
+        
+                                }),
+                                error: (function (data) {
+                                    debugger
+                                    swal("Oops", "Error code: "+ data.status +". Please contact technical support.", "error");
+                                })
+                            })
+                    })
+                }
     </script>
 }

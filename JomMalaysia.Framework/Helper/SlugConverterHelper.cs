@@ -9,11 +9,8 @@ namespace JomMalaysia.Framework.Helper
     {
         public SlugConverterHelper()
         {
-
         }
 
         public static SlugConverterHelper Instance { get; } = new SlugConverterHelper();
-
-       
     }
 }

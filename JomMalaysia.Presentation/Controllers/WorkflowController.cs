@@ -22,7 +22,9 @@ namespace JomMalaysia.Presentation.Controllers
 
         private List<WorkflowModel> WorkflowList { get; set; }
         private Boolean refresh = false;
+
         #region gateway helper
+
         public WorkflowController(IWorkflowGateway gateway)
         {
             _gateway = gateway;
@@ -42,7 +44,6 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
 
-
         // GET: WorkflowModel
         async Task<List<WorkflowModel>> GetWorkflows()
         {
@@ -50,6 +51,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 return WorkflowList;
             }
+
             try
             {
                 WorkflowList = await _gateway.GetAll().ConfigureAwait(false);
@@ -62,6 +64,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         #endregion
+
         [HttpGet]
         public IActionResult Detail(string id)
         {
@@ -89,12 +92,15 @@ namespace JomMalaysia.Presentation.Controllers
                         {
                             count++;
                         }
+
                         status.Count = count;
                     }
+
                     total += count;
                     vm.Add(status);
                 }
             }
+
             var allStatus = new WorkflowStatus("all")
             {
                 Count = total

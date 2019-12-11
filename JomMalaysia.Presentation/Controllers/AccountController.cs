@@ -41,11 +41,12 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(User vm)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
             try
             {
-                AuthenticationApiClient client = new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
+                AuthenticationApiClient client =
+                    new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
 
                 var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
                 {
@@ -68,7 +69,8 @@ namespace JomMalaysia.Presentation.Controllers
 
                 if (handler.ReadToken(result.AccessToken) is JwtSecurityToken tokenS)
                 {
-                    var role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+                    var role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value)
+                        .FirstOrDefault();
                     // Create claims principal
                     var claims = new List<Claim>
                     {
@@ -77,13 +79,13 @@ namespace JomMalaysia.Presentation.Controllers
                         new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString()),
                         new Claim(ConstantHelper.Claims.userId, user.UserId),
                         new Claim(ConstantHelper.Claims.name, user.FullName),
-                        new Claim(ClaimTypes.Role,role)
-
+                        new Claim(ClaimTypes.Role, role)
                     };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     // Sign user into cookie middleware
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity)).ConfigureAwait(false);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity)).ConfigureAwait(false);
                 }
 
                 return RedirectToLocal(vm.returnURL);
@@ -92,6 +94,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 ModelState.AddModelError("", e.Message);
             }
+
             return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
             // return View(vm); //auth:enable this to bypass
         }
@@ -109,6 +112,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         #region Helpers
+
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -122,6 +126,5 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         #endregion
-
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using JomMalaysia.Presentation.Models.AppUsers;
+﻿using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 
 namespace JomMalaysia.Presentation.Manager

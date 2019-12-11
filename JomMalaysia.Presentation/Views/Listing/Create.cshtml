@@ -25,7 +25,7 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-controller="Listing" asp-action="Create" id="FormCreate" 
+<form asp-controller="Listing" asp-action="Create" id="FormCreate"
       class="form-m-gap-top" method="post">
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -39,7 +39,7 @@
         <input asp-for="ListingName" id="listing-name-autocomplete" class="form-control"/>
         <span asp-validation-for="ListingName" class="text-danger"></span>
     </div>
-    
+
 </div>
 <div class="form-group offset-md-3">
     <div class="form-check input-group">
@@ -71,7 +71,7 @@
         <select asp-for="MerchantId" asp-items="Model.MerchantList" class="form-control">
             <option disabled selected>--- SELECT ---</option>
         </select>
-       <span asp-validation-for="MerchantId" class="text-danger"></span>
+        <span asp-validation-for="MerchantId" class="text-danger"></span>
     </div>
 </div>
 @* Type Dropdown *@
@@ -99,16 +99,17 @@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.FullAddress)</div>
     <div class="col-sm-10 col-md-6 input-group">
-        @Html.Hidden("StateList", Html.Raw(Json.Serialize(ViewBag.States)), new {id = "StateList"})
+        @Html.Hidden("StateList", (@Html.Raw(Json.Serialize(Model.Address.StateList.Item2))), new {id = "StateList"})
         @Html.TextBoxFor(m => m.FullAddress, new {@class = "form-control", @readonly = true, id = "txtFullAddress",})
-        
+
         <div class="input-group-append">
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-address">
                 <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
 
             </button>
-        </div><div class="col-md-12">
-        @Html.ValidationMessageFor(m => m.FullAddress)
+        </div>
+        <div class="col-md-12">
+            @Html.ValidationMessageFor(m => m.FullAddress)
         </div>
     </div>
 </div>
@@ -204,39 +205,39 @@
 
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.OperatingHours)</div>
-@* TODO Cheechuen fix grid *@
+    @* TODO Cheechuen fix grid *@
     <div class="col-sm-10 col-md-5 ">
         <div class="container" id="business-hours-list">
-        @foreach (var t in Model.OperatingHours)
-        {
-            <div class="row">
-                <div class="label col-md-4">
-                    <label type="text">@t.Day</label>
-                </div>
+            @foreach (var t in Model.OperatingHours)
+            {
+                <div class="row">
+                    <div class="label col-md-4">
+                        <label type="text">@t.Day</label>
+                    </div>
 
-                <div class="label col-md-4 ">
-                    <label type="text" class="label">
-                        @if (t.Enabled)
-                        {
-                            @("Open")
-                        }
-                        else
-                        {
-                            @("Closed")
-                        }
-                    </label>
+                    <div class="label col-md-4 ">
+                        <label type="text" class="label">
+                            @if (t.Enabled)
+                            {
+                                @("Open")
+                            }
+                            else
+                            {
+                                @("Closed")
+                            }
+                        </label>
 
+                    </div>
                 </div>
-            </div>
-        }
-</div>
+            }
+        </div>
     </div>
-<div class="col-md-1">
-    <button type="button" class="btn btn-info" 
-            data-toggle="modal" data-target="#modal-operating">
-                <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
-            </button>
-            </div>
+    <div class="col-md-1">
+        <button type="button" class="btn btn-info"
+                data-toggle="modal" data-target="#modal-operating">
+            <i class="fa fa-edit fa-fw" aria-hidden="true"></i>
+        </button>
+    </div>
     <span asp-validation-for="Contact" class="text-danger"></span>
 </div>
 
@@ -258,8 +259,10 @@
                 }
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" 
-                        onclick="saveOperating()" id="btnSaveOperating">Apply</button>
+                <button type="button" class="btn btn-primary"
+                        onclick="saveOperating()" id="btnSaveOperating">
+                    Apply
+                </button>
                 <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -287,7 +290,7 @@
     </div>
 </div>
 
-@* Address Modal *@ 
+@* Address Modal *@
 <div class="modal" id="modal-address">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -299,7 +302,7 @@
             </div>
             <div class="modal-body">
                 <form id="addressForm">
-                @Html.EditorFor(x => x.Address)
+                    @Html.EditorFor(x => x.Address)
                 </form>
             </div>
             <div class="modal-footer">
@@ -318,9 +321,9 @@
     @{ await Html.RenderPartialAsync("_PlacesApiPartial"); }
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
-    @{ await Html.RenderPartialAsync("_TimePickerPartial");}
+    @{ await Html.RenderPartialAsync("_TimePickerPartial"); }
     <script src="~/js/Listings/ModalFunctionScripts.js"></script>
-    
+
 
     <script type="text/javascript">
    
@@ -334,12 +337,12 @@
    
     $("#FormCreate").submit(function (e) {
           e.preventDefault();
+          setLoading(true);
       let data = $(this).serialize();
         let token = $('input[name="__RequestVerificationToken"]').val();
                   debugger
                   if ($(this).valid()) {
                       $.ajax({
-                          //TODO add [ValidateAntiForgeryToken]
                           url: "/Listing/Create/",
                           data: data,
                            headers: {
@@ -357,59 +360,19 @@
                                           window.location.href = '/listing';
                                       });
                               } else {
+                                   setLoading(false);
                                     swal("Oops",item2,"error");
                               }
                                      }), 
                                error: (function (data) {
-                              swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                                   setLoading(false);
+                              swal("Oops", "Error code: "+data.status+". Please contact technical support.", "error");
+                              
                           })
                       })
                   }
       
     });
-
-    //populate category based on type
-    $("#type-input").change(function() {
-            let filterValue = $("#type-input option:selected").text().toLowerCase();
-            let categoryDropdown = $("#category-dropdown");
-            categoryDropdown.prop('disabled', true); 
-            if(filterValue!=null){
-                
-              $.ajax({  
-                         type: "GET",  
-                         url: "/Category/GetCategoryByType",  
-                         data: {type:filterValue},  
-                         complete: function (data) {
-                             let result =data.responseJSON;
-                             categoryDropdown.empty();
-                             
-                             if(result.length === 0){
-                                 categoryDropdown.append($('<option>', {
-                                    value: -1,
-                                    text: '--- This type do not have category yet ---',
-                                    selected: true
-                                    }));
-                             }else {
-                                    let $prevGroup, prevGroupName;
-                                    $.each(result, function () {
-                                    categoryDropdown.prop("disabled",false);
-                                    if (prevGroupName !== this.group.name) {
-                                        $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
-                                    }
-                                     $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
-                                     prevGroupName = this.group.name;
-                                      });
-                             }
-                         
-                         }, 
-                     });  
-    }
-        });
-    
-    
-   
-     
-
 </script>
 
 

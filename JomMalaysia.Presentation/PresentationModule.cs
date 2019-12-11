@@ -12,7 +12,6 @@ namespace JomMalaysia.Presentation
         //public string DatabaseName { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
-
             builder.RegisterType<AuthorizationManagers>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.RegisterType<AppSetting>().AsImplementedInterfaces().SingleInstance();
@@ -20,10 +19,9 @@ namespace JomMalaysia.Presentation
             builder.RegisterType<HasScopeHandler>().AsImplementedInterfaces().SingleInstance();
 
             builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
-                   .Where(gateway => gateway.Name.EndsWith("Gateway"))
-                   .AsImplementedInterfaces()
-                   .InstancePerLifetimeScope();
-            
+                .Where(gateway => gateway.Name.EndsWith("Gateway"))
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
         }
     }
 }

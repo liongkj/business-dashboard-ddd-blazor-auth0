@@ -9,8 +9,6 @@ namespace JomMalaysia.Framework.Helper
     /// </summary>
     public static class NetHelper
     {
-
-
         /// <summary>
         /// Gets the base URL (Protocol + Host) from a full URL.
         /// </summary>

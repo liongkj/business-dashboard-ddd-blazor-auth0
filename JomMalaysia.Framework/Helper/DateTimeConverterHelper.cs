@@ -10,10 +10,12 @@ namespace JomMalaysia.Framework.Helper
 {
     public class CustomDateTimeConverter : DateTimeConverterBase
     {
-        public static string[] DefaultInputFormats = new[] {
-        "yyyyMMdd", "yyyy/MM/dd", "dd/MM/yyyy", "dd-MM-yyyy",
-        "yyyyMMddHHmmss", "yyyy/MM/dd HH:mm:ss", "dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss"
-    };
+        public static string[] DefaultInputFormats = new[]
+        {
+            "yyyyMMdd", "yyyy/MM/dd", "dd/MM/yyyy", "dd-MM-yyyy",
+            "yyyyMMddHHmmss", "yyyy/MM/dd HH:mm:ss", "dd/MM/yyyy HH:mm:ss", "dd-MM-yyyy HH:mm:ss"
+        };
+
         public static string DefaultOutputFormat = "yyyyMMdd";
         public static bool DefaultEvaluateEmptyStringAsNull = true;
 
@@ -25,14 +27,16 @@ namespace JomMalaysia.Framework.Helper
         {
         }
 
-        public CustomDateTimeConverter(string[] inputFormats, string outputFormat, bool evaluateEmptyStringAsNull = true)
+        public CustomDateTimeConverter(string[] inputFormats, string outputFormat,
+            bool evaluateEmptyStringAsNull = true)
         {
             if (inputFormats != null) InputFormats = inputFormats;
             if (outputFormat != null) OutputFormat = outputFormat;
             EvaluateEmptyStringAsNull = evaluateEmptyStringAsNull;
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
+            JsonSerializer serializer)
         {
             string v = (reader.Value != null) ? reader.Value.ToString() : null;
             try
@@ -44,17 +48,20 @@ namespace JomMalaysia.Framework.Helper
                     // otherwise we'll let DateTime.ParseExactwill throw an exception in a couple lines.
                     if (v == null || EvaluateEmptyStringAsNull) return null;
                 }
+
                 return DateTime.ParseExact(v, InputFormats, CultureInfo.InvariantCulture, DateTimeStyles.None);
             }
             catch (Exception e)
             {
-                throw new NotSupportedException(String.Format("ERROR: Input value '{0}' is not parseable using the following supported formats: {1}. {2}", v, string.Join(",", InputFormats), e));
+                throw new NotSupportedException(String.Format(
+                    "ERROR: Input value '{0}' is not parseable using the following supported formats: {1}. {2}", v,
+                    string.Join(",", InputFormats), e));
             }
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue(((DateTime)value).ToString(OutputFormat));
+            writer.WriteValue(((DateTime) value).ToString(OutputFormat));
         }
     }
 }

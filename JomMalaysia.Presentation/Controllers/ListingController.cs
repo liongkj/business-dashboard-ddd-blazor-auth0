@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
@@ -33,7 +34,7 @@ namespace JomMalaysia.Presentation.Controllers
         #region gateway helper
 
         public ListingController(IListingGateway gateway, IMerchantGateway merchantGateway,
-            ICategoryGateway categoryGateway,IMapper mapper)
+            ICategoryGateway categoryGateway, IMapper mapper)
         {
             _gateway = gateway;
             _merchantGateway = merchantGateway;
@@ -77,22 +78,22 @@ namespace JomMalaysia.Presentation.Controllers
         {
             var init = await PopulateFields().ConfigureAwait(false);
             var _operatingHours = new List<OperatingHourViewModel>();
-            
+
             foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
             {
                 _operatingHours.Add(new OperatingHourViewModel
                 {
                     Enabled = false,
-                    Day = (DayOfWeek)day,
+                    Day = (DayOfWeek) day,
                 });
             }
-            
+
             var vm = new RegisterListingViewModel
             {
                 OperatingHours = _operatingHours,
                 ListingImages = new ListingImageViewModel(),
                 MerchantList = init.MerchantList,
-                CategoryTypeList =  init.CategoryTypeList,
+                CategoryTypeList = init.CategoryTypeList,
                 Address = init.Address
             };
             ViewBag.States = init.StateDictionary;
@@ -107,7 +108,10 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
+                var OperatingHours = (from days in vm.OperatingHours
+                    where days.Enabled
+                    select new OperatingHourViewModel
+                        {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
                 vm.OperatingHours = OperatingHours;
                 var response = await _gateway.Add(vm).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -122,8 +126,8 @@ namespace JomMalaysia.Presentation.Controllers
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
         }
-       
-        
+
+
         [HttpGet]
         public async Task<ViewResult> Edit(string listingId)
         {
@@ -137,17 +141,17 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 throw e;
             }
-            
+
             var vm = _mapper.Map<RegisterListingViewModel>(m);
-            
+
             //operating hours
             var _operatingHours = new List<OperatingHourViewModel>();
             var open = m.OperatingHours;
             var count = 0;
             foreach (DayOfWeek day in Enum.GetValues(typeof(DayOfWeek)))
             {
-                
-                if(open.FindIndex(x=>x.DayOfWeek==day)>=0){
+                if (open.FindIndex(x => x.DayOfWeek == day) >= 0)
+                {
                     _operatingHours.Add(new OperatingHourViewModel
                     {
                         Enabled = true,
@@ -166,10 +170,12 @@ namespace JomMalaysia.Presentation.Controllers
                     });
                 }
             }
+
             //category
             var _categories = new List<SelectListItem>();
             var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
-            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == m.CategoryType).OrderBy(x => x.CategoryName)
+            var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == m.CategoryType)
+                .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);
 
             foreach (var category in cats)
@@ -188,6 +194,7 @@ namespace JomMalaysia.Presentation.Controllers
                     }
                 }
             }
+
             //populate fields
             vm.MerchantList = init.MerchantList;
             vm.CategoryTypeList = init.CategoryTypeList;
@@ -198,14 +205,17 @@ namespace JomMalaysia.Presentation.Controllers
             ViewBag.States = init.StateDictionary;
             return View(vm);
         }
-        
+
         [HttpPost]
         public async Task<Tuple<int, string>> Edit(RegisterListingViewModel vm, string listingId)
         {
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
-            { 
-                var OperatingHours = (from days in vm.OperatingHours where days.Enabled select new OperatingHourViewModel {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
+            {
+                var OperatingHours = (from days in vm.OperatingHours
+                    where days.Enabled
+                    select new OperatingHourViewModel
+                        {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
                 vm.OperatingHours = OperatingHours;
                 var response = await _gateway.Edit(vm, listingId).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -220,7 +230,7 @@ namespace JomMalaysia.Presentation.Controllers
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
         }
-        
+
         [HttpPost]
         public async Task<Tuple<int, string>> Publish(string id, int months)
         {
@@ -240,11 +250,10 @@ namespace JomMalaysia.Presentation.Controllers
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
         }
-        
+
         //helper functions
 
 
-    
         private async Task<RegisterListingViewModel> PopulateFields()
         {
             //merchant
@@ -254,16 +263,8 @@ namespace JomMalaysia.Presentation.Controllers
                 Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
                 Value = m.MerchantId
             }).ToList();
-            //country
-            var _country = new List<SelectListItem>();
-            foreach (Enum country in Enum.GetValues(typeof(CountryEnum)))
-            {
-                _country.Add(new SelectListItem
-                {
-                    Text = country.GetDescription(),
-                    Value = country.ToString(),
-                });
-            }
+          
+
             //category type
             var _categoryType = new List<SelectListItem>();
             foreach (Enum category in Enum.GetValues(typeof(CategoryType)))
@@ -274,32 +275,36 @@ namespace JomMalaysia.Presentation.Controllers
                     Value = category.ToString(),
                 });
             }
-            //states
-            var _states = new List<SelectListItem>();
-            var dicState = new Dictionary<string,string>();
-            foreach (Enum state in Enum.GetValues(typeof(StateEnum)))
-            {
-                var fullName = state.GetDescription();
-                _states.Add(new SelectListItem
-                {
-                    Text = fullName,
-                    Value = state.ToString(),
-                });
 
-                if (fullName != null) dicState.Add(key: fullName.ToLower(), value: state.ToString());
-            }
+            var add = new AddressViewModel();
             var vm = new RegisterListingViewModel
             {
                 MerchantList = _merchants,
-                CategoryTypeList =  _categoryType,
-                Address = new AddressViewModel
-                {
-                    StateList =  _states,
-                    CountryList = _country
-                },
-                StateDictionary = dicState,
+                CategoryTypeList = _categoryType,
+                Address = add,
+                StateDictionary = add.StateList.Item2,
             };
             return vm;
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<Tuple<int, string>> ConfirmDelete(string id)
+        {
+            IWebServiceResponse response;
+            if (string.IsNullOrEmpty(id)) return SweetDialogHelper.HandleNotFound();
+            try
+            {
+                response = await _gateway.Delete(id).ConfigureAwait(false);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
+
+            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
+            return SweetDialogHelper.HandleResponse(response);
+        }
+
     }
 }

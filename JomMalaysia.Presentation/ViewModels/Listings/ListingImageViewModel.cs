@@ -9,12 +9,9 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
 {
     public class ListingImageViewModel
     {
-        [DisplayName("Logo")]
-        public Image ListingLogo { get; set; }
-        [DisplayName("Cover Photo")]
-        public Image CoverPhoto { get; set; }
-        [DisplayName("Ads Image")]
-        public List<Image> Ads { get; }
+        [DisplayName("Logo")] public Image ListingLogo { get; set; }
+        [DisplayName("Cover Photo")] public Image CoverPhoto { get; set; }
+        [DisplayName("Ads Image")] public List<Image> Ads { get; }
 
         public ListingImageViewModel()
         {

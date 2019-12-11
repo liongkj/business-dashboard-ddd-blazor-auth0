@@ -31,7 +31,7 @@ namespace JomMalaysia.Framework.Helper
         public string RootElement { get; set; }
 
         public string Serialize(object obj) =>
-              JsonConvert.SerializeObject(obj);
+            JsonConvert.SerializeObject(obj);
 
 
         public T Deserialize<T>(IRestResponse response)

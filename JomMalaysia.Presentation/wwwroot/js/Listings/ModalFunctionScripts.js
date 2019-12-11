@@ -1,11 +1,13 @@
 ﻿let validator;
 let to_validate_fields;
+//init validator
 $(function () {
 
     validator = $("form").validate();
     
 });
 
+// validte field function
 function validate(fields) {
     let isValid = validator.element(fields);
     debugger
@@ -14,7 +16,7 @@ function validate(fields) {
     }
 }
 
-
+// save info on contact modal
 function saveContact() {
     to_validate_fields = 0;
     let fields = document.querySelectorAll(".contact_field");
@@ -105,5 +107,43 @@ function updateFormHours(UpdatedHours) {
         
     });
 
+//populate category based on type
+    $("#type-input").change(function() {
+        let filterValue = $("#type-input option:selected").text().toLowerCase();
+        let categoryDropdown = $("#category-dropdown");
+        categoryDropdown.prop('disabled', true);
+        if(filterValue!=null){
+
+            $.ajax({
+                type: "GET",
+                url: "/Category/GetCategoryByType",
+                data: {type:filterValue},
+                complete: function (data) {
+                    let result =data.responseJSON;
+                    categoryDropdown.empty();
+
+                    if(result.length === 0){
+                        categoryDropdown.append($('<option>', {
+                            value: -1,
+                            text: '--- This type do not have category yet ---',
+                            selected: true
+                        }));
+                    }else {
+                        let $prevGroup, prevGroupName;
+                        $.each(result, function () {
+                            debugger
+                            categoryDropdown.prop("disabled",false);
+                            if (prevGroupName !== this.group.name) {
+                                $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');
+                            }
+                            $("<option />").val(this.value).text(this.text).appendTo($prevGroup);
+                            prevGroupName = this.group.name;
+                        });
+                    }
+
+                },
+            });
+        }
+    });
 
 }

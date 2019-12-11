@@ -9,9 +9,8 @@ namespace JomMalaysia.Framework.WebServices
         string RawContent { get; set; }
     }
 
-    public interface IWebServiceResponse<T>:IWebServiceResponse
+    public interface IWebServiceResponse<T> : IWebServiceResponse
     {
-       
         T Data { get; set; }
     }
 }

@@ -11,14 +11,14 @@
             <input type="hidden" asp-for="Day" value="@Model.Day"/>
             <input type="checkbox" class="custom-control-input OperatingCb"
                    asp-for="Enabled" onclick="showHourField(this)" data-day="@((int) Model.Day)">
-            <label class="custom-control-label" type="hidden" asp-for="Enabled">@(Model.Enabled?"Open":"Close")</label>
+            <label class="custom-control-label" type="hidden" asp-for="Enabled">@(Model.Enabled ? "Open" : "Close")</label>
         </div>
     </div>
-   
-        <div class="col-sm-10 col-md-8 row justify-content-center" id="hour-field-@((int)Model.Day)" style="display:@(Model.Enabled?"block":"none")">
-            <input asp-for="OpenTime" class="col-md-4 timepicker start-time"/>
-            <label class="label col-md-2"> - </label>
-            <input asp-for="CloseTime" class="col-md-4 timepicker close-time"/>
-        </div>
-    
+
+    <div class="col-sm-10 col-md-8 row justify-content-center" id="hour-field-@((int) Model.Day)" style="display:@(Model.Enabled ? "block" : "none")">
+        <input asp-for="OpenTime" class="col-md-4 timepicker start-time"/>
+        <label class="label col-md-2"> - </label>
+        <input asp-for="CloseTime" class="col-md-4 timepicker close-time"/>
+    </div>
+
 </div>

@@ -20,7 +20,7 @@ namespace JomMalaysia.Framework.Helper
         public static List<string> GetAssignableRoles(string role)
         {
             var find = role.ToLower();
-            var roleList = new List<string> { "manager", "admin", "editor" };
+            var roleList = new List<string> {"manager", "admin", "editor"};
             switch (find)
             {
                 case "superadmin":

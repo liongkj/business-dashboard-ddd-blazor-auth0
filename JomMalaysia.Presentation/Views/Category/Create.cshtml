@@ -1,9 +1,8 @@
-﻿
-@using JomMalaysia.Presentation.Models.Categories
+﻿@using JomMalaysia.Presentation.Models.Categories
 @model JomMalaysia.Presentation.ViewModels.Categories.NewCategoryViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -30,15 +29,15 @@
 <h2>@TempData["title"]</h2>
 <form asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.Hidden("parentCategoryId",TempData["categoryId"])
+    @Html.Hidden("parentCategoryId", TempData["categoryId"])
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryCode, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.CategoryCode, new {@class = "form-control"})
             @Html.ValidationMessageFor(m => m.CategoryCode)
         </div>
     </div>
-    @if (TempData["categoryId"]==null)
+    @if (TempData["categoryId"] == null)
     {
         <div class="form-group row">
             <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryType)</div>
@@ -48,11 +47,11 @@
             </div>
         </div>
     }
-    
+
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryName)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryName, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.CategoryName, new {@class = "form-control"})
             @Html.ValidationMessageFor(m => m.CategoryName)
             @*<input type="text" class="form-control" id="txtSSMID" placeholder="Enter SSM ID">*@
         </div>
@@ -60,26 +59,26 @@
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameMs)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryNameMs, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.CategoryNameMs, new {@class = "form-control"})
             @Html.ValidationMessageFor(m => m.CategoryNameMs)
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameZh)</div>
         <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryNameZh, new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.CategoryNameZh, new {@class = "form-control"})
             @Html.ValidationMessageFor(m => m.CategoryNameZh)
         </div>
     </div>
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryImageUrl)</div>
         <div class="input-group col-sm-10 col-md-6">
-            @Html.HiddenFor(m => m.CategoryImageUrl, new { @class = "form-control category-logo imageUrl" })
-            
-            <input type="text" class="form-control category-logo imageName" id="imageName" disabled />
+            @Html.HiddenFor(m => m.CategoryImageUrl, new {@class = "form-control category-logo imageUrl"})
+
+            <input type="text" class="form-control category-logo imageName" id="imageName" disabled/>
             <div class="input-group-append">
-                <button type="button" class="btn btn-secondary category-logo btnUpload"  onclick="uploadImageWidget('category_images','category-logo');">Browse</button>
-                 @Html.ValidationMessageFor(m => m.CategoryThumbnailUrl)
+                <button type="button" class="btn btn-secondary category-logo btnUpload" onclick="uploadImageWidget('category_images','category-logo');">Browse</button>
+                @Html.ValidationMessageFor(m => m.CategoryThumbnailUrl)
             </div>
         </div>
     </div>
@@ -87,10 +86,10 @@
 
 @section Scripts{
 
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     @{ await Html.RenderPartialAsync("_CloudinaryPartial"); }
-  
-  
+
+
     <script type="text/javascript">
      
         function createCategory() {

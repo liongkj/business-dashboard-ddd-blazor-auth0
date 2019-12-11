@@ -8,7 +8,6 @@ namespace JomMalaysia.Presentation.Controllers
 {
     public class ErrorController : Controller
     {
-      
         public IActionResult AccessDeniedError()
         {
             return View();

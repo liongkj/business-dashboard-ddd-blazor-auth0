@@ -18,5 +18,4 @@ namespace JomMalaysia.Presentation.Models.Common
             return formatted;
         }
     }
-
 }

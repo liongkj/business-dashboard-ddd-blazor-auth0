@@ -7,7 +7,6 @@
 
     if (TempData["Message"] != null)
     {
-
     }
 }
 
@@ -16,7 +15,9 @@
     @foreach (var x in Model)
     {
         <li class="nav-item">
-            <a class="nav-link justify-content-between align-items-center" data-toggle="tab" href="#@x.Name">@x.Name <span class="badge badge-primary badge-pill">@x.Count</span></a>
+            <a class="nav-link justify-content-between align-items-center" data-toggle="tab" href="#@x.Name">
+                @x.Name <span class="badge badge-primary badge-pill">@x.Count</span>
+            </a>
 
         </li>
     }

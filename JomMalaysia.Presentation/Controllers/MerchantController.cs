@@ -23,7 +23,9 @@ namespace JomMalaysia.Presentation.Controllers
 
         private List<Merchant> Merchants { get; set; }
         private Boolean refresh = false;
+
         #region gateway helper
+
         public MerchantController(IMerchantGateway gateway)
         {
             _gateway = gateway;
@@ -48,6 +50,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 return Merchants;
             }
+
             try
             {
                 Merchants = await _gateway.GetMerchants().ConfigureAwait(false);
@@ -60,6 +63,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         #endregion
+
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
@@ -71,17 +75,21 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new RegisterMerchantViewModel());
+            
+            var vm = new RegisterMerchantViewModel();
+            
+            return View(vm);
         }
 
         [HttpPost]
         public async Task<Tuple<int, string>> Create(RegisterMerchantViewModel vm)
         {
             IWebServiceResponse response = null;
-            vm.Contacts.Add(new ContactViewModel { 
-            Name="Liong Khai Jiet",
-            Email="khaijiet@hotmail.com",
-            Phone="0187627267"
+            vm.Contacts.Add(new ContactViewModel
+            {
+                Name = "Liong Khai Jiet",
+                Email = "khaijiet@hotmail.com",
+                Phone = "0187627267"
             });
 
             if (ModelState.IsValid)
@@ -94,12 +102,32 @@ namespace JomMalaysia.Presentation.Controllers
                 {
                     return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
                 }
+
                 if (response.StatusCode == HttpStatusCode.OK)
 
                     refresh = true;
             }
 
             return SweetDialogHelper.HandleResponse(response);
+        }
+    [HttpGet]
+        public async Task<IActionResult> Detail(string id)
+        {
+            Merchant m;
+            try
+            {
+                m = await _gateway.Detail(id).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            return View(m);
+        }
+
+        public IActionResult Edit()
+        {
+            throw new NotImplementedException();
         }
     }
 }

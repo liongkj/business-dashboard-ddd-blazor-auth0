@@ -9,6 +9,7 @@ namespace JomMalaysia.Framework.Helper
         public int CurrentPage { get; set; }
 
         private int _pageCount { get; set; }
+
         public int PageCount
         {
             get { return _pageCount; }

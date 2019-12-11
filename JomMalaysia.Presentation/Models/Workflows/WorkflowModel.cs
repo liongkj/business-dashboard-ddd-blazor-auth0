@@ -9,7 +9,6 @@ namespace JomMalaysia.Presentation.Models.Workflows
 {
     public class WorkflowModel
     {
-
         public string WorkflowId { get; set; }
         public WorkflowTypeEnum Type { get; set; }
         public WorkflowStatusEnum Status { get; set; }
@@ -25,8 +24,6 @@ namespace JomMalaysia.Presentation.Models.Workflows
         public bool IsCompleted()
         {
             return Status == WorkflowStatusEnum.rejected || Status == WorkflowStatusEnum.completed;
-          
         }
-      
     }
 }

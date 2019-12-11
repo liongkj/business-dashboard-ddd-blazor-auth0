@@ -6,11 +6,10 @@ namespace JomMalaysia.Presentation.Gateways.Users
     public class UserListResponse
     {
         public UserListViewModel Data { get; set; }
-
     }
+
     public class UserListViewModel
     {
         public List<AppUser> Results { get; set; }
-
     }
 }

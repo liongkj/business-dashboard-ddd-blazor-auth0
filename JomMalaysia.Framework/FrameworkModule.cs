@@ -10,13 +10,11 @@ namespace JomMalaysia.Framework
         //public string DatabaseName { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
-
             builder.RegisterType<WebServiceExecutor>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.RegisterType<WebServiceResponse>().AsImplementedInterfaces().InstancePerLifetimeScope();
 
             builder.RegisterType<ApiBuilder>().AsImplementedInterfaces().InstancePerLifetimeScope();
-
         }
     }
 }
