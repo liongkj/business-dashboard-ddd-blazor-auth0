@@ -3,7 +3,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listing";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
 <form method="post">
@@ -55,10 +55,10 @@
                             <i class="fa fa-cloud-upload" aria-hidden="true"></i>
                         </button>
                         <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
-                            <i class="fa fa-info" aria-hidden="true"></i>
+                            <i class="fa fa-edit" aria-hidden="true"></i>
                         </a>
                         <a type="button" class="btn btn-danger form-control" onclick="deleteListing('@item.ListingId','@item.ListingName')">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
+                            <i class="fa fa-trash-o" aria-hidden="true"></i>
                         </a>
                     </div>
                 </td>

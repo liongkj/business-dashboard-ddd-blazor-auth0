@@ -12,8 +12,8 @@ namespace JomMalaysia.Presentation.Models.Common
 
         public override string ToString()
         {
-            var formatted = String.Format("{0} {1} {2} ",
-                (IsPrimary ? '*' : ' '), Name.ToString(), Phone.ToString()
+            var formatted = String.Format("{1} {2} ",
+                 Name.ToString(), Phone.ToString()
             );
             return formatted;
         }

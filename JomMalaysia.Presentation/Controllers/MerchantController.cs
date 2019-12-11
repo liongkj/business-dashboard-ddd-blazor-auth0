@@ -85,32 +85,26 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<Tuple<int, string>> Create(RegisterMerchantViewModel vm)
         {
             IWebServiceResponse response = null;
-            vm.Contacts.Add(new ContactViewModel
+
+
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            try
             {
-                Name = "Liong Khai Jiet",
-                Email = "khaijiet@hotmail.com",
-                Phone = "0187627267"
-            });
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    response = await _gateway.Add(vm).ConfigureAwait(false);
-                }
-                catch (GatewayException e)
-                {
-                    return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
-                }
-
-                if (response.StatusCode == HttpStatusCode.OK)
-
-                    refresh = true;
+                response = await _gateway.Add(vm).ConfigureAwait(false);
             }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
+
+            if (response.StatusCode == HttpStatusCode.OK)
+
+                refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
-    [HttpGet]
+        
+        [HttpGet]
         public async Task<IActionResult> Detail(string id)
         {
             Merchant m;

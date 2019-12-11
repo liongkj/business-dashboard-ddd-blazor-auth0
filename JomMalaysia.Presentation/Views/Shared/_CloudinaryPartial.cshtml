@@ -30,8 +30,7 @@ function uploadImageWidget(folder, imageType, uploadMultiple){
                    setLoading(true);
                 }
                 if (!error && result && result.event === "success") {
-                    setLoading(false);
-                    debugger 
+                    setLoading(false); 
                     $(".imageUrl."+ field).val(result.info.secure_url);
                     $(".img-thumbnail."+field).attr("src",result.info.thumbnail_url);
                     $(".imageName."+ field).val(result.info.original_filename + "." + result.info.format);

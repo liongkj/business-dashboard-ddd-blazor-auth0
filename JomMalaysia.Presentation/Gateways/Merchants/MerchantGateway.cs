@@ -34,7 +34,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             IWebServiceResponse<Merchant> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Merchant);
 
                 var method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth, vm)

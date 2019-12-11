@@ -306,5 +306,9 @@ namespace JomMalaysia.Presentation.Controllers
             return SweetDialogHelper.HandleResponse(response);
         }
 
+        public IActionResult GetByMerchant()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

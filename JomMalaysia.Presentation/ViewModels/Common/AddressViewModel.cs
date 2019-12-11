@@ -25,7 +25,7 @@ namespace JomMalaysia.Presentation.ViewModels.Common
         public string PostalCode { get; set; }
 
         [Required] public CountryEnum Country { get; set; }
-        [Required] public Coordinates Coordinates { get; set; }
+        public Coordinates Coordinates { get; set; }
 
 
         public IEnumerable<SelectListItem> CountryList { get; set; }
