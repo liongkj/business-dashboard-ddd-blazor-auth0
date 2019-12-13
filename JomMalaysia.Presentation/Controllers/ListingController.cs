@@ -16,11 +16,13 @@ using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Common;
 using JomMalaysia.Presentation.ViewModels.Listings;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace JomMalaysia.Presentation.Controllers
 {
+    [Authorize]
     public class ListingController : Controller
     {
         private readonly IListingGateway _gateway;

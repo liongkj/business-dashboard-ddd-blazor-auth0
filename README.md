@@ -5,7 +5,7 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 ![Build Status](https://dev.azure.com/busylikedog/biscat/_apis/build/status/portal-jommalaysia%20-%20CI)
 
 - [x] Add cloudinary jqeury upload https://cloudinary.com/documentation/jquery_integration
-- [ ] refactor cloudinary code
+- [x] refactor cloudinary code
 - [x] update image to include thumbnail url and normal url
 
 - [x] find out why released version css is missing https://portal-jommalaysia.azurewebsites.net/
@@ -21,4 +21,4 @@ Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 
 - [x] Fix auth0 claims
 
-* [ ] Google Map Geocoding in Add listing page
+* [x] Google Map Geocoding in Add listing page

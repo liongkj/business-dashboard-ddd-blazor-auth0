@@ -16,7 +16,7 @@ using JomMalaysia.Presentation.ViewModels.Common;
 
 namespace JomMalaysia.Presentation.Controllers
 {
-    // [Authorize("read:merchant")] auth:enable this
+    [Authorize]
     public class MerchantController : Controller
     {
         private readonly IMerchantGateway _gateway;
@@ -58,7 +58,7 @@ namespace JomMalaysia.Presentation.Controllers
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
 
@@ -105,18 +105,13 @@ namespace JomMalaysia.Presentation.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> Detail(string id)
+        public IActionResult Detail(string id)
         {
-            Merchant m;
-            try
+            var vm = new Merchant
             {
-                m = await _gateway.Detail(id).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return View(m);
+                MerchantId = id
+            };
+            return PartialView("_Detail", vm);
         }
 
         public IActionResult Edit()

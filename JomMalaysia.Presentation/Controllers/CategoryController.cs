@@ -11,13 +11,14 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace JomMalaysia.Presentation.Controllers
-{
+{    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryGateway _gateway;

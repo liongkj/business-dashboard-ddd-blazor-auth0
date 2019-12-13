@@ -85,7 +85,8 @@ namespace JomMalaysia.Presentation.Controllers
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     // Sign user into cookie middleware
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity)).ConfigureAwait(false);
+                        new ClaimsPrincipal(claimsIdentity))
+                        .ConfigureAwait(false);
                 }
 
                 return RedirectToLocal(vm.returnURL);
@@ -95,7 +96,7 @@ namespace JomMalaysia.Presentation.Controllers
                 ModelState.AddModelError("", e.Message);
             }
 
-            return RedirectToLocal(vm.returnURL); //auth: disable this to force logout
+            return RedirectToLocal(vm.returnURL); //auth: enable this to force logout
             // return View(vm); //auth:enable this to bypass
         }
 

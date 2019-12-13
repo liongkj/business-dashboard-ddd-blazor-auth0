@@ -1,0 +1,119 @@
+﻿@using JomMalaysia.Framework.Helper
+@model JomMalaysia.Presentation.Models.Merchants.Merchant
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<h4>Merchant</h4>
+<div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CompanyRegistration.SsmId)</div>
+        <div class="col-sm-10 col-md-3">
+            <input type="number" asp-for="CompanyRegistration.SsmId" class="form-control only-number-no-arrow"/>
+            <span asp-validation-for="CompanyRegistration.SsmId" class="text-danger"></span>
+        </div>
+
+        <div class="col-sm-2 col-md-1 col-form-label">@Html.DisplayNameFor(m => m.CompanyRegistration.OldSsmId)</div>
+        <div class="col-sm-10 col-md-2">
+            <input asp-for="CompanyRegistration.OldSsmId" class="form-control"/>
+            <span asp-validation-for="CompanyRegistration.OldSsmId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CompanyRegistration.RegistrationName)</div>
+        <div class="col-sm-10 col-md-6">
+            <input asp-for="CompanyRegistration.RegistrationName" class="form-control"/>
+            <span asp-validation-for="CompanyRegistration.RegistrationName" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add1)</div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.Address.Add1, new {@class = "form-control add_field", placeholder = "Address Line 1"})
+            @Html.ValidationMessageFor(m => m.Address.Add1)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.Add2)</div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(m => m.Address.Add2, new {@class = "form-control add_field", placeholder = "Address Line 2"})
+            @Html.ValidationMessageFor(m => m.Address.Add2)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.City)</div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Address.City, new {@class = "form-control add_field", placeholder = "City"})
+            @Html.ValidationMessageFor(m => m.Address.City)
+        </div>
+        <div class="col-md-3">
+            @Html.TextBoxFor(m => m.Address.PostalCode, new {@class = "form-control add_field", placeholder = "Postal Code"})
+            @Html.ValidationMessageFor(m => m.Address.PostalCode)
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">@Html.DisplayNameFor(m => m.Address.State)</div>
+        <div class="col-md-3">
+            <input asp-for="Address.State" class="form-control add_field"/>
+            <span asp-validation-for="Address.State" class="text-danger"></span>
+
+        </div>
+        <div class="col-md-3">
+            <input asp-for="Address.Country"  class="form-control add_field"/>
+            <span asp-validation-for="Address.Country" class="text-danger"></span>
+        </div>
+    </div>
+     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
+        <table class="table table-hover">
+            <thead class="table-primary">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Listing</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Tags</th>
+                <th scope="col">Full Address</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+    @foreach (var item in Model.Listing)
+    {
+        <tr>
+                <td>
+                </td>
+                <td>@item.ListingName</td>
+                
+                <td>
+                    <strong class="line-breaks">@($"{item.CategoryType}")</strong> <br/>
+                    @($"{item.Category.Category.CapitalizeOrConvertNullToEmptyString()}-" +
+                      $"{item.Category.Subcategory.CapitalizeOrConvertNullToEmptyString()}")
+                </td>
+                <td>@item.PublishStatus.Status</td>
+                <td>
+                    @{
+                        foreach (var tag in item.Tags)
+                        {
+                            <span class="badge badge-info">@tag</span>
+                        }
+                    }
+                </td>
+                <td>@item.Address.ToString()</td>
+                <td>
+                    <div class="btn-group" role="group">
+                       
+                        <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit"
+                           asp-route-listingId="@item.ListingId" target="_blank">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        
+    }    </tbody>
+    </table>
+</div>
+    

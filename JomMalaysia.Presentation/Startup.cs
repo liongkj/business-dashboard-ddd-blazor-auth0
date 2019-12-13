@@ -42,7 +42,9 @@ namespace JomMalaysia.Presentation
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options => { options.AccessDeniedPath = "/Error/AccessDeniedError"; }).AddOpenIdConnect(
+            }).AddCookie(options =>
+            { options.AccessDeniedPath = "/Error/AccessDeniedError"; }
+            ).AddOpenIdConnect(
                 "Auth0", options =>
                 {
                     // Set the authority to your Auth0 domain
@@ -54,7 +56,9 @@ namespace JomMalaysia.Presentation
                     options.ResponseType = "code";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/roles"
+                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/roles",
+                        ValidateIssuer = true,
+                        ValidateLifetime = true,
                     };
                     // Configure the scope
                     options.Scope.Clear();
@@ -151,6 +155,7 @@ namespace JomMalaysia.Presentation
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {
@@ -158,7 +163,7 @@ namespace JomMalaysia.Presentation
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            app.UseCookiePolicy();
+
         }
     }
 }

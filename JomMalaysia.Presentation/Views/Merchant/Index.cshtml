@@ -32,9 +32,9 @@
                     <td><a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId" @(item.Listings.Count>0?"":"disabled") ></a>@item.Listings.Count</td>
                     <td>@item.Contacts[0].ToString()</td>
                     <td>
-                                        <div class="btn-group" role="group">
-                                            
-                                            <a type="button" class="btn btn-info form-control" asp-controller="Merchant" asp-action="Edit" asp-route-merchantId="@item.MerchantId">
+                        <div class="btn-group" role="group">
+                            <a type="button" class="btn btn-info form-control" data-toggle="modal" 
+                               data-target="#modal-merchant-detail" data-id="@item.MerchantId">
                                                 <i class="fa fa-info" aria-hidden="true"></i>
                                             </a>
                                             <a type="button" class="btn btn-danger form-control" onclick="deleteMerchant('@item.MerchantId','@item.CompanyRegistration.RegistrationName')">
@@ -48,10 +48,31 @@
     </div>
 </form>
 
+@* Detail Modal *@
+<div class="modal" id="modal-merchant-detail">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Merchant Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                loading..
+            </div>
+            @* <div class="modal-footer"> *@
+            @*     <button type="button" class="btn btn-primary" onclick="saveAddress()" id="btnSaveAddress">Apply</button> *@
+            @*     <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button> *@
+            @* </div> *@
+        </div>
+    </div>
+</div>
+
 @section SpecificScripts{
- <script type="text/javascript">
+    <script type="text/javascript">
  //delete merchant
-                function deleteMerchant(MerchantId, MerchantName) {
+     function deleteMerchant(MerchantId, MerchantName) {
                 let token = $('input[name="__RequestVerificationToken"]').val();
                     swal({
                         title: 'Delete merchant',
@@ -97,5 +118,31 @@
                             })
                     })
                 }
+    
+    $(function () {
+                $('#modal-merchant-detail').on('show.bs.modal', function (e) {
+                    let id = e.relatedTarget.dataset.id;
+                    let $modal = $(this);
+    
+                    $.ajax({
+                        cache: false,
+                        type: 'GET',
+                        url: '/Merchant/Detail/' + id,
+                        success: function (data) {
+                            $modal.find('.modal-body').html(data);
+                        },
+                        fail: function (error) {
+                            $modal.hide();
+                            swal("Oops",error,"error");
+                        }
+                    });
+                });
+            });
+            $(function () {
+                $('#modal-merchant-detail').on('hidden.bs.modal', function () {
+                   
+                    $(this).find('.modal-body').empty();
+                });
+            });
     </script>
 }
