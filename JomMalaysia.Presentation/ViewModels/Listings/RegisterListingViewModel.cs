@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JomMalaysia.Presentation.Models.Categories;
-using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,7 +15,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Display(Name = "Business Name / Shop Name")]
         public string ListingName { get; set; }
 
-        [MinLength(5)] [MaxLength(100)] public string Description { get; set; }
+        public ListingDescription Description { get; set; }
 
         [Required]
         [Display(Name = "Category")]

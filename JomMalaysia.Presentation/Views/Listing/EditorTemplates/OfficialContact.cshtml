@@ -3,35 +3,35 @@
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Email)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Email, new {@class = "form-control contact_field", placeholder = "hello@email.com"})
-        @Html.ValidationMessageFor(m => m.Email)
+        <input asp-for="Email" class="form-control contact_field" placeholder="hello@email.com"/>
+        <span asp-validation-for="Email"></span>
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Website)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Website, new {@class = "form-control contact_field", placeholder = "Official Website / Facebook"})
-        @Html.ValidationMessageFor(m => m.Website)
+        <input asp-for="Website" class="form-control contact_field" placeholder="Official Website / Facebook"/>
+        <span asp-validation-for="Website"></span>
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.MobileNumber)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.MobileNumber, new {@class = "form-control contact_field", placeholder = "Phone"})
-        @Html.ValidationMessageFor(m => m.MobileNumber)
+        <input asp-for="MobileNumber" class="form-control contact_field" placeholder="Phone (601267938478)"/>
+        <span asp-validation-for="MobileNumber"></span>
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.OfficeNumber)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.OfficeNumber, new {@class = "form-control contact_field", placeholder = "Office"})
-        @Html.ValidationMessageFor(m => m.OfficeNumber)
+        <input asp-for="OfficeNumber" class="form-control contact_field" placeholder="Office (601267938478)"/>
+        <span asp-validation-for="OfficeNumber"></span>
     </div>
 </div>
 <div class="form-group row">
     <div class="col-md-3">@Html.DisplayNameFor(m => m.Fax)</div>
     <div class="col-md-9">
-        @Html.TextBoxFor(m => m.Fax, new {@class = "form-control contact_field", placeholder = "Fax"})
-        @Html.ValidationMessageFor(m => m.Fax)
+        <input asp-for="Fax" class="form-control contact_field" placeholder="Fax (60312345678)"/>
+        <span asp-validation-for="Fax"></span>
     </div>
 </div>

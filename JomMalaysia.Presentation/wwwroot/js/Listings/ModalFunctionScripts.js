@@ -1,9 +1,10 @@
 ﻿let validator;
 let to_validate_fields;
+let contact_fields;
 //init validator
 $(function () {
 
-    validator = $("form").validate();
+    validator = $("form").validate({debug: true});
     //populate category based on type
     $("#type-input").change(function() {
         let filterValue = $("#type-input option:selected").text().toLowerCase();
@@ -47,31 +48,62 @@ $(function () {
 
 // validte field function
 function validate(fields) {
+
     let isValid = validator.element(fields);
-    debugger
+
     if (isValid) {
         to_validate_fields += 1;
+    }
+}
+
+
+// save description
+function saveDescription() {
+    to_validate_fields = 0;
+    contact_fields = "";
+    let fields = document.querySelectorAll(".description_field");
+    fields.forEach(validate);
+    fields.forEach(generateString);
+
+    if (to_validate_fields === fields.length) {
+
+        $("#saved-description").val(contact_fields);
+        $("#modal-description").hide();
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     }
 }
 
 // save info on contact modal
 function saveContact() {
     to_validate_fields = 0;
+    contact_fields = "";
     let fields = document.querySelectorAll(".contact_field");
     fields.forEach(validate);
-    
+    fields.forEach(generateString);
+
     if (to_validate_fields === fields.length) {
+
+        $("#saved-contact").val(contact_fields);
         $("#modal-contact").hide();
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
     }
 }
 
+function generateString(fields) {
+    if (fields.value) {
+        contact_fields += fields.value + "; ";
+        debugger
+    }
+
+}
+
 function saveAddress() {
     to_validate_fields = 0;
     let fields = document.querySelectorAll(".add_field");
     fields.forEach(validate);
-    
+
     if (to_validate_fields === fields.length) {
         $("#modal-address").hide();
         $('body').removeClass('modal-open');
