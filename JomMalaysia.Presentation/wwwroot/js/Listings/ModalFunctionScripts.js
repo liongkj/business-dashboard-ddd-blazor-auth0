@@ -29,7 +29,7 @@ $(function () {
                     }else {
                         let $prevGroup, prevGroupName;
                         $.each(result, function () {
-                            debugger
+
                             categoryDropdown.prop("disabled",false);
                             if (prevGroupName !== this.group.name) {
                                 $prevGroup = $('<optgroup />').prop('label', this.group.name).appendTo('#category-dropdown');

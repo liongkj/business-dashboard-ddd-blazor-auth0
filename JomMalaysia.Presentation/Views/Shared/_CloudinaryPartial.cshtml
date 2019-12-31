@@ -6,7 +6,6 @@ function uploadImageWidget(folder, imageType){
         let isLogo = field.indexOf("logo")>=0;
         let isCover = field.indexOf("cover")>=0;
         let isAds = field.indexOf("ads")>=0;
-        console.log(".cloudinary-thumbnails."+field);
         cloudinary.openUploadWidget(
             {
                 cloudName: 'jomn9-com',
@@ -42,12 +41,25 @@ function uploadImageWidget(folder, imageType){
                     setLoading(false); 
                     if(!isAds){
                         $(".imageUrl."+ field).val(result.info.secure_url);
-                        $(".imageName."+ field).val(result.info.original_filename + "." + result.info.format);
-                                        
+                        $(".imageName."+ field).val(result.info.original_filename + "." + result.info.format);                  
                     }
                         }
             }
         )
+}
+
+function parseAdsImage(){
+    let adList = $(".image-thumbnail.listing-ads ul").children();
+   let adCount =0;
+    adList.each(function(){
+        let url = $(this).data("cloudinary").secure_url;
+        $(".ads-group").append('<input name="ListingImages.Ads[' + adCount +'].Url" type="hidden" ' +
+                                     'value="'+url+'">');
+        adCount+=1;
+        });
+    
+    
+                            
 }
         
    function setLoading(loading){
