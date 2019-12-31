@@ -124,9 +124,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="addressForm">
-                    @Html.EditorFor(x => x.Address)
-                </form>
+                @* <form id="addressForm"> *@
+                @Html.EditorFor(x => x.Address)
+                @* </form> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="saveAddress()" id="btnSaveAddress">Apply</button>
@@ -141,7 +141,7 @@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.ListingLogo)</div>
     <div class="col-sm-10 col-md-6">
-        <img src="@Model.ListingImages.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
+        <ul class="image-thumbnail listing-logo"></ul>
 
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
@@ -163,7 +163,7 @@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.CoverPhoto)</div>
     <div class="col-sm-10 col-md-6">
-        <img src="@Model.ListingImages.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
+        <ul class="image-thumbnail listing-cover"></ul>
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
                 @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
@@ -199,9 +199,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    @Html.EditorFor(x => x.Description)
-                </form>
+                @* <form> *@
+                @Html.EditorFor(x => x.Description)
+                @* </form> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="saveDescription()" id="btnSaveDescription">Apply</button>
@@ -233,9 +233,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    @Html.EditorFor(x => x.Contact)
-                </form>
+                @* <form> *@
+                @Html.EditorFor(x => x.Contact)
+                @* </form> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="saveContact()" id="btnSaveContact">Apply</button>
@@ -251,23 +251,20 @@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.Ads)</div>
     <div class="col-sm-10 col-md-6">
-        @for (var i = 0; i < Model.ListingImages.Ads.Count; i++)
-        {
-            <img src="@Model.ListingImages.Ads" class="img-thumbnail listing-logo" alt="placeholder"/>
 
-            <div class="form-group row">
-                <div class="input-group col-sm-10 col-md-12">
-                    @Html.HiddenFor(m => m.ListingImages.Ads[i].Url, new {@class = "form-control listing-logo imageUrl"})
+        <ul class="image-thumbnail listing-ads"></ul>
+        <div class="form-group row">
+            <div class="col-sm-10 col-md-12 input-group">
 
-                    <input type="text" class="form-control listing-logo imageName" id="detail-photo" disabled/>
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-secondary btnUpload listing-logo" onclick="uploadImageWidget('listing_images','listing-logo');">
-                            <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
-                        </button>
-                    </div>
+                <input type="text" placeholder="Listing ads does not support cropping. Please edit the image before uploading"
+                       class="form-control listing-ads imageName cloudinary-fileupload" data-cloudinary-field="image[]" multiple="multiple" id="detail-photo" disabled/>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-info btnUpload listing-ads" onclick="uploadImageWidget('listing_images','listing-ads');">
+                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                    </button>
                 </div>
             </div>
-        }
+        </div>
     </div>
 </div>
 
@@ -322,12 +319,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    @for (var i = 0; i < Model.OperatingHours.Count; i++)
-                    {
-                        @Html.EditorFor(x => x.OperatingHours[i])
-                    }
-                </form>
+                @* <form> *@
+                @for (var i = 0; i < Model.OperatingHours.Count; i++)
+                {
+                    @Html.EditorFor(x => x.OperatingHours[i])
+                }
+                @* </form> *@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary"
@@ -398,7 +395,7 @@
                               
                           })
                       })
-                  }
+                  }else{setLoading(false);}
       
     });
 </script>

@@ -15,6 +15,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Display(Name = "Business Name / Shop Name")]
         public string ListingName { get; set; }
 
+        [Display(Name = "Listing Description")]
         public ListingDescription Description { get; set; }
 
         [Required]

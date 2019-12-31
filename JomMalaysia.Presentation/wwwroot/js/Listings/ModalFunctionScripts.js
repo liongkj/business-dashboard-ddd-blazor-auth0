@@ -59,19 +59,16 @@ function validate(fields) {
 
 // save description
 function saveDescription() {
-    to_validate_fields = 0;
+
     contact_fields = "";
     let fields = document.querySelectorAll(".description_field");
-    fields.forEach(validate);
+
     fields.forEach(generateString);
-
-    if (to_validate_fields === fields.length) {
-
         $("#saved-description").val(contact_fields);
         $("#modal-description").hide();
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
-    }
+
 }
 
 // save info on contact modal
@@ -93,8 +90,7 @@ function saveContact() {
 
 function generateString(fields) {
     if (fields.value) {
-        contact_fields += fields.value + "; ";
-        debugger
+        contact_fields += fields.value + "\n";
     }
 
 }
