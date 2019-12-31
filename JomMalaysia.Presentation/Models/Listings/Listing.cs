@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using JomMalaysia.Framework.Helper;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Merchants;
-using JomMalaysia.Presentation.ViewModels.Listings;
-using Newtonsoft.Json;
-using static JomMalaysia.Framework.Constant.EnumConstant;
 
 namespace JomMalaysia.Presentation.Models.Listings
 {
@@ -18,7 +12,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         public CategoryPath Category { get; set; }
         public MerchantSummary Merchant { get; set; }
         public string ListingName { get; set; }
-        public string Description { get; set; }
+        public ListingDescription Description { get; set; }
         public List<string> Tags { get; set; }
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
