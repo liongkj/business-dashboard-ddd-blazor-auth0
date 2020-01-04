@@ -36,7 +36,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public ListingImageViewModel ListingImages { get; set; }
 
         [Display(Name = "Public Contact Info")]
-        public OfficialContact Contact { get; set; }
+        public OfficialContact OfficialContact { get; set; }
 
 
         [Required]
