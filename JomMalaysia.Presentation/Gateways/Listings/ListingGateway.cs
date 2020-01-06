@@ -63,6 +63,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 };
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth)
                     .ConfigureAwait(false);
+                
             }
             catch (GatewayException ex)
             {

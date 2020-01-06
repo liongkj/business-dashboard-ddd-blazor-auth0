@@ -36,8 +36,8 @@
                 </td>
                 <td>
                     <strong class="line-breaks">@($"{item.CategoryType}")</strong> <br/>
-                    @($"{item.Category.Category.CapitalizeOrConvertNullToEmptyString()}-" +
-                      $"{item.Category.Subcategory.CapitalizeOrConvertNullToEmptyString()}")
+                    @($"{item.Category.Category.categoryName.CapitalizeOrConvertNullToEmptyString()}-" +
+                      $"{item.Category.Subcategory.categoryName.CapitalizeOrConvertNullToEmptyString()}")
                 </td>
                 <td>@item.PublishStatus.Status</td>
                 <td>
