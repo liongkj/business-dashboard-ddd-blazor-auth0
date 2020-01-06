@@ -1,6 +1,10 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function setLoading(loading){
+    let submitButton = $(".submitButton");
+    let backButton = $(".cancelButton");
 
+    submitButton.attr("disabled",loading);
+    backButton.attr("disabled",loading);
+}
 // Write your Javascript code.
 $(document).ready(function () {
 

@@ -9,7 +9,7 @@ namespace JomMalaysia.Presentation.Models.Listings
     public class Listing
     {
         public string ListingId { get; set; }
-        public CategoryPath Category { get; set; }
+        public ListingCategory Category { get; set; }
         public MerchantSummary Merchant { get; set; }
         public string ListingName { get; set; }
         public ListingDescription Description { get; set; }
@@ -29,5 +29,17 @@ namespace JomMalaysia.Presentation.Models.Listings
         public Image ListingLogo { get; set; }
         public Image CoverPhoto { get; set; }
         public List<Image> ListingDetails { get; set; }
+    }
+
+    public class ListingCategory
+    {
+        public string CategoryId { get; set; }
+        public CategoryItem Category { get; set; }
+        public CategoryItem Subcategory { get; set; }
+    }
+
+    public class CategoryItem
+    {
+        public string categoryName { get; set; }
     }
 }

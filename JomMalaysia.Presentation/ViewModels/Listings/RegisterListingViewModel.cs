@@ -48,5 +48,6 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public IEnumerable<SelectListItem> CategoryTypeList { get; set; }
         public IEnumerable<SelectListItem> CategoryList { get; set; }
         public Dictionary<string, string> StateDictionary { get; set; }
+        public string ContactString { get; set; }
     }
 }

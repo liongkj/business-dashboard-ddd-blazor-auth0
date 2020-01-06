@@ -81,7 +81,7 @@ function saveContact() {
 
     if (to_validate_fields === fields.length) {
 
-        $("#saved-contact").val(contact_fields);
+        $("#textContactString").val(contact_fields);
         $("#modal-contact").hide();
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
@@ -90,7 +90,7 @@ function saveContact() {
 
 function generateString(fields) {
     if (fields.value) {
-        contact_fields += fields.value + "\n";
+        contact_fields += fields.value + ", ";
     }
 
 }

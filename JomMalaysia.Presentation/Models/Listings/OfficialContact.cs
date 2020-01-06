@@ -11,12 +11,12 @@ namespace JomMalaysia.Presentation.Models.Listings
         public string MobileNumber { get; set; }
 
         [DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
-        [RegularExpression(@"^((60(\s|-)?)|0)(((?!0)(?!2)(?!80)(?!81)\d{1,2})[1]?)(\s|-)?\d{2,4}(\s|-)?\d{4}$",
-            ErrorMessage = "Invalid Phone Number. (Remove + sign and start with 60)")]
-        [Display(Name = "Office")]
+        [Display(Name = "Office / Hotline")]
         public string OfficeNumber { get; set; }
 
-        [DataType(DataType.Url)] public string Website { get; set; }
+        [Url(ErrorMessage = "Invalid Website Url (https://example.com)")]
+        [Display(Name = "Web / Facebook / Insta", Prompt = "Invalid Website Url (https://example.com)")]
+        public string Website { get; set; }
 
         [DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
         [RegularExpression(@"^((60(\s|-)?)|0)(((?!0)(?!2)(?!80)(?!81)\d{1,2})[1]?)(\s|-)?\d{2,4}(\s|-)?\d{4}$",
