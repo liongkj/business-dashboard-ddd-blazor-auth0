@@ -159,6 +159,7 @@ namespace JomMalaysia.Presentation.Controllers
             vm.Address.StateList = init.Address.StateList;
             vm.OperatingHours = _operatingHours;
             vm.CategoryList = _categories;
+            vm.ContactString = vm.OfficialContact?.ToString();
             ViewBag.States = init.StateDictionary;
             return View(vm);
         }

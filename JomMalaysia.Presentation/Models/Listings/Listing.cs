@@ -16,7 +16,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         public List<string> Tags { get; set; }
         public Address Address { get; set; }
         public List<OperatingHour> OperatingHours { get; set; }
-        public OfficialContact Contact { get; set; }
+        public OfficialContact OfficialContact { get; set; }
         public ListingImages ListingImages { get; set; }
         public PublishStatus PublishStatus { get; set; }
         public CategoryType? CategoryType { get; set; }
