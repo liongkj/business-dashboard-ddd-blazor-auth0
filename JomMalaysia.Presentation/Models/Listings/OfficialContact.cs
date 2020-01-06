@@ -10,7 +10,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         [Display(Name = "Mobile Phone")]
         public string MobileNumber { get; set; }
 
-        [DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
+        [Phone(ErrorMessage = "Invalid Phone Number")]
         [Display(Name = "Office / Hotline")]
         public string OfficeNumber { get; set; }
 
