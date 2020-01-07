@@ -12,7 +12,9 @@ using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using System.Net;
+using AutoMapper;
 using JomMalaysia.Presentation.ViewModels.Common;
+using JomMalaysia.Presentation.ViewModels.Listings;
 
 namespace JomMalaysia.Presentation.Controllers
 {
@@ -24,26 +26,28 @@ namespace JomMalaysia.Presentation.Controllers
         private List<Merchant> Merchants { get; set; }
         private Boolean refresh = false;
 
+        private readonly IMapper _mapper;
+
         #region gateway helper
 
-        public MerchantController(IMerchantGateway gateway)
+        public MerchantController(IMerchantGateway gateway, IMapper mapper)
         {
             _gateway = gateway;
-
+            _mapper = mapper;
             Refresh();
         }
 
         async void Refresh()
         {
             if (Merchants != null && !refresh)
-                Merchants = await GetMerchants();
+                Merchants = await GetMerchants().ConfigureAwait(false);
             else
             {
                 Merchants = new List<Merchant>();
             }
         }
 
-        // GET: Listing
+        // GET: Merchant
         async Task<List<Merchant>> GetMerchants()
         {
             if (Merchants.Count > 0)
@@ -67,7 +71,7 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var merchants = await GetMerchants();
+            var merchants = await GetMerchants().ConfigureAwait(false);
 
             return View(merchants);
         }
@@ -75,12 +79,12 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            
             var vm = new RegisterMerchantViewModel();
-            
+
             return View(vm);
         }
-
+        
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<Tuple<int, string>> Create(RegisterMerchantViewModel vm)
         {
@@ -103,7 +107,7 @@ namespace JomMalaysia.Presentation.Controllers
 
             return SweetDialogHelper.HandleResponse(response);
         }
-        
+
         [HttpGet]
         public IActionResult Detail(string id)
         {
@@ -114,9 +118,39 @@ namespace JomMalaysia.Presentation.Controllers
             return PartialView("_Detail", vm);
         }
 
-        public IActionResult Edit()
+        [HttpGet]
+        public async Task<ViewResult> Edit(string merchantId)
         {
-            throw new NotImplementedException();
+            Merchant m;
+            try
+            {
+                m = await _gateway.Detail(merchantId).ConfigureAwait(false);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+
+            var vm = _mapper.Map<RegisterMerchantViewModel>(m);
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<Tuple<int, string>> Edit(RegisterMerchantViewModel vm, string merchantId)
+        {
+            if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+
+            try
+            {
+                var response = await _gateway.Edit(vm, merchantId).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK) refresh = true;
+                return SweetDialogHelper.HandleResponse(response);
+            }
+            catch (GatewayException e)
+            {
+                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+            }
         }
     }
 }

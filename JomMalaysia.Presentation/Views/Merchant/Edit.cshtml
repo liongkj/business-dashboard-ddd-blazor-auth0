@@ -1,24 +1,23 @@
 ﻿@model JomMalaysia.Presentation.ViewModels.Merchants.RegisterMerchantViewModel
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
+<!--modal-->
 @{
-    ViewData["Title"] = "Register New Merchant";
+    ViewData["Title"] = "Edit Merchant";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <!--HEADER-->
-
 <div class="form-group col-md-12 no-padding d-none d-md-block">
-    <button type="button" class="btn btn-success col-md-2" onclick="create()">Save</button>
-    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
+    <button type="submit" form="FormCreate" class="btn btn-success col-md-2 submitButton" id="btnMerchantSubmit">Save</button>
+    <button type="button" class="btn btn-danger col-md-2 cancelButton" onclick="window.history.go(-1); return false;">Back</button>
 </div>
+
 <!--Mobile Buttons-->
 <div class="form-group col-md-12 no-padding d-sm-block d-md-none">
     <div class="btn-group col-sm-12 no-padding" role="group">
         <button type="button" class="btn btn-primary">Action</button>
-        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
-            <a class="dropdown-item" onclick="$('#btnSubmit').click()">Save</a>
-            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Cancel</a>
+        <div id="dropdown-action-button" class="dropdown-menu col-sm-12" aria-labelledby="btnGroupDrop1" x-placement="bottom-start" style="display:none; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0; left: 0; will-change: transform;">
+
+            <a class="dropdown-item" onclick="window.history.go(-1); return false;">Back</a>
         </div>
         <div id="action-button" class="btn-group" role="group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
@@ -27,11 +26,12 @@
 </div>
 <!--END OF HEADER-->
 
-<form asp-controller="Merchant" asp-action="Create" id="FormCreate" class="form-m-gap-top" method="post">
+<form asp-controller="Merchant" asp-action="Edit" id="FormCreate"
+      class="form-m-gap-top" method="post">
+    <input type="hidden" asp-for="@Model.MerchantId" value="@Model.MerchantId"/>
+    <input type="hidden" asp-for="@Model.Listings" value="@Model.Listings"/>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     @Html.EditorFor(x=>x);
-   
-
 </form>
 
 @section Scripts {
@@ -40,23 +40,25 @@
     <script src="~/js/Listings/ModalFunctionScripts.js"></script>
 
     <script type="text/javascript">
-    function create() {
+    $("#FormCreate").submit(function (e) {
+              e.preventDefault();
         setLoading(true);
-        let form = $("#FormCreate");
-        let data = form.serialize();
-
-        if (form.valid()) {
+        let data = $(this).serialize();
+        let token = $('input[name="__RequestVerificationToken"]').val();
+        if ($(this).valid()) {
             $.ajax({
-                //TODO add [ValidateAntiForgeryToken]
-                url: "/Merchant/Create/",
+                url: "/Merchant/Edit/",
                 data: data,
                 type: "POST",
+                headers: {
+                    'RequestVerificationToken': token
+                },
                 success: function ({ item1, item2 }) {
                     if (item1 === 1) {
                         sweetAlert(
                             {
-                                title: "Merchant Registered",
-                                text: "The merchant is registered successfully.",
+                                title: "Merchant Updated",
+                                text: "Merchant Info Updated Successfully.",
                                 type: "success"
                             },
                             function () {
@@ -82,7 +84,7 @@
                 }
             });
         }
-    }
+    });
 
 </script>
 }

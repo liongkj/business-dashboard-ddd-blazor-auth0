@@ -107,6 +107,27 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             //handle exception
             return result;
         }
+        public async Task<IWebServiceResponse> Edit(RegisterMerchantViewModel vm, string merchangId)
+        {
+            IWebServiceResponse<Merchant> response;
+            try
+            {
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.MerchantDetail, merchangId);
 
+                const Method method = Method.PUT;
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<Merchant>(req, method, auth, vm)
+                    .ConfigureAwait(false);
+            }
+            catch (GatewayException ex)
+            {
+                throw ex;
+            }
+
+            return response;
+
+
+            //handle exception
+        }
     }
 }

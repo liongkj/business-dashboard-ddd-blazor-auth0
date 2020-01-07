@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
+using JomMalaysia.Presentation.Models.Merchants;
 using JomMalaysia.Presentation.ViewModels.Common;
 using JomMalaysia.Presentation.ViewModels.Listings;
+using JomMalaysia.Presentation.ViewModels.Merchants;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace JomMalaysia.Presentation.ViewModels
 {
@@ -22,6 +25,13 @@ namespace JomMalaysia.Presentation.ViewModels
             CreateMap<Address, AddressViewModel>();
 
             CreateMap<ListingImages, ListingImageViewModel>();
+
+            CreateMap<Merchant, RegisterMerchantViewModel>()
+                .ForPath(vm=>vm.CompanyRegistrationName,opt=>opt.MapFrom(m=>m.CompanyRegistration.RegistrationName))
+                .ForPath(vm=>vm.OldSsmId,opt=>opt.MapFrom(m=>m.CompanyRegistration.OldSsmId))
+                .ForPath(vm=>vm.SsmId,opt=>opt.MapFrom(m=>m.CompanyRegistration.SsmId));
+
+            CreateMap<Contact, ContactViewModel>();
         }
     }
 }

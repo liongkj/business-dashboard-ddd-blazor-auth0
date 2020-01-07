@@ -15,7 +15,7 @@ namespace JomMalaysia.Presentation.ViewModels.Merchants
             };
             Address = new AddressViewModel();
         }
-
+        public string MerchantId { get; set; }
         [Required]
         [Display(Name = "Company Registration Number (SSM)")]
         [RegularExpression(@"([\d]{12})", ErrorMessage = "Registration Number must be only digits")]
@@ -24,7 +24,8 @@ namespace JomMalaysia.Presentation.ViewModels.Merchants
 
         [Display(Name = "SSM Number (old)")]
         public string OldSsmId { get; set; }
-
+        
+        public List<string> Listings { get; set; }
 
         [Required]
         [Display(Name = "Company Registered Name")]

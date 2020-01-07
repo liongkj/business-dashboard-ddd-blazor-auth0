@@ -12,5 +12,6 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
         Task<List<Merchant>> GetMerchants();
         Task<IWebServiceResponse> Add(RegisterMerchantViewModel vm);
         Task<Merchant> Detail(string id);
+        Task<IWebServiceResponse> Edit(RegisterMerchantViewModel vm, string merchantId);
     }
 }
