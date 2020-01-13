@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         {
             ListingLogo = new Image();
             CoverPhoto = new Image();
-            Ads = new List<Image>();
+            Ads = new List<Image>(5) ;
         }
     }
 }

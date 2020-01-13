@@ -11,6 +11,7 @@ using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.Models.Categories;
+using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Common;
 using JomMalaysia.Presentation.ViewModels.Listings;
@@ -62,6 +63,7 @@ namespace JomMalaysia.Presentation.Controllers
                 CategoryTypeList = init.CategoryTypeList,
                 Address = init.Address
             };
+            vm.ListingImages.Ads.AddRange(Enumerable.Repeat(new Image(),5));
             ViewBag.States = init.StateDictionary;
             return View(vm);
         }

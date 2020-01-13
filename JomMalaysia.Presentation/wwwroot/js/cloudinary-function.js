@@ -24,7 +24,7 @@ $(function () {
                 minImageWidth: 100,
                 minImageHeight: 100,
                 showSkipCropButton: true,
-                thumbnails: ".image-thumbnail.listing-logo",
+                thumbnails: ".image-thumbnail",
                 thumbnailTransformation: "w_150,h_150,c_fill"
             },(error, result) => {
                 if (!error) {
@@ -66,8 +66,8 @@ $(function () {
                 minImageHeight: 100,
                 maxFiles: 5,
                 showSkipCropButton: true,
-                thumbnails: ".image-thumbnail.listing-cover",
-                thumbnailTransformation: "w_150,h_150,c_fill"
+                thumbnails: ".image-thumbnail",
+                thumbnailTransformation: "w_200,h_150,c_fill"
             },(error, result) => {
                 if (!error) {
                     
@@ -112,40 +112,29 @@ function uploadAdsWidget(no) {
             googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
             searchBySites: ["all", "unsplash.com", "freepik.com"],
             croppingShowDimensions: true,
-            multiple: true,
-            cropping: false,
-            croppingAspectRatio: 0.6,
+            cropping: "server",
             showCompleted: true,
             croppingShowBackButton: true,
             resourceType: ["image"],
             clientAllowedFormats: ["png", "jpg", "jpeg"],
-            minImageWidth: 100,
-            minImageHeight: 100,
-            maxFiles: 5,
+            minImageWidth: 250,
+            minImageHeight: 300,
+            
             showSkipCropButton: true,
-            thumbnailTransformation: "w_150,h_150,c_fill"
+            thumbnailTransformation: "w_250,h_300,c_fill"
         },(error, result) => {
-            if (!error) {
-
-            }
-
             if (result.event === "upload-added") {
                 setLoading(true);
             }
             if (!error && result && result.event === "success") {
                 setLoading(false);
-                $("#open_pre_widget1").on("click", function() {
-                    preWidget.open(null, {files: [result.info.secure_url]});
-                });
-
-
+                $(".ads-thumbnail.listing-ads-"+no).attr("src",result.info.secure_url);
+                
             }
         }
     );
 
-    $("#open_pre_widget1").on("click", function() {
-        preWidget.open(null, {files: [result.info.secure_url]});
-    });
+  
 }
 
 function parseAdsImage() {
