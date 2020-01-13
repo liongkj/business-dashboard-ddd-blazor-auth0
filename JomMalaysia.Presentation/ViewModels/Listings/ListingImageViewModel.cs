@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,13 +12,13 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
     {
         [DisplayName("Logo")] public Image ListingLogo { get; set; }
         [DisplayName("Cover Photo")] public Image CoverPhoto { get; set; }
-        [DisplayName("Ads Image")] public List<Image> Ads { get; }
+        [DisplayName("Ads Image")] public List<Image> Ads { get; set; }
 
         public ListingImageViewModel()
         {
             ListingLogo = new Image();
             CoverPhoto = new Image();
-            Ads = new List<Image>();
+            Ads = new List<Image>(5) ;
         }
     }
 }

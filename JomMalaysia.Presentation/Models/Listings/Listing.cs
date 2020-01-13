@@ -29,7 +29,7 @@ namespace JomMalaysia.Presentation.Models.Listings
     {
         public Image ListingLogo { get; set; }
         public Image CoverPhoto { get; set; }
-        public List<Image> ListingDetails { get; set; }
+        public List<Image> Ads { get; set; }
     }
 
     public class ListingCategory
