@@ -38,7 +38,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Display(Name = "Public Contact Info")]
         public OfficialContact OfficialContact { get; set; }
 
-        [Display(Name = "Featured")]
+        [Display(Name = "Featured Listing")]
         public bool IsFeatured { get; set; } = false;
 
         [Required]
