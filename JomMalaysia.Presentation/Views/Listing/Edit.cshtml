@@ -140,41 +140,23 @@
 </div>
 
 <legend>Public Info</legend>
-@*logo*@
+@* Cover Photo *@
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.ListingLogo)</div>
     <div class="col-sm-10 col-md-6">
-        <ul class="image-thumbnail listing-logo"></ul>
-        <img src="@Model.ListingImages.ListingLogo.Url" class="img-thumbnail listing-logo" alt="placeholder">
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
-                @Html.HiddenFor(m => m.ListingImages.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl"})
-
-                <input type="text" class="form-control listing-logo imageName" id="logo-photo" disabled/>
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-info btnUpload listing-logo" onclick="uploadLogoWidget('listing_images','listing-logo');">
-                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
-
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* Cover Photo *@
-<div class="form-group row">
-    <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.CoverPhoto)</div>
-    <div class="col-sm-10 col-md-6">
-        <ul class="image-thumbnail listing-cover"></ul>
-        <div class="form-group row">
-            <div class="input-group col-sm-10 col-md-12">
+                <img src="@Model.ListingImages.ListingLogo.Url" width="100" height="100" class="listing-logo img-thumbnail" alt="">
+                <img src="@Model.ListingImages.CoverPhoto.Url" width="300" height="250" class="listing-cover img-thumbnail" alt="">
                 @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
-                <img src="@Model.ListingImages.CoverPhoto.Url" class="img-thumbnail listing-cover" alt="placeholder">
-                <input type="text" class="form-control imageName listing-cover" id="cover-photo" disabled/>
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-info btnUpload listing-cover" onclick="uploadCoverWidget('listing_images','listing-cover');">
-                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
+
+                <div class="input">
+                    <button type="button" class="cloudinary-button btnUpload listing-logo" onclick="uploadLogoWidget();">
+                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>Upload Logo
+                    </button>
+                    <button type="button" class="cloudinary-button btnUpload listing-cover" onclick="uploadCoverWidget();">
+                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>Upload Cover
                     </button>
                 </div>
             </div>
@@ -256,24 +238,24 @@
 
 <div class="form-group row">
     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.ListingImages.Ads)</div>
-    <div class="col-sm-10 col-md-6">
-        @foreach (var ads in Model.ListingImages.Ads)
+    <div class="col-sm-10 col-md-8">
+        @for (var i = 0; i < Model.ListingImages.Ads.Count; i++)
         {
-            <img src="@ads.Url" class="img-thumbnail listing-ads" alt="placeholder">
-        }
-
-        <ul class="image-thumbnail listing-ads"></ul>
-        <div class="form-group row">
-            <div class="col-sm-10 col-md-12 input-group ads-group">
-                <input type="text" placeholder="Listing ads does not support cropping."
-                       class="form-control listing-ads imageName" id="detail-photo" disabled/>
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-info btnUpload listing-ads" onclick="uploadAdsWidget('listing_images','listing-ads');">
-                        <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
-                    </button>
+            <div class="container">
+                <div class="row mt-3 align-items-center">
+                    <div class="col-md-6">
+                        <img src="@Model.ListingImages.Ads[i].Url" width="250" height="300" class="ads-thumbnail listing-ads-@(i)" alt="placeholder">
+                        <input type="hidden" asp-for="ListingImages.Ads[i].Url" class="listing-ads-@(i) image-url"/>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" class="cloudinary-button btnUpload listing-ads" onclick="uploadAdsWidget(@i);">
+                            <i class="fa fa-upload fa-fw" aria-hidden="true"></i>
+                            Listing/Product Image @(i + 1)
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 

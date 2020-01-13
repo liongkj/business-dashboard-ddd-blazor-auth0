@@ -38,7 +38,8 @@ $(function () {
                     setLoading(false);
 
                     $(".imageUrl.listing-logo").val(result.info.secure_url);
-                    $(".imageName.listing-logo").val(result.info.original_filename + "." + result.info.format);
+                    debugger
+                    $(".img-thumbnail.listing-logo").val(result.info.original_filename + "." + result.info.format);
 
                 }
             }
@@ -80,7 +81,7 @@ $(function () {
                     setLoading(false);
                    
                         $(".imageUrl.listing-cover").val(result.info.secure_url);
-                        $(".imageName.listing-cover").val(result.info.original_filename + "." + result.info.format);
+                        $(".img-thumbnail.listing-cover").val(result.info.original_filename + "." + result.info.format);
                     
                 }
             }
@@ -129,7 +130,7 @@ function uploadAdsWidget(no) {
             if (!error && result && result.event === "success") {
                 setLoading(false);
                 $(".ads-thumbnail.listing-ads-"+no).attr("src",result.info.secure_url);
-                
+                $(".image-url.listing-ads-"+no).val(result.info.secure_url);
             }
         }
     );

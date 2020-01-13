@@ -12,7 +12,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
     {
         [DisplayName("Logo")] public Image ListingLogo { get; set; }
         [DisplayName("Cover Photo")] public Image CoverPhoto { get; set; }
-        [DisplayName("Ads Image")] public List<Image> Ads { get; }
+        [DisplayName("Ads Image")] public List<Image> Ads { get; set; }
 
         public ListingImageViewModel()
         {

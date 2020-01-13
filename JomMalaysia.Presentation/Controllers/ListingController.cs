@@ -76,11 +76,19 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
+                //process operating hour
                 var OperatingHours = (from days in vm.OperatingHours
                     where days.Enabled
                     select new OperatingHourViewModel
                         {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
                 vm.OperatingHours = OperatingHours;
+                //process images
+                var adsList = new List<Image>();
+                adsList.AddRange(vm.ListingImages.Ads.Where(ad => !String.Equals(ad.Url,
+                        "https://res.cloudinary.com/jomn9-com/image/upload/c_scale,w_200/v1575257964/placeholder_xtcpy8.jpg"))
+                    .Select(ad => new Image(ad.Url)));
+
+                vm.ListingImages.Ads = adsList;
                 var response = await _gateway.Add(vm).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
@@ -140,7 +148,15 @@ namespace JomMalaysia.Presentation.Controllers
             var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == m.CategoryType)
                 .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);
-
+            
+            //ads image
+            var _adsCount = 5 - vm.ListingImages.Ads.Count;
+            var _ads = vm.ListingImages.Ads;
+            for (var i = 0; i < _adsCount; i++)
+            {
+                _ads.Add(new Image());
+            }
+            
             foreach (var category in cats)
             {
                 var groups = new SelectListGroup {Name = category.Key};
