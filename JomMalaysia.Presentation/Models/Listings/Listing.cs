@@ -19,6 +19,7 @@ namespace JomMalaysia.Presentation.Models.Listings
         public OfficialContact OfficialContact { get; set; }
         public ListingImages ListingImages { get; set; }
         public PublishStatus PublishStatus { get; set; }
+        public bool IsFeatured { get; set; }
         public CategoryType? CategoryType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ModifiedAt { get; set; }

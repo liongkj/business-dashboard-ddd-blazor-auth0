@@ -38,6 +38,8 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Display(Name = "Public Contact Info")]
         public OfficialContact OfficialContact { get; set; }
 
+        [Display(Name = "Featured")]
+        public bool IsFeatured { get; set; } = false;
 
         [Required]
         [Display(Name = "Merchant")]
