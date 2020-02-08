@@ -193,6 +193,12 @@ namespace JomMalaysia.Presentation.Controllers
                     select new OperatingHourViewModel
                         {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
                 vm.OperatingHours = OperatingHours;
+                var adsList = new List<Image>();
+                adsList.AddRange(vm.ListingImages.Ads.Where(ad => !String.Equals(ad.Url,
+                        "https://res.cloudinary.com/jomn9-com/image/upload/c_scale,w_200/v1575257964/placeholder_xtcpy8.jpg"))
+                    .Select(ad => new Image(ad.Url)));
+
+                vm.ListingImages.Ads = adsList;
                 var response = await _gateway.Edit(vm, listingId).ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
