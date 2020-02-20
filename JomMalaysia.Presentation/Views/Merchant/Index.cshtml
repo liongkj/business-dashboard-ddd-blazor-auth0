@@ -31,8 +31,17 @@
                     </td>
                     <td>@item?.CompanyRegistration?.RegistrationName</td>
                     <td>@item.Address.ToString()</td>
-                    <td>
-                        <a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId" @(item.Listings.Count > 0 ? "" : "disabled")></a>@item.Listings.Count</td>
+                <td>
+                   @if (item.Listings.Count > 0)
+                   {
+                       <a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId" )></a>
+                       @item.Listings.Count
+                   }
+                   else
+                   {
+                       <a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId"  disabled)></a>@item.Listings.Count
+                   }
+                      </td>  
                     <td>@item.Contacts[0].ToString()</td>
                     <td>
                         <div class="btn-group" role="group">

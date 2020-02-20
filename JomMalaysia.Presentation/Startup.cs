@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace JomMalaysia.Presentation
@@ -28,7 +29,7 @@ namespace JomMalaysia.Presentation
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -110,7 +111,7 @@ namespace JomMalaysia.Presentation
                         }
                     };
                 });
-
+            
             services.AddAuthorization(
                 options =>
                 {
@@ -119,27 +120,25 @@ namespace JomMalaysia.Presentation
                             "https://jomn9.auth0.com/")));
                 }
             );
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddHttpContextAccessor();
 
             services.AddSingleton(Configuration);
             services.AddSingleton(new MapperConfiguration(cfg => { cfg.AddProfile<PresentationProfile>(); })
                 .CreateMapper());
 
+            
 
-            // Now register our services with Autofac container.
-            var builder = new ContainerBuilder();
+        }
+        public void ConfigureContainer(ContainerBuilder builder) {
+          
+            // Use and configure Autofac
             builder.RegisterModule(new PresentationModule());
             builder.RegisterModule(new FrameworkModule());
-            builder.Populate(services);
-            var container = builder.Build();
-            // Create the IServiceProvider based on the container.
-            return new AutofacServiceProvider(container);
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -151,18 +150,30 @@ namespace JomMalaysia.Presentation
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
+          
             app.UseStaticFiles();
             app.UseAuthentication();
+           
             app.UseCookiePolicy();
-
-            app.UseMvc(routes =>
+            app.UseRouting()
+                ; app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages()
+                    ;
             });
+            
+            // app.UseMvc(routes =>
+            // {
+            //     routes.MapRoute(
+            //         name: "default",
+            //         template: "{controller=Home}/{action=Index}/{id?}");
+            // });
 
         }
     }
