@@ -15,63 +15,33 @@
     <!-- add whatever model data not in fields.-->
     @Html.HiddenFor(m => m.CategoryId)
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @* <div class="form-group row"> *@
-    @*     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryThumbnail)</div> *@
-    @*     @Html.Hidden("CategoryImageUrl", @Model.CategoryThumbnail.Url, new {@class = "form-control", id = "imageUrl"}) *@
-    @*     <div class="col-sm-10 col-md-6"> *@
-    @*         <figure class="figure"> *@
-    @*             <img src="@Model.CategoryThumbnail.Url" class="figure-img img-fluid rounded" id="thumbnail-preview" alt="@Model.CategoryCode-logo"> *@
-    @* *@
-    @*             <div class="input-group-append"> *@
-    @*                 <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Replace</button> *@
-    @*                 @Html.ValidationMessageFor(m => m.CategoryThumbnail.Url) *@
-    @*             </div> *@
-    @*         </figure> *@
-    @*     </div> *@
-    @* *@
-    @* </div> *@
-
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryCode, new {@class = "form-control"})
-            @Html.ValidationMessageFor(m => m.CategoryCode)
-
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryName)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryName, new {@class = "form-control"})
-            @Html.ValidationMessageFor(m => m.CategoryName)
-
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameMs)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryNameMs, new {@class = "form-control"})
-            @Html.ValidationMessageFor(m => m.CategoryNameMs)
-
-        </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryNameZh)</div>
-        <div class="col-sm-10 col-md-6">
-            @Html.TextBoxFor(m => m.CategoryNameZh, new {@class = "form-control"})
-            @Html.ValidationMessageFor(m => m.CategoryNameZh)
-
-        </div>
-    </div>
-    
+    @Html.EditorForModel()
     @* <button href="@Url.Action("Create", "Category", new {item.CategoryId, parentName = item.CategoryName})" *@
     @*                                class="btn btn-success form-control addButton"  *@
     @*                                data-toggle="tooltip" data-placement="bottom" data-original-title="Create subcategory"><i class="fa fa-plus" aria-hidden="true"></i> Subcategory *@
     @*                                  *@
     @*                             </button> *@
 </form>
-
+@* Contacts Modal *@
+<div class="modal" id="modal-subcategory">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Subcategory Info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.EditorFor(x => x)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="saveContact()" id="btnSaveContact">Apply</button>
+                <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @if (Model.LstSubCategory.Count > 0)
 {
     <tr class="subcategory-bg subcategory collapse">
@@ -100,12 +70,15 @@
                         <td>@subitem.CategoryNameMs</td>
                         <td>@subitem.CategoryNameZh</td>
                         <td>
-                            <a href="@Url.Action("Edit", "Category", new {subitem.CategoryId})" class="btn btn-outline-info col-md-4">
+                            <a data-toggle="modal" data-target="#modal-subcategory" 
+                            data-id="@subitem.CategoryId"
+                               @* href="@Url.Action("Edit", "Category", new {subitem.CategoryId})"  *@
+                               class="btn btn-outline-info col-md-4">
                                 <span>
                                     <i class="fa fa-edit"></i>
                                 </span>
                             </a>
-                            <!--TODO KJ - link to delete subcategory controller -- get subcategory id using subitem.CategoryId -->
+                            
                             <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1 deleteButton">
                                 <span>
                                     <i class="fa fa-trash"></i>
@@ -124,51 +97,82 @@
 
 }
          
+         
+         
+         
 @section Scripts{
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    <!-- cloudinary api -->
-    <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
-    <script>cloudinary.setCloudName("jomn9-com")</script>
-
     <script type="text/javascript">
          
-            let uploadImageWidget = cloudinary.createUploadWidget(
-                {
-                    ucloudname: 'jomn9-com',
-                    uploadPreset: 'ox3azzqe',
-                    apiKey: '731121621859821',
-                    folder: 'category_thumbnail',
-                    sources: ["local", "url", "image_search"],
-                    googleApiKey: 'AIzaSyCZseAlp_Rd9CxaJtOQBVKvpkBl8gHiXvk',
-                    searchBySites: ["all", "cloudinary.com", "unsplash.com", "freepik.com"],
-                    searchByRights: true,
-                    cropping: true,
-                    croppingAspectRatio: 1,
-                    resourceType: ["image"],
-                    clientAllowedFormats: ["png", "jpg", "jpeg"],
-                    minImageWidth: 100,
-                    minImageHeight: 100,
-                    autoMinimize: true,
-                    showSkipCropButton: true,
-    
-    
-                }, (error, result) => {
-                    if (!error && result && result.event === "success") {
-                        console.log("Image uploaded");
-                        $("#imageUrl").val(result.info.url); 
-                        $("#thumbnailUrl").val(result.info.thumbnail_url);
-                       $("#thumbnail-preview").attr("src",result.info.url)
-                    }
-                }
-            );
-    
-            $("#btnUpload").on("click", function () {
-                uploadImageWidget.open();
-            });
-    
-
+        $(function () {
+                        $('#modal-subcategory').on('show.bs.modal', function (e) {
+                            let id = e.relatedTarget.dataset.id;
+                            let $modal = $(this);
+                             
+                            $.ajax({
+                                cache: false,
+                                type: 'GET',
+                                url: '/Category/Detail/' + id,
+                                success: function (data) {
+                                    debugger
+                                    $modal.find('.modal-body').html(data);
+                                    
+                                },
+                                fail: function (error) {
+                                    $modal.hide();
+                                    swal("Oops",error,"error");
+                                }
+                            });
+                        });
+                    });
+                    $(function () {
+                        $('#modal-subcategory').on('hidden.bs.modal', function () {
+                           
+                            $(this).find('.modal-body').empty();
+                        });
+                    });
+    //Delete category function
+        function deleteCategory(catId, catName) {    
+                            swal({
+                                title: "Are you sure?",
+                                text: "Are you sure that you want to delete " + catName + "?",
+                                type: "warning",
+                                showCancelButton: true,
+                                closeOnConfirm: false,
+                                confirmButtonText: "Yes",
+                                confirmButtonColor: "#ec6c62"
+                            },
+                                function () {
+                                    $.ajax({
+                                        //TODO add [ValidateAntiForgeryToken]
+                                        url: "/Category/ConfirmDelete/",
+                                        data: {
+                                            "CategoryId": catId
+                                        },
+                                        type: "POST",
+                                         success: (function ({ item1, item2 }) {
+                                             debugger
+                                            if (item1 === 1) {
+                                                sweetAlert({
+                                                    title: "Deleted",
+                                                    text: catName + " has been deleted successfully!",
+                                                    type: "success"
+                                                },
+                                                    function () {
+                                                        window.location.href = '/category';
+                                                    });
+                                            }
+                                              else {
+                                                swal("Oops",item2,"error");
+                                              }
+                                        }), error: (function () {
+                                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                                        })
+                                    })
+                                });
+                        }
 
         function editCategory() {
             debugger;

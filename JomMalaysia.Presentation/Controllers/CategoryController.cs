@@ -121,11 +121,23 @@ namespace JomMalaysia.Presentation.Controllers
 
             return SweetDialogHelper.HandleResponse(response);
         }
-
+        
         [HttpGet]
-        public async Task<ViewResult> Edit(string categoryId)
+        public IActionResult Detail(string id)
         {
-            var vm = await _gateway.GetCategory(categoryId).ConfigureAwait(false);
+            var vm = new Category
+            {
+                CategoryId = id
+            };
+            return PartialView("_Detail", vm);
+        }
+            
+    
+        
+        [HttpGet]
+        public async Task<ViewResult> Edit(string id)
+        {
+            var vm = await _gateway.GetCategory(id).ConfigureAwait(false);
             var categories = await GetCategories().ConfigureAwait(false);
             vm.LstSubCategory = new List<Category>();
             foreach (var category in categories)
@@ -136,7 +148,7 @@ namespace JomMalaysia.Presentation.Controllers
             }
             return View(vm);
         }
-
+        
         [HttpPost]
         public async Task<Tuple<int, string>> Edit(NewCategoryViewModel category, string categoryId)
         {
