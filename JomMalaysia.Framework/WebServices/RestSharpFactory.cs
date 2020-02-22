@@ -44,7 +44,7 @@ namespace JomMalaysia.Framework.WebServices
         public static IRestClient ConstructClient(string baseUrl, string accesstoken = null)
         {
             var client = new RestClient(baseUrl);
-
+            client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
             client.ClearHandlers();
             if (accesstoken != null) client.AddDefaultHeader("Authorization", $"Bearer {accesstoken}");
             var handler = NewtonsoftJsonSerializer.Default;
@@ -53,6 +53,9 @@ namespace JomMalaysia.Framework.WebServices
             client.AddHandler("text/x-json", () => handler);
             client.AddHandler("text/javascript", () => handler);
             client.AddHandler("*+json", () => handler);
+            //bypass ssl validation check by using RestClient object
+            
+           
             client.Timeout = 300000; // 5 minutes
             return client;
         }

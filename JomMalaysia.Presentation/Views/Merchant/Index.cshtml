@@ -39,7 +39,8 @@
                    }
                    else
                    {
-                       <a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId"  disabled)></a>@item.Listings.Count
+                       <a asp-controller="Listing" asp-action="GetByMerchant" asp-route-id="@item.MerchantId"
+                          disabled)></a>@item.Listings.Count
                    }
                       </td>  
                     <td>@item.Contacts[0].ToString()</td>
@@ -53,7 +54,8 @@
                                asp-action="Edit" asp-route-MerchantId="@item.MerchantId">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>
-                            <a type="button" class="btn btn-danger form-control" onclick="deleteMerchant('@item.MerchantId','@item?.CompanyRegistration?.RegistrationName')">
+                            <a type="button" class="btn btn-danger form-control"
+                               onclick="deleteMerchant('@item.MerchantId','@item?.CompanyRegistration?.RegistrationName')">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
                         </div>

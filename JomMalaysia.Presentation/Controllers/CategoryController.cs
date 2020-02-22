@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Razor.Tokenizer.Symbols;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
@@ -84,9 +85,7 @@ namespace JomMalaysia.Presentation.Controllers
                 }
 
                 vm.Add(c);
-            }
-
-            return View(vm);
+            } return View(vm);
         }
 
         [HttpGet]
@@ -126,9 +125,16 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public async Task<ViewResult> Edit(string categoryId)
         {
-            var category = await _gateway.GetCategory(categoryId).ConfigureAwait(false);
-
-            return View(category);
+            var vm = await _gateway.GetCategory(categoryId).ConfigureAwait(false);
+            var categories = await GetCategories().ConfigureAwait(false);
+            vm.LstSubCategory = new List<Category>();
+            foreach (var category in categories)
+            {
+                if (!category.IsCategory())
+                    if(category.CategoryPath.Category == vm.CategoryName)
+                        vm.LstSubCategory.Add(category);
+            }
+            return View(vm);
         }
 
         [HttpPost]

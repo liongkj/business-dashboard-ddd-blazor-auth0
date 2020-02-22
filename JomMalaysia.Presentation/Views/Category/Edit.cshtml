@@ -16,21 +16,21 @@
     @Html.HiddenFor(m => m.CategoryId)
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group row">
-        <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryThumbnail)</div>
-        @Html.Hidden("CategoryImageUrl", @Model.CategoryThumbnail.Url, new {@class = "form-control", id = "imageUrl"})
-        <div class="col-sm-10 col-md-6">
-            <figure class="figure">
-                <img src="@Model.CategoryThumbnail.Url" class="figure-img img-fluid rounded" id="thumbnail-preview" alt="@Model.CategoryCode-logo">
-
-                <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Replace</button>
-                    @Html.ValidationMessageFor(m => m.CategoryThumbnail.Url)
-                </div>
-            </figure>
-        </div>
-
-    </div>
+    @* <div class="form-group row"> *@
+    @*     <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryThumbnail)</div> *@
+    @*     @Html.Hidden("CategoryImageUrl", @Model.CategoryThumbnail.Url, new {@class = "form-control", id = "imageUrl"}) *@
+    @*     <div class="col-sm-10 col-md-6"> *@
+    @*         <figure class="figure"> *@
+    @*             <img src="@Model.CategoryThumbnail.Url" class="figure-img img-fluid rounded" id="thumbnail-preview" alt="@Model.CategoryCode-logo"> *@
+    @* *@
+    @*             <div class="input-group-append"> *@
+    @*                 <button type="button" class="btn btn-secondary" id="btnUpload" onclick="uploadImageWidget.open();">Replace</button> *@
+    @*                 @Html.ValidationMessageFor(m => m.CategoryThumbnail.Url) *@
+    @*             </div> *@
+    @*         </figure> *@
+    @*     </div> *@
+    @* *@
+    @* </div> *@
 
     <div class="form-group row">
         <div class="col-sm-2 col-md-3 col-form-label">@Html.DisplayNameFor(m => m.CategoryCode)</div>
@@ -64,9 +64,66 @@
 
         </div>
     </div>
+    
+    @* <button href="@Url.Action("Create", "Category", new {item.CategoryId, parentName = item.CategoryName})" *@
+    @*                                class="btn btn-success form-control addButton"  *@
+    @*                                data-toggle="tooltip" data-placement="bottom" data-original-title="Create subcategory"><i class="fa fa-plus" aria-hidden="true"></i> Subcategory *@
+    @*                                  *@
+    @*                             </button> *@
 </form>
 
+@if (Model.LstSubCategory.Count > 0)
+{
+    <tr class="subcategory-bg subcategory collapse">
+        <td colspan="6" class="no-padding">
+            <br/>
+            <table id="subtabledata" class="table table-hover">
+<thead class="table-primary">
+            <tr>
+                
+                <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th>
+                <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
+                <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
+                <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
+                
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+                <tbody>
 
+                @foreach (var subitem in Model.LstSubCategory)
+                {
+                    <tr>
+                        
+                        <td>@subitem.CategoryCode</td>
+                        <td>@subitem.CategoryName</td>
+                        <td>@subitem.CategoryNameMs</td>
+                        <td>@subitem.CategoryNameZh</td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Category", new {subitem.CategoryId})" class="btn btn-outline-info col-md-4">
+                                <span>
+                                    <i class="fa fa-edit"></i>
+                                </span>
+                            </a>
+                            <!--TODO KJ - link to delete subcategory controller -- get subcategory id using subitem.CategoryId -->
+                            <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1 deleteButton">
+                                <span>
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+
+
+                }
+
+                </tbody>
+            </table>
+        </td>
+    </tr>
+
+}
+         
 @section Scripts{
 
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

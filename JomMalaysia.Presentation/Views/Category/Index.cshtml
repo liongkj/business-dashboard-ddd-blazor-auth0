@@ -25,11 +25,12 @@
             <!--remain id as this, else change name in _LayoutIndex too-->
             <thead class="table-primary">
             <tr>
-                <th scope="col" style="width:3%"></th>
+                
                 <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th>
                 <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
                 <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
                 <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
+                 <th scope="col">Subcategories</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -39,91 +40,33 @@
             @foreach (var item in Model)
             {
                 <tr style="cursor:pointer;" data-toggle="collapse" data-target="collapse-next-subcategory" class="parent-category" data-type="@item.CategoryType">
-                    <td>
-                        @if (item.LstSubCategory.Count > 0)
-                        {
-                            <a class="col-md-2 ">
-                                <span>
-                                    <i class="btnSubcategory fa fa-angle-down big-icon"></i>
-                                </span>
-                            </a>
-                        }
-                    </td>
-                    <td><span class="badge badge-dark">@(item.LstSubCategory.Count)</span>&nbsp; @item.CategoryCode</td>
+                    
+                   <td>@item.CategoryCode</td>
                     <td>@item.CategoryName</td>
                     <td>@item.CategoryNameMs</td>
                     <td>@item.CategoryNameZh</td>
                     <td>
-                        <a href="@Url.Action("Create", "Category", new {item.CategoryId, parentName = item.CategoryName})"
-                           class="btn btn-success col-md-3 addButton"
-                           data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Create subcategory">
-                            <span>
-                                <i class="fa fa-plus"></i>
-                            </span>
-                        </a>
-
-                        <a href="@Url.Action("Edit", "Category", new {item.CategoryId})"
-                           class="btn btn-info col-md-3 deleteButton"
-                           data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Edit @item.CategoryName">
-                            <span>
-                                <i class="fa fa-edit"></i>
-                            </span>
-                        </a>
-
-                        <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')"
-                           id="btnDelete" class="btn btn-danger col-md-3 deleteButton"
-                           data-toggle="tooltip" data-placement="bottom" title="" data-original-title="delete @item.CategoryName">
-                            <span>
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </a>
+                        <span class="badge badge-dark">@(item.LstSubCategory.Count)</span>
                     </td>
-                </tr>
-                @if (item.LstSubCategory.Count > 0)
-                {
-                    <tr class="subcategory-bg subcategory collapse">
-                        <td colspan="6" class="no-padding">
-                            <br/>
-                            <table id="subtabledata" class="table table-hover">
+                    <td class="btn-group" role="group">
+                       
+                            <a href="@Url.Action("Edit", "Category", new {item.CategoryId})"
+                               class="btn btn-info  form-control deleteButton" type="button"
+                               data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Edit @item.CategoryName">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </a>
 
-                                <tbody>
-                                @{ var count1 = 0; }
-
-                                @foreach (var subitem in item.LstSubCategory)
-                                {
-                                    <tr>
-                                        <td>
-
-                                        </td>
-                                        <td>@subitem.CategoryCode</td>
-                                        <td>@subitem.CategoryName</td>
-                                        <td>@subitem.CategoryNameMs</td>
-                                        <td>@subitem.CategoryNameZh</td>
-                                        <td>
-                                            <!--TODO KJ - link to edit subcategory controller -- get subcategory id using subitem.CategoryId -->
-                                            <a href="@Url.Action("Edit", "Category", new {subitem.CategoryId})" class="btn btn-outline-info col-md-4">
-                                                <span>
-                                                    <i class="fa fa-edit"></i>
-                                                </span>
-                                            </a>
-                                            <!--TODO KJ - link to delete subcategory controller -- get subcategory id using subitem.CategoryId -->
-                                            <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1 deleteButton">
-                                                <span>
-                                                    <i class="fa fa-trash"></i>
-                                                </span>
-                                            </a>
-                                        </td>
-                                    </tr>
-
-                                    count1 += 1;
-                                }
-
-                                </tbody>
-                            </table>
+                            <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')"
+                               class="btn btn-danger form-control deleteButton" type="button"
+                               data-toggle="tooltip" data-placement="bottom" title="" data-original-title="delete @item.CategoryName">
+                                <i class="fa fa-trash" aria-hidden="true"></i>
+                            </a>
                         </td>
-                    </tr>
+                    
+                </tr>
+                
                 }
-            }
+            
 
             </tbody>
         </table>
@@ -214,7 +157,7 @@
                                           else {
                                             swal("Oops",item2,"error");
                                           }
-                                    }), error: (function (data) {
+                                    }), error: (function () {
                                         swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                                     })
                                 })

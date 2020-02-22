@@ -13,7 +13,7 @@ namespace JomMalaysia.Presentation.Models.Categories
 
 
         [StringLength(10, ErrorMessage = "{0} should not exceed 10 characters.")]
-        [Display(Name = "Category Code")]
+        [Display(Name = "Code")]
         public string CategoryCode { get; set; }
 
         [Required]

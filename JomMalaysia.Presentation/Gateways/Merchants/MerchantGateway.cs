@@ -18,7 +18,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
-        private readonly string auth;
+        private readonly string _auth;
 
         public MerchantGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
             IApiBuilder apiBuilder)
@@ -26,7 +26,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             _webServiceExecutor = webServiceExecutor;
             _authorizationManagers = authorizationManagers;
             _apiBuilder = apiBuilder;
-            auth = _authorizationManagers.accessToken;
+            _auth = _authorizationManagers.accessToken;
         }
 
         public async Task<IWebServiceResponse> Add(RegisterMerchantViewModel vm)
@@ -37,7 +37,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.Merchant);
 
                 var method = Method.POST;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, auth, vm)
+                response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, _auth, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -59,7 +59,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             {
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
                 var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method, auth)
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method, _auth)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -88,7 +88,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.MerchantDetail, id);
                 const Method method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Merchant>>(req, method, auth)
+                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Merchant>>(req, method, _auth)
                     .ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -116,7 +116,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Merchant>(req, method, auth, vm)
+                    .ExecuteRequestAsync<Merchant>(req, method, _auth, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
