@@ -21,7 +21,7 @@
 @* Contacts Modal *@
 <div class="modal" id="modal-subcategory">
     <div class="modal-dialog modal-lg" role="document">
-        <form method="post"  >
+        <form id="FormSubEdit" >
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Subcategory</h5>
@@ -35,7 +35,7 @@
                 </div>
             
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" >Save</button>
+                <button type="button" onclick="editSubcategory('@Model.CategoryId')" class="btn btn-primary" >Save</button>
                 <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -114,8 +114,6 @@
                                 type: 'GET',
                                 url: '/Category/Detail/' + id,
                                 success: function (data) {
-                                    $modal.find('form').attr('action',"/Category/Edit/"+id );
-                                    // $modal.find('form').attr('asp-route-CategoryId',id);
                                     $modal.find('.modal-body').html(data);
                                     debugger
                                 },
@@ -126,9 +124,9 @@
                             });
                        });
                     });
-         $(function () {
-            $modal.on('hidden.bs.modal', function () {
-            $modal.find('.modal-body').empty();
+        $(function () {
+        $modal.on('hidden.bs.modal', function () {
+        $modal.find('.modal-body').empty();
                         });
                     });
     
@@ -207,5 +205,40 @@
                 })
             }
         }
+        
+        function editSubcategory(CategoryId) {
+            let form = $('#FormSubEdit');
+                    debugger;
+                    let data = form.serialize();
+                    setLoading(true);
+                    //TODO KJ - create one more for edit subcategory
+                    if (form.valid()) {
+                        $.ajax({
+                            //TODO add [ValidateAntiForgeryToken]
+                            url: "/Category/Edit/",
+                            data: data,
+                            type: "POST",
+                            success: (function ({ item1, item2 }) {
+                                if (item1 === 1) {
+                                    sweetAlert({
+                                        title: "Updated",
+                                        text: "Subcategory details have been updated successfully!",
+                                        type: "success"
+                                    },
+                                        function () {
+                                            window.location.href = '/category/Edit/'+CategoryId;
+                                        });
+                                }
+                                else {
+                                      swal("Oops",item2,"error");
+                                      setLoading(false);
+                                 }
+                            }), error: (function (data) {
+                                setLoading(false);
+                                swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                            })
+                        })
+                    }
+                }
     </script>
 }
