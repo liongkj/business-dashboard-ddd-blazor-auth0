@@ -281,3 +281,4 @@ healthchecksdb
 JomMalaysia.Presentation/wwwroot/css/site.min.css
 JomMalaysia.Presentation/wwwroot/js/site.min.js
 JomMalaysia.Presentation/mono_crash.mem.28923.1.blob
+*.blob
