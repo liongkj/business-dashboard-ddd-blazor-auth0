@@ -102,9 +102,9 @@ namespace JomMalaysia.Presentation.Controllers
             return View();
         }
 
-
+        
         [HttpPost]
-        public async Task<Tuple<int, string>> Create(NewCategoryViewModel vm, string parentCategoryId = null)
+        public async Task<Tuple<int, string>> Create( NewCategoryViewModel vm, string parentCategoryId = null)
         {
             IWebServiceResponse response;
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);

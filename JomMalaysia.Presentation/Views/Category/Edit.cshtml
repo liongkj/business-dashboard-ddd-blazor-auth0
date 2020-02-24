@@ -7,7 +7,8 @@
 
 <div class="form-group col-md-12 no-padding d-none d-md-block">
     <button type="button" class="btn btn-success col-md-2" onclick="editCategory()">Save</button>
-    <button type="button" class="btn btn-danger col-md-2" onclick="window.history.go(-1); return false;">Cancel</button>
+    <button type="button" class="btn btn-danger col-md-2" onclick="location.href='@Url.Action("Index", "Category")'"
+            >Cancel</button>
 </div>
 
 <form asp-action="Edit" id="FormEdit" class="form-m-gap-top">
@@ -22,81 +23,91 @@
 <div class="modal" id="modal-subcategory">
     <div class="modal-dialog modal-lg" role="document">
         <form id="FormSubEdit" >
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Subcategory</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Subcategory</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
             
                 <div class="modal-body">
                     Loading..
                 </div>
             
-            <div class="modal-footer">
-                <button type="button" onclick="editSubcategory('@Model.CategoryId')" class="btn btn-primary" >Save</button>
-                <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button type="button" onclick="editSubcategory('@Model.CategoryId')" class="btn btn-primary" >Save</button>
+                    <button type="button" class="btn btn-secondary" onclick="" data-dismiss="modal">Close</button>
+                </div>
             </div>
-        </div>
         </form>
     </div>
 </div>
-@if (Model.LstSubCategory.Count > 0)
-{
+<form asp-action="Create" method="post" id="FormNewSub">
+    <input name="parentCategoryId" value="@Model.CategoryId" type="hidden"/>
     <tr class="subcategory-bg subcategory collapse">
         <td colspan="6" class="no-padding">
             <br/>
             <table id="subtabledata" class="table table-hover">
-<thead class="table-primary">
-            <tr>
-                
-                <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th>
-                <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
-                <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
-                <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
-                
-                <th scope="col">Action</th>
-            </tr>
-            </thead>
-                <tbody>
+                <thead class="table-primary">
+                <tr>
 
-                @foreach (var subitem in Model.LstSubCategory)
+                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryCode)</th>
+                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
+                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
+                    <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
+
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                @if (Model.LstSubCategory.Count > 0)
                 {
-                    <tr>
-                        
-                        <td>@subitem.CategoryCode</td>
-                        <td>@subitem.CategoryName</td>
-                        <td>@subitem.CategoryNameMs</td>
-                        <td>@subitem.CategoryNameZh</td>
-                        <td>
-                            <a data-toggle="modal" data-target="#modal-subcategory" 
-                            data-id="@subitem.CategoryId"
-                               @* href="@Url.Action("Edit", "Category", new {subitem.CategoryId})"  *@
-                               class="btn btn-outline-info col-md-4">
-                                <span>
-                                    <i class="fa fa-edit"></i>
-                                </span>
-                            </a>
-                            
-                            <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1 deleteButton">
-                                <span>
-                                    <i class="fa fa-trash"></i>
-                                </span>
-                            </a>
-                        </td>
-                    </tr>
+                    <tbody>
 
+                    @foreach (var subitem in Model.LstSubCategory)
+                    {
+                        <tr>
 
+                            <td>@subitem.CategoryCode</td>
+                            <td>@subitem.CategoryName</td>
+                            <td>@subitem.CategoryNameMs</td>
+                            <td>@subitem.CategoryNameZh</td>
+                            <td>
+                                <a data-toggle="modal" data-target="#modal-subcategory"
+                                   data-id="@subitem.CategoryId"
+                                   @* href="@Url.Action("Edit", "Category", new {subitem.CategoryId})"  *@
+                                   class="btn btn-outline-info col-md-4">
+                                    <span>
+                                        <i class="fa fa-edit"></i>
+                                    </span>
+                                </a>
+
+                                <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName','@Model.CategoryId')" id="btnDelete" class="btn btn-outline-danger col-md-4 offset-md-1 deleteButton">
+                                    <span>
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+
+                    }
+                    </tbody>
                 }
-
-                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="5" style="text-align: left;">
+                        <input type="button" class="btn btn-lg btn-block btn-info" id="addRowBtn" onclick="addNewSubRow('@Model.CategoryId')" value="Add Subcategory"/>
+                    </td>
+                </tr>
+                <tr>
+                </tr>
+                </tfoot>
             </table>
+
+
         </td>
     </tr>
-
-}
-         
+</form>
          
          
          
@@ -105,140 +116,194 @@
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script type="text/javascript">
-         let $modal = $('#modal-subcategory');
-        $(function () {
-                      $modal.on('show.bs.modal', function (e) {
-                            let id = e.relatedTarget.dataset.id;
-                            $.ajax({
-                                cache: false,
-                                type: 'GET',
-                                url: '/Category/Detail/' + id,
-                                success: function (data) {
-                                    $modal.find('.modal-body').html(data);
-                                    debugger
-                                },
-                                fail: function (error) {
-                                    $modal.hide();
-                                    swal("Oops",error,"error");
-                                }
-                            });
-                       });
-                    });
-        $(function () {
-        $modal.on('hidden.bs.modal', function () {
-        $modal.find('.modal-body').empty();
-                        });
-                    });
-    
-                    
-                    //Delete category function
-        function deleteCategory(catId, catName) {    
-                            swal({
-                                title: "Are you sure?",
-                                text: "Are you sure that you want to delete " + catName + "?",
-                                type: "warning",
-                                showCancelButton: true,
-                                closeOnConfirm: false,
-                                confirmButtonText: "Yes",
-                                confirmButtonColor: "#ec6c62"
-                            },
-                                function () {
-                                    $.ajax({
-                                        //TODO add [ValidateAntiForgeryToken]
-                                        url: "/Category/ConfirmDelete/",
-                                        data: {
-                                            "CategoryId": catId
-                                        },
-                                        type: "POST",
-                                         success: (function ({ item1, item2 }) {
-                                             debugger
-                                            if (item1 === 1) {
-                                                sweetAlert({
-                                                    title: "Deleted",
-                                                    text: catName + " has been deleted successfully!",
-                                                    type: "success"
-                                                },
-                                                    function () {
-                                                        window.location.href = '/category';
-                                                    });
-                                            }
-                                              else {
-                                                swal("Oops",item2,"error");
-                                              }
-                                        }), error: (function () {
-                                            swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                                        })
-                                    })
-                                });
-                        }
+       let $modal = $('#modal-subcategory');
+       $(function () {
+           $modal.on('show.bs.modal', function (e) {
+               let id = e.relatedTarget.dataset.id;
+               $.ajax({
+                   cache: false,
+                   type: 'GET',
+                   url: '/Category/Detail/' + id,
+                   success: function (data) {
+                       $modal.find('.modal-body').html(data);
+                      
+                   },
+                   fail: function (error) {
+                       $modal.hide();
+                       swal("Oops", error, "error");
+                   }
+               });
+           });
+       });
+       $(function () {
+           $modal.on('hidden.bs.modal', function () {
+               $modal.find('.modal-body').empty();
+           });
+       });
+       
+       let newSubform = $('#FormNewSub');
+       function createSubcategory(category) {
+       
+           let data = newSubform.serialize();
+       
+           if (newSubform.valid()) {
+               $.ajax({
+       
+                   url: "/Category/Create/",
+                   data: data,
+                   type: "POST",
+                   success: (function ({ item1, item2 }) {
+                       if (item1 === 1) {
+                           sweetAlert({
+                               title: "Success",
+                               text: "Subcategory haas been added successfully!",
+                               type: "success"
+                           },
+                               function () {
+                                   window.location.href = '/category/edit/' + category;
+                               });
+                       }
+                       else {
+                           swal("Oops", item2, "error");
+                           setLoading(false);
+                       }
+                   }), error: (function (data) {
+                       setLoading(false);
+                       swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                   })
+               })
+       
+           }
+       }
+       
+       //new subcategory
+       function addNewSubRow(categoryId) {
+       
+           var newRow = $("<tr id='new-sub-row'>");
+           var cols = "";
+       
+           cols += '<td><input type="text" class="new-sub catCode form-control" name="CategoryCode" /></td>';
+           cols += '<td><input type="text" class="new-sub catName form-control" name="CategoryName"/></td>';
+           cols += '<td><input type="text" class="new-sub catNameMs form-control" name="CategoryNameMs"/></td>';
+           cols += '<td><input type="text" class="new-sub catNameZh form-control" name="CategoryNameZh"/></td>';
+           cols += '<td><input type="button" class="submit-new-sub btn btn-md btn-success" value="Save"></td>';
+       
+           newRow.append(cols);
+           $("table#subtabledata").append(newRow);
+           $(".submit-new-sub").on("click", function () { createSubcategory(categoryId) });
+           $("#addRowBtn").attr('disabled',true);
+       
+       }
+       //Delete category function
+       function deleteCategory(catId, catName, parentId) {
+           swal({
+               title: "Are you sure?",
+               text: "Are you sure that you want to delete " + catName + "?",
+               type: "warning",
+               showCancelButton: true,
+               closeOnConfirm: false,
+               confirmButtonText: "Yes",
+               confirmButtonColor: "#ec6c62"
+           },
+               function () {
+                   $.ajax({
+                       //TODO add [ValidateAntiForgeryToken]
+                       url: "/Category/ConfirmDelete/",
+                       data: {
+                           "CategoryId": catId
+                       },
+                       type: "POST",
+                       success: (function ({ item1, item2 }) {
+                           
+                           if (item1 === 1) {
+                               sweetAlert({
+                                   title: "Deleted",
+                                   text: catName + " has been deleted successfully!",
+                                   type: "success"
+                               },
+                                   function () {
+                                       window.location.href = '/category/edit/' + parentId;
+                                   });
+                           }
+                           else {
+                               swal("Oops", item2, "error");
+                           }
+                       }), error: (function () {
+                           swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                       })
+                   })
+               });
+       }
+       
+       function editCategory() {
+       
+           var data = $('#FormEdit').serialize();
+           setLoading(true);
+           //TODO KJ - create one more for edit subcategory
+           if ($("#FormEdit").valid()) {
+               $.ajax({
+                   //TODO add [ValidateAntiForgeryToken]
+                   url: "/Category/Edit/",
+                   data: data,
+                   type: "POST",
+                   success: (function ({ item1, item2 }) {
+                       if (item1 === 1) {
+                           sweetAlert({
+                               title: "Updated",
+                               text: "Category details have been updated successfully!",
+                               type: "success"
+                           },
+                               function () {
+                                   window.location.href = '/category';
+                               });
+                       }
+                       else {
+                           swal("Oops", item2, "error");
+                           setLoading(false);
+                       }
+                   }), error: (function (data) {
+                       setLoading(false);
+                       swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                   })
+               })
+           }
+       }
+       
+       function editSubcategory(CategoryId) {
+           let form = $('#FormSubEdit');
+          
+           let data = form.serialize();
+           setLoading(true);
+           //TODO KJ - create one more for edit subcategory
+           if (form.valid()) {
+               $.ajax({
+                   //TODO add [ValidateAntiForgeryToken]
+                   url: "/Category/Edit/",
+                   data: data,
+                   type: "POST",
+                   success: (function ({ item1, item2 }) {
+                       if (item1 === 1) {
+                           sweetAlert({
+                               title: "Updated",
+                               text: "Subcategory details have been updated successfully!",
+                               type: "success"
+                           },
+                               function () {
+                                   window.location.href = '/category/Edit/' + CategoryId;
+                               });
+                       }
+                       else {
+                           swal("Oops", item2, "error");
+                           setLoading(false);
+                       }
+                   }), error: (function (data) {
+                       setLoading(false);
+                       swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                   })
+               })
+           }
+       }
+       
 
-        function editCategory() {
-            debugger;
-            var data = $('#FormEdit').serialize();
-            setLoading(true);
-            //TODO KJ - create one more for edit subcategory
-            if ($("#FormEdit").valid()) {
-                $.ajax({
-                    //TODO add [ValidateAntiForgeryToken]
-                    url: "/Category/Edit/",
-                    data: data,
-                    type: "POST",
-                    success: (function ({ item1, item2 }) {
-                        if (item1 === 1) {
-                            sweetAlert({
-                                title: "Updated",
-                                text: "Category details have been updated successfully!",
-                                type: "success"
-                            },
-                                function () {
-                                    window.location.href = '/category';
-                                });
-                        }
-                        else {
-                              swal("Oops",item2,"error");
-                              setLoading(false);
-                         }
-                    }), error: (function (data) {
-                        setLoading(false);
-                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                    })
-                })
-            }
-        }
-        
-        function editSubcategory(CategoryId) {
-            let form = $('#FormSubEdit');
-                    debugger;
-                    let data = form.serialize();
-                    setLoading(true);
-                    //TODO KJ - create one more for edit subcategory
-                    if (form.valid()) {
-                        $.ajax({
-                            //TODO add [ValidateAntiForgeryToken]
-                            url: "/Category/Edit/",
-                            data: data,
-                            type: "POST",
-                            success: (function ({ item1, item2 }) {
-                                if (item1 === 1) {
-                                    sweetAlert({
-                                        title: "Updated",
-                                        text: "Subcategory details have been updated successfully!",
-                                        type: "success"
-                                    },
-                                        function () {
-                                            window.location.href = '/category/Edit/'+CategoryId;
-                                        });
-                                }
-                                else {
-                                      swal("Oops",item2,"error");
-                                      setLoading(false);
-                                 }
-                            }), error: (function (data) {
-                                setLoading(false);
-                                swal("Oops", "An unknown error occured! Please contact technical support.", "error");
-                            })
-                        })
-                    }
-                }
     </script>
 }
