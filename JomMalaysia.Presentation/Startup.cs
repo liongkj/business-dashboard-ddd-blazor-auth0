@@ -1,13 +1,20 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Auth0.AuthenticationApi;
+using Auth0.AuthenticationApi.Models;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using JomMalaysia.Framework;
 using JomMalaysia.Presentation.Scope;
 using JomMalaysia.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +32,7 @@ namespace JomMalaysia.Presentation
         {
             Configuration = configuration;
         }
-        private IWebHostEnvironment currentEnvironment { get; set; }
+       
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -44,7 +51,60 @@ namespace JomMalaysia.Presentation
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options =>
-            { options.AccessDeniedPath = "/Error/AccessDeniedError"; }
+                {
+                    options.Events = new CookieAuthenticationEvents 
+                    {
+                        OnValidatePrincipal = async context =>
+                        {
+                            //check to see if user is authenticated first
+                            if (context.Principal.Identity.IsAuthenticated)
+                            {
+                                //get the users tokens
+                                var tokens = context.Principal.Identity as ClaimsIdentity;
+                                String refreshToken = tokens.Claims.Where(x=>x.Type=="refresh_token").FirstOrDefault().Value;
+                                // String accessToken = tokens.FirstOrDefault(t => t.Type == "access_token").ToString();
+                                // var exp = tokens.FirstOrDefault(t => t.Type == "expires_at").ToString();
+                                // var expires = DateTime.Parse(exp);
+                                // //check to see if the token has expired
+                                // if (expires < DateTime.Now)
+                                // {
+                                //     AuthenticationApiClient client =
+                                //         new AuthenticationApiClient(new Uri($"https://{Configuration["Auth0:Domain"]}"));
+                                //     var request = new RefreshTokenRequest
+                                //     {
+                                //         RefreshToken =  refreshToken,
+                                //         ClientId = Configuration["Auth0:ClientId"],
+                                //         ClientSecret = Configuration["Auth0:ClientSecret"],
+                                //     };
+                                //     var response =  await client.GetTokenAsync(request);
+                                //     //check for error while renewing - any error will trigger a new login.
+                                //     if (response == null)
+                                //     {
+                                //         //reject Principal
+                                //         context.RejectPrincipal();
+                                //         return ;
+                                //     }
+                                //     //set new token values
+                                //     refreshToken = response.RefreshToken;
+                                //     accessToken = response.AccessToken;
+                                //     //set new expiration date
+                                //     var newExpires = DateTime.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn);
+                                //     exp = newExpires.ToString("o", CultureInfo.InvariantCulture);
+                                //     //set tokens in auth properties 
+                                //     context.Properties.UpdateTokenValue("access_token",accessToken);
+                                //     
+                                //     context.Properties.UpdateTokenValue("refresh_token",refreshToken);
+                                //     //trigger context to renew cookie with new token values
+                                //     context.ShouldRenew = true;
+                                    await context.HttpContext.SignInAsync(context.Principal, context.Properties);
+                                // }
+                            }
+                            return;
+                        }
+                    };
+                    
+                    options.AccessDeniedPath = new PathString("/Error/AccessDeniedError");
+                }
             ).AddOpenIdConnect(
                 "Auth0", options =>
                 {
@@ -57,6 +117,7 @@ namespace JomMalaysia.Presentation
                     options.ResponseType = "code";
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ClockSkew = TimeSpan.Zero,
                         RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/roles",
                         ValidateIssuer = true,
                         ValidateLifetime = true,
@@ -69,7 +130,7 @@ namespace JomMalaysia.Presentation
                     options.CallbackPath = new PathString("/success");
                     // Configure the Claims Issuer to be Auth0
                     options.ClaimsIssuer = "Auth0";
-
+                    
                     options.Events = new OpenIdConnectEvents
                     {
                         OnRedirectToIdentityProvider = context =>
@@ -139,7 +200,6 @@ namespace JomMalaysia.Presentation
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            currentEnvironment = env;
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -156,9 +216,9 @@ namespace JomMalaysia.Presentation
             app.UseStaticFiles();
             app.UseAuthentication();
            
-            app.UseCookiePolicy();
-            app.UseRouting()
-                ; app.UseAuthorization();
+            app.UseCookiePolicy(); 
+            app.UseRouting();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

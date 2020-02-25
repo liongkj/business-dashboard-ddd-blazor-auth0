@@ -9,6 +9,7 @@ using Auth0.AuthenticationApi.Models;
 using JomMalaysia.Framework.Configuration;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models;
 using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authentication;
@@ -23,10 +24,12 @@ namespace JomMalaysia.Presentation.Controllers
     public class AccountController : Controller
     {
         private readonly IAppSetting _appSetting;
+        private readonly IAuthorizationManagers _authorizationManagers;
 
-        public AccountController(IAppSetting appSetting)
+        public AccountController(IAppSetting appSetting, IAuthorizationManagers authorizationManagers)
         {
             _appSetting = appSetting;
+            _authorizationManagers = authorizationManagers;
         }
 
 
@@ -47,7 +50,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 AuthenticationApiClient client =
                     new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
-
+                
                 var result = await client.GetTokenAsync(new ResourceOwnerTokenRequest
                 {
                     ClientId = _appSetting.Auth0ClientId,
@@ -61,11 +64,9 @@ namespace JomMalaysia.Presentation.Controllers
 
                 // Get user info from token
                 var user = await client.GetUserInfoAsync(result.AccessToken).ConfigureAwait(false);
-                //var role = user.AdditionalClaims["https://jomn9:auth0:com//roles"].Values<String>().ToList();
-
+                
 
                 var handler = new JwtSecurityTokenHandler();
-                var jsonToken = handler.ReadToken(result.AccessToken);
 
                 if (handler.ReadToken(result.AccessToken) is JwtSecurityToken tokenS)
                 {
@@ -76,7 +77,8 @@ namespace JomMalaysia.Presentation.Controllers
                     {
                         new Claim(ConstantHelper.Claims.accessToken, result.AccessToken),
                         new Claim(ConstantHelper.Claims.refreshToken, result.RefreshToken),
-                        new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString()),
+                        new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString() ),
+                        //current 86400 
                         new Claim(ConstantHelper.Claims.userId, user.UserId),
                         new Claim(ConstantHelper.Claims.name, user.FullName),
                         new Claim(ClaimTypes.Role, role)
@@ -84,6 +86,7 @@ namespace JomMalaysia.Presentation.Controllers
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     // Sign user into cookie middleware
+                    
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity))
                         .ConfigureAwait(false);
@@ -107,6 +110,29 @@ namespace JomMalaysia.Presentation.Controllers
             return RedirectToAction(nameof(Login), "Account");
         }
 
+        public async Task<string> RefreshToken()
+        {
+            try{
+                AuthenticationApiClient client =
+                    new AuthenticationApiClient(new Uri($"https://{_appSetting.Auth0Domain}/"));
+                var request = new RefreshTokenRequest
+                {
+                    RefreshToken =  _authorizationManagers.refreshToken,
+                    ClientId = _appSetting.Auth0ClientId,
+                    ClientSecret = _appSetting.Auth0ClientSecret,
+                };
+              var response =  await client.GetTokenAsync(request);
+              // if(response)
+              // HttpContext.User.Claims
+
+            }catch(Exception e)
+            {
+                throw e;
+            }
+
+            return "";
+        }
+        
         public IActionResult Claims()
         {
             return View();
