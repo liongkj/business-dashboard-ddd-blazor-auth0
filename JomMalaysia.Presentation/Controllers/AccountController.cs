@@ -72,12 +72,13 @@ namespace JomMalaysia.Presentation.Controllers
                 {
                     var role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value)
                         .FirstOrDefault();
+                    var exp = tokenS.Claims.FirstOrDefault(x => x.Type == "exp")?.Value;
                     // Create claims principal
                     var claims = new List<Claim>
                     {
                         new Claim(ConstantHelper.Claims.accessToken, result.AccessToken),
                         new Claim(ConstantHelper.Claims.refreshToken, result.RefreshToken),
-                        new Claim(ConstantHelper.Claims.expiry, result.ExpiresIn.ToString() ),
+                        new Claim(ConstantHelper.Claims.expiry, exp),
                         //current 86400 
                         new Claim(ConstantHelper.Claims.userId, user.UserId),
                         new Claim(ConstantHelper.Claims.name, user.FullName),
@@ -90,6 +91,7 @@ namespace JomMalaysia.Presentation.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity))
                         .ConfigureAwait(false);
+                    await HttpContext.ChallengeAsync("Auth0", new AuthenticationProperties() { RedirectUri = vm.returnURL });
                 }
 
                 return RedirectToLocal(vm.returnURL);
@@ -103,11 +105,15 @@ namespace JomMalaysia.Presentation.Controllers
             // return View(vm); //auth:enable this to bypass
         }
 
-        public async Task<IActionResult> Logout()
+        public async Task Logout()
         {
+            await HttpContext.SignOutAsync("Auth0", new AuthenticationProperties
+            {
+                RedirectUri = Url.Action(nameof(Login), "Account")
+            });
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
 
-            return RedirectToAction(nameof(Login), "Account");
+            // return RedirectToAction(nameof(Login), "Account");
         }
 
         public async Task<string> RefreshToken()

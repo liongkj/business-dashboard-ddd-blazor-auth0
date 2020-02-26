@@ -10,6 +10,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using JomMalaysia.Framework;
+using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.Scope;
 using JomMalaysia.Presentation.ViewModels;
 using Microsoft.AspNetCore.Authentication;
@@ -53,52 +54,69 @@ namespace JomMalaysia.Presentation
             }).AddCookie(options =>
                 {
                     options.Events = new CookieAuthenticationEvents 
+                        
                     {
                         OnValidatePrincipal = async context =>
                         {
                             //check to see if user is authenticated first
+                            var tokens = context.Principal.Identity as ClaimsIdentity;
+                            var userId = tokens?.Claims.Where(x => x.Type == ConstantHelper.Claims.userId)
+                                .FirstOrDefault()?.Value;
                             if (context.Principal.Identity.IsAuthenticated)
                             {
+
                                 //get the users tokens
-                                var tokens = context.Principal.Identity as ClaimsIdentity;
-                                String refreshToken = tokens.Claims.Where(x=>x.Type=="refresh_token").FirstOrDefault().Value;
-                                // String accessToken = tokens.FirstOrDefault(t => t.Type == "access_token").ToString();
-                                // var exp = tokens.FirstOrDefault(t => t.Type == "expires_at").ToString();
-                                // var expires = DateTime.Parse(exp);
-                                // //check to see if the token has expired
-                                // if (expires < DateTime.Now)
-                                // {
-                                //     AuthenticationApiClient client =
-                                //         new AuthenticationApiClient(new Uri($"https://{Configuration["Auth0:Domain"]}"));
-                                //     var request = new RefreshTokenRequest
-                                //     {
-                                //         RefreshToken =  refreshToken,
-                                //         ClientId = Configuration["Auth0:ClientId"],
-                                //         ClientSecret = Configuration["Auth0:ClientSecret"],
-                                //     };
-                                //     var response =  await client.GetTokenAsync(request);
-                                //     //check for error while renewing - any error will trigger a new login.
-                                //     if (response == null)
-                                //     {
-                                //         //reject Principal
-                                //         context.RejectPrincipal();
-                                //         return ;
-                                //     }
-                                //     //set new token values
-                                //     refreshToken = response.RefreshToken;
-                                //     accessToken = response.AccessToken;
-                                //     //set new expiration date
-                                //     var newExpires = DateTime.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn);
-                                //     exp = newExpires.ToString("o", CultureInfo.InvariantCulture);
-                                //     //set tokens in auth properties 
-                                //     context.Properties.UpdateTokenValue("access_token",accessToken);
-                                //     
-                                //     context.Properties.UpdateTokenValue("refresh_token",refreshToken);
-                                //     //trigger context to renew cookie with new token values
-                                //     context.ShouldRenew = true;
-                                    await context.HttpContext.SignInAsync(context.Principal, context.Properties);
-                                // }
+                                
+                                String refreshToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.refreshToken).FirstOrDefault()?.Value;
+                                String accessToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.accessToken).FirstOrDefault()?.Value;
+                                
+                                
+                                AccessTokenResponse response = null;
+                                var exp = tokens?.Claims.FirstOrDefault(x => x.Type==ConstantHelper.Claims.expiry)?.Value;
+                                if (long.TryParse(exp, out var parsed))
+                                {
+                                    var expires = DateTimeOffset.FromUnixTimeSeconds(parsed);
+                                    Console.WriteLine("has Expire:" + expires.ToLocalTime() +"Datetime now: "+ DateTime.UtcNow);
+                                    //check to see if the token has expired
+                                    
+                                    if (expires < DateTime.UtcNow)
+                                    {
+                                        AuthenticationApiClient client =
+                                            new AuthenticationApiClient(
+                                                new Uri($"https://{Configuration["Auth0:Domain"]}"));
+                                        var request = new RefreshTokenRequest
+                                        {
+                                            RefreshToken = refreshToken,
+                                            ClientId = Configuration["Auth0:ClientId"],
+                                            ClientSecret = Configuration["Auth0:ClientSecret"],
+                                            Scope = "offline_access"
+                                        };
+                                        response = await client.GetTokenAsync(request);
+                                        //check for error while renewing - any error will trigger a new login.
+                                        if (response == null)
+                                        {
+                                            //reject Principal
+                                            context.RejectPrincipal();
+                                            return;
+                                        }
+                                        tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.accessToken));
+                                        tokens.AddClaim(new Claim(ConstantHelper.Claims.accessToken,response?.AccessToken)); 
+                                        // accessToken = response?.AccessToken;
+                                        //set new expiration date
+                                        var newExpires = DateTime.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn);
+                                        
+                                        tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.expiry));
+                                        tokens.AddClaim(new Claim(ConstantHelper.Claims.expiry, newExpires.Ticks.ToString()));
+                                        //trigger context to renew cookie with new token values
+                                        context.ShouldRenew = true;
+                                        return;
+                                    }
+
+                                    context.RejectPrincipal();
+                                }
+                               
                             }
+
                             return;
                         }
                     };

@@ -43,7 +43,7 @@
 <body class="text-center">
 <form method="post" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-m-gap-top form-signin">
     <img class="mb-4" src="~/images/JomN9.png" alt="" width="80%">
-    @Html.ValidationMessage("")
+    @Html.ValidationSummary(false,"", new {@class = "text-danger"})
     
     <div for="inputEmail" class="sr-only">@Html.DisplayNameFor(m => m.email)</div>
     @Html.TextBoxFor(m => m.email, new {placeholder = "Email", @class = "form-control"})
