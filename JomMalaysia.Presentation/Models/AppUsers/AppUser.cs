@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using JomMalaysia.Presentation.Models.Common;
 
 namespace JomMalaysia.Presentation.Models.AppUsers
 {

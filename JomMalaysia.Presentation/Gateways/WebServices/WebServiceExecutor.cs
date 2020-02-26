@@ -1,70 +1,34 @@
 ﻿using System;
-using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Framework.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
-namespace JomMalaysia.Framework.WebServices
+namespace JomMalaysia.Presentation.Gateways.WebServices
 {
     public class WebServiceExecutor : IWebServiceExecutor
     {
-        public virtual IWebServiceResponse ExecuteRequest(string url, Method method, string auth,
-            params object[] objects)
+        private static IHttpContextAccessor _httpContextAccessor;
+        public WebServiceExecutor(IHttpContextAccessor httpContextAccessor)
         {
-            //Create Client
-            IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
-            client.AddDefaultHeader($"Authorization", $"Bearer {auth}");
-            //Create Request
-            IRestRequest request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
-            //wait response
-            IRestResponse response = client.Execute(request);
-            ThrowExceptionIfError(response);
-            return new WebServiceResponse()
-            {
-                RawContent = response.Content,
-                StatusCode = response.StatusCode,
-                StatusDescription = response.StatusDescription
-            };
+            _httpContextAccessor = httpContextAccessor;
         }
-
-
-        public IWebServiceResponse<T> ExecuteRequest<T>(string url, Method method, string auth, params object[] objects)
-            where T : new()
-        {
-            //Create Client
-            IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
-            client.AddDefaultHeader($"Authorization", $"Bearer {auth}");
-            //Create Request
-            IRestRequest request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
-            //wait response
-            IRestResponse<T> response = client.Execute<T>(request);
-            ThrowExceptionIfError(response);
-
-
-            return new WebServiceResponse<T>()
-            {
-                RawContent = response.Content,
-                StatusCode = response.StatusCode,
-                StatusDescription = response.StatusDescription,
-                Data = response.Data
-            };
-        }
-
-
-        public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, string auth,
+        public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, 
             params object[] objects) where T : new()
         {
             //Create Client
-            IRestClient client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url));
-            client.AddDefaultHeader($"Authorization", $"Bearer {auth}");
+            IRestClient client =  RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url), await
+                _httpContextAccessor.HttpContext.GetTokenAsync("access_token"));
             //Create Request
             IRestRequest request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
 
             //wait response
-            IRestResponse<T> response = await client.ExecuteTaskAsync<T>(request);
+            IRestResponse<T> response = await client.ExecuteAsync<T>(request);
             ThrowExceptionIfError(response);
             return new WebServiceResponse<T>()
             {

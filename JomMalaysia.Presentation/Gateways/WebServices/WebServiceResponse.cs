@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
+using JomMalaysia.Framework.Interfaces;
 
-namespace JomMalaysia.Framework.WebServices
+namespace JomMalaysia.Presentation.Gateways.WebServices
 {
     public class WebServiceResponse : IWebServiceResponse
     {

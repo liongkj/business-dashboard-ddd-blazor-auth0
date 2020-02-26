@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
-using RestSharp;
 using JomMalaysia.Framework.Configuration;
-using System.Security.Claims;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 
 namespace JomMalaysia.Presentation.Controllers
 {
@@ -18,18 +13,17 @@ namespace JomMalaysia.Presentation.Controllers
     public class HomeController : Controller
     {
         private readonly IAppSetting _appSetting;
-        private readonly IAuthorizationManagers _authorizationManagers;
 
-        public HomeController(IAppSetting appSetting, IAuthorizationManagers authorizationManagers)
+        public HomeController(IAppSetting appSetting)
         {
             _appSetting = appSetting;
-            _authorizationManagers = authorizationManagers;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewData["AT"] = _authorizationManagers.accessToken;
+            ViewData["AT"] = await HttpContext.GetTokenAsync("access_token");
+            ViewData["ID"] = await HttpContext.GetTokenAsync("id_token");
             return View();
         }
 

@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
@@ -16,7 +16,6 @@ namespace JomMalaysia.Presentation.Gateways.Listings
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
         private readonly IApiBuilder _apiBuilder;
-        private readonly string auth;
 
         public ListingGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
             IApiBuilder apiBuilder)
@@ -24,7 +23,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             _webServiceExecutor = webServiceExecutor;
             var authorizationManagers1 = authorizationManagers;
             _apiBuilder = apiBuilder;
-            if (authorizationManagers1 != null) auth = authorizationManagers1.accessToken;
+           
         }
 
         public async Task<IWebServiceResponse> Add(RegisterListingViewModel vm)
@@ -35,7 +34,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Listing));
 
                 const Method method = Method.POST;
-                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, auth, vm)
+                response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -61,7 +60,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 {
                     {"status", "all"}
                 };
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth)
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method)
                     .ConfigureAwait(false);
                 
             }
@@ -88,7 +87,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             {
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, id);
                 const Method method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method, auth)
+                response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method)
                     .ConfigureAwait(false);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -117,7 +116,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Listing>(req, method, auth, vm)
+                    .ExecuteRequestAsync<Listing>(req, method, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -140,7 +139,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Listing>(req, method, auth)
+                    .ExecuteRequestAsync<Listing>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -162,7 +161,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.Publish, ListingId, months.ToString());
                 const Method method = Method.POST;
 
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method, auth)
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)

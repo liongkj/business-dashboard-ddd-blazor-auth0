@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Workflows;
-using JomMalaysia.Presentation.Models.Workflows;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JomMalaysia.Presentation.Views.Workflow.Components.WorkflowDetail

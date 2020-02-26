@@ -1,7 +1,8 @@
 ﻿using System.Text;
 using JomMalaysia.Framework.Configuration;
+using JomMalaysia.Framework.Interfaces;
 
-namespace JomMalaysia.Framework.WebServices
+namespace  JomMalaysia.Presentation.Gateways.WebServices
 {
     public class ApiBuilder : IApiBuilder
     {

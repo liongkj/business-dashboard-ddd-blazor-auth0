@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 using JomMalaysia.Presentation.Models.Common;
 
 namespace JomMalaysia.Presentation.Models.Categories

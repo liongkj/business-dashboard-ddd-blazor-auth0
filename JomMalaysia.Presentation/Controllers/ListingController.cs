@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Gateways.Merchants;

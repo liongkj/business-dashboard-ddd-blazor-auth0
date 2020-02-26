@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace JomMalaysia.Presentation.ViewModels.Workflows
+﻿namespace JomMalaysia.Presentation.ViewModels.Workflows
 {
     public class WorkflowAction
     {

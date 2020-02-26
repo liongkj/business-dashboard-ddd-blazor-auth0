@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Text.RegularExpressions;
-
-namespace JomMalaysia.Framework.Helper
+﻿namespace JomMalaysia.Framework.Helper
 {
     public class SlugConverterHelper
     {

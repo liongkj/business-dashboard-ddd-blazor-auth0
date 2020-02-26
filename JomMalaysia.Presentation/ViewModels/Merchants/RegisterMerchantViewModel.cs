@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using JomMalaysia.Presentation.Models.Common;
 using JomMalaysia.Presentation.ViewModels.Common;
 
 namespace JomMalaysia.Presentation.ViewModels.Merchants

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JomMalaysia.Framework.Constant
+﻿namespace JomMalaysia.Framework.Constant
 {
     public partial class ConstantHelper
     {

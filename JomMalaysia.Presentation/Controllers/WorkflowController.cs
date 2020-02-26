@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using JomMalaysia.Presentation.Gateways.Workflows;
 using JomMalaysia.Presentation.Models.Workflows;
@@ -8,7 +7,6 @@ using JomMalaysia.Presentation.ViewModels.Workflows;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static JomMalaysia.Framework.Constant.EnumConstant;
-using static JomMalaysia.Presentation.Models.Workflows.WorkflowModel;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

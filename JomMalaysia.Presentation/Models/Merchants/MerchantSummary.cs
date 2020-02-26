@@ -1,5 +1,3 @@
-using System;
-
 namespace JomMalaysia.Presentation.Models.Merchants
 {
     public class MerchantSummary

@@ -1,5 +1,3 @@
-using System;
-
 namespace JomMalaysia.Presentation.ViewModels
 {
     public class ErrorViewModel

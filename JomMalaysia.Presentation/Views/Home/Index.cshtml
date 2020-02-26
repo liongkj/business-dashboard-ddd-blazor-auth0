@@ -1,11 +1,15 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    var data = ViewData["AT"];
+    var at = ViewData["AT"];
+    var id = ViewData["ID"];
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 >Access token</h1>
+    <input type="text" value="Bearer + @at"  id="myInput">
+    <h2>Id token</h2>
+    <input type="text" value="Bearer + @id"  id="myInput">
     <p>
-        Bearer @data
+        
     </p>
 </div>
