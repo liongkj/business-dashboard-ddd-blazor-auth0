@@ -43,15 +43,18 @@
 <body class="text-center">
 <form method="post" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="form-m-gap-top form-signin">
     <img class="mb-4" src="~/images/JomN9.png" alt="" width="80%">
+    @Html.ValidationSummary(false,"", new {@class = "text-danger"})
+    
     <div for="inputEmail" class="sr-only">@Html.DisplayNameFor(m => m.email)</div>
     @Html.TextBoxFor(m => m.email, new {placeholder = "Email", @class = "form-control"})
     <div for="inputPassword" class="sr-only">@Html.DisplayNameFor(m => m.email)</div>
     @Html.PasswordFor(m => m.password, new {placeholder = "Password", @class = "form-control"})
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" value="remember-me"> Remember me
-        </label>
-    </div>
+    
+    @* <div class="checkbox mb-3"> *@
+    @*     <label> *@
+    @*         <input type="checkbox" value="remember-me"> Remember me *@
+    @*     </label> *@
+    @* </div> *@
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 </form>
 </body>

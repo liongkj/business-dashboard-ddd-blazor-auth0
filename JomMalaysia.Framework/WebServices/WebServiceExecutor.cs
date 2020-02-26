@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
@@ -87,10 +88,17 @@ namespace JomMalaysia.Framework.WebServices
             {
                 throw new GatewayException("Failed to connect to web service.", response.ErrorException);
             }
-            else if (response.StatusCode != HttpStatusCode.OK)
+
+            switch (response.StatusCode)
             {
+                case HttpStatusCode.OK:
+                    return;
                 // Business Exceptions
-                if (response.StatusCode == HttpStatusCode.Conflict)
+                case HttpStatusCode.Unauthorized:
+                    dynamic content = null;
+                    
+                    throw new GatewayException(response.StatusCode,response.ErrorMessage);
+                case HttpStatusCode.Conflict:
                 {
                     // Parse the content manually to get the error details (if any).
                     dynamic conflictContent = null;
@@ -108,33 +116,35 @@ namespace JomMalaysia.Framework.WebServices
                         string msg = conflictContent.message;
                         throw new GatewayException(response.StatusCode, msg);
                     }
-                }
-                //others
 
-                // Business Exceptions
+                    break;
+                }
+            }
+            //others
 
-                // Parse the content manually to get the error details (if any).
-                dynamic badRequest = null;
-                try
-                {
-                    badRequest = JObject.Parse(response.Content);
-                }
-                catch (Exception)
-                {
-                    // Do nothing.
-                }
+            // Business Exceptions
 
-                if (badRequest != null && badRequest.message != null)
-                {
-                    string msg = badRequest.message;
-                    throw new GatewayException(response.StatusCode, msg);
-                }
+            // Parse the content manually to get the error details (if any).
+            dynamic badRequest = null;
+            try
+            {
+                badRequest = JObject.Parse(response.Content);
+            }
+            catch (Exception)
+            {
+                // Do nothing.
+            }
 
-                if (badRequest != null && badRequest.errors != null)
-                {
-                    string msg = badRequest.errors[0];
-                    throw new GatewayException(response.StatusCode, msg);
-                }
+            if (badRequest != null && badRequest.message != null)
+            {
+                string msg = badRequest.message;
+                throw new GatewayException(response.StatusCode, msg);
+            }
+
+            if (badRequest != null && badRequest.errors != null)
+            {
+                string msg = badRequest.errors[0];
+                throw new GatewayException(response.StatusCode, msg);
             }
         }
     }

@@ -10,6 +10,7 @@ using JomMalaysia.Presentation.Gateways.Users;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.ViewModels.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -53,6 +54,10 @@ namespace JomMalaysia.Presentation.Controllers
             }
             catch (GatewayException e)
             {
+                if (e.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                   
+                }
                 throw e;
             }
         }
