@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace JomMalaysia.Framework.WebServices
+namespace  JomMalaysia.Framework.Interfaces
 {
     public interface IWebServiceResponse
     {

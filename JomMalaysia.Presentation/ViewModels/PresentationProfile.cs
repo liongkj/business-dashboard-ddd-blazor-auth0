@@ -5,7 +5,6 @@ using JomMalaysia.Presentation.Models.Merchants;
 using JomMalaysia.Presentation.ViewModels.Common;
 using JomMalaysia.Presentation.ViewModels.Listings;
 using JomMalaysia.Presentation.ViewModels.Merchants;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace JomMalaysia.Presentation.ViewModels
 {

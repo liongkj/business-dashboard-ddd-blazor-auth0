@@ -1,9 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using Microsoft.AspNetCore.Html;
-using Newtonsoft.Json;
 
 namespace JomMalaysia.Framework.Helper
 {

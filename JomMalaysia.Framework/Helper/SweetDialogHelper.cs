@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using JomMalaysia.Framework.Constant;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 
 namespace JomMalaysia.Framework.Helper
 {

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using JomMalaysia.Framework.WebServices;
-using JomMalaysia.Presentation.Models;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Models.Listings;
 using JomMalaysia.Presentation.ViewModels.Listings;
-using Microsoft.AspNetCore.Mvc;
 
 namespace JomMalaysia.Presentation.Gateways.Listings
 {

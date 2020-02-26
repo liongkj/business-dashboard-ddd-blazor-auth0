@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Razor.Tokenizer.Symbols;
-using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Gateways.Categories;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
@@ -16,10 +14,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace JomMalaysia.Presentation.Controllers
-{    [Authorize]
+{    
+    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryGateway _gateway;

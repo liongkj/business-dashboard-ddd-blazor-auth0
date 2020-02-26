@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Helper;
+using JomMalaysia.Presentation.Manager;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 
-namespace JomMalaysia.Framework.WebServices
+namespace  JomMalaysia.Presentation.Gateways.WebServices
 {
     public class RestSharpFactory
     {
+      
         public static IRestRequest ConstructRequest(string path, Method method, object[] objects,
             Dictionary<string, string> query = null)
         {
@@ -41,12 +45,16 @@ namespace JomMalaysia.Framework.WebServices
         /// </summary>
         /// <param name="baseUrl">Base URL of web service to connect. (Example: http://api.google.com)</param>
         /// <returns>A RestSharp client.</returns>
-        public static IRestClient ConstructClient(string baseUrl, string accesstoken = null)
+        public static  IRestClient ConstructClient(string baseUrl, string auth)
         {
-            var client = new RestClient(baseUrl);
-            client.RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
+            var client = new RestClient(baseUrl)
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true
+            };
+            
+            
             client.ClearHandlers();
-            if (accesstoken != null) client.AddDefaultHeader("Authorization", $"Bearer {accesstoken}");
+            client.AddDefaultHeader($"Authorization", $"Bearer {auth}");
             var handler = NewtonsoftJsonSerializer.Default;
             client.AddHandler("application/json", () => handler); // Use custom deserializer.
             client.AddHandler("text/json", () => handler);

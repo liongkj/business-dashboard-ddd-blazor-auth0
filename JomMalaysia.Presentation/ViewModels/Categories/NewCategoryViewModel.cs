@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using JomMalaysia.Presentation.Models.Categories;
 
 namespace JomMalaysia.Presentation.ViewModels.Categories

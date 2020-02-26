@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.ViewModels.Users;
 

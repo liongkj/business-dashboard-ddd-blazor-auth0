@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JomMalaysia.Framework.WebServices
+﻿namespace JomMalaysia.Framework.Interfaces
 {
     public interface IApiBuilder
     {

@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
@@ -14,14 +14,12 @@ namespace JomMalaysia.Presentation.Gateways.Categories
     public class CategoryGateway : ICategoryGateway
     {
         private readonly IWebServiceExecutor _webServiceExecutor;
-        private readonly IAuthorizationManagers _authorizationManagers;
         private readonly IApiBuilder _apiBuilder;
 
-        public CategoryGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
+        public CategoryGateway(IWebServiceExecutor webServiceExecutor,
             IApiBuilder apiBuilder)
         {
             _webServiceExecutor = webServiceExecutor;
-            _authorizationManagers = authorizationManagers;
             _apiBuilder = apiBuilder;
         }
 
@@ -33,7 +31,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId, CategoryId);
                 const Method method = Method.GET;
                 IWebServiceResponse<ViewModel<Category>> response = await _webServiceExecutor
-                    .ExecuteRequestAsync<ViewModel<Category>>(req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<ViewModel<Category>>(req, method)
                     .ConfigureAwait(false);
                 if (response.StatusCode != HttpStatusCode.OK) return null;
                 result = response.Data.Data;
@@ -57,7 +55,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
 
                 const Method method = Method.POST;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm)
+                    .ExecuteRequestAsync<Category>(req, method, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -77,7 +75,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken, vm)
+                    .ExecuteRequestAsync<Category>(req, method, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -101,7 +99,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
                 var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
                 const Method method = Method.GET;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<ListViewModel<Category>>(req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<ListViewModel<Category>>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -125,7 +123,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<Category>(req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<Category>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)

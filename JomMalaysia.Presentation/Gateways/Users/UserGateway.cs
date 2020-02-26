@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
-using JomMalaysia.Framework.WebServices;
+using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
@@ -34,7 +34,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.User);
                 var method = Method.POST;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<RegisterUserViewModel>(req, method, _authorizationManagers.accessToken, vm)
+                    .ExecuteRequestAsync<RegisterUserViewModel>(req, method, vm)
                     .ConfigureAwait(false);
             }
 
@@ -56,7 +56,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.User);
                 var method = Method.GET;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<UserListResponse>(req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<UserListResponse>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)
@@ -80,7 +80,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.UserWithId, id);
                 const Method method = Method.GET;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<ViewModel<AppUser>>(req, method, _authorizationManagers.accessToken)
+                    .ExecuteRequestAsync<ViewModel<AppUser>>(req, method)
                     .ConfigureAwait(false);
             }
             catch (GatewayException e)
@@ -102,7 +102,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<User>(req, method, _authorizationManagers.accessToken).ConfigureAwait(false);
+                    .ExecuteRequestAsync<User>(req, method).ConfigureAwait(false);
             }
             catch (GatewayException ex)
             {
@@ -121,7 +121,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
 
                 const Method method = Method.PATCH;
                 response = await _webServiceExecutor
-                    .ExecuteRequestAsync<AppUser>(req, method, _authorizationManagers.accessToken, vm)
+                    .ExecuteRequestAsync<AppUser>(req, method, vm)
                     .ConfigureAwait(false);
             }
             catch (GatewayException ex)

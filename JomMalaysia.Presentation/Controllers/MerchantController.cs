@@ -1,20 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using JomMalaysia.Presentation.Models;
 using Microsoft.AspNetCore.Authorization;
 using JomMalaysia.Presentation.Models.Merchants;
 using JomMalaysia.Presentation.Gateways.Merchants;
 using JomMalaysia.Presentation.ViewModels.Merchants;
-using JomMalaysia.Framework.WebServices;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using System.Net;
 using AutoMapper;
-using JomMalaysia.Presentation.ViewModels.Common;
-using JomMalaysia.Presentation.ViewModels.Listings;
+using JomMalaysia.Framework.Interfaces;
 
 namespace JomMalaysia.Presentation.Controllers
 {

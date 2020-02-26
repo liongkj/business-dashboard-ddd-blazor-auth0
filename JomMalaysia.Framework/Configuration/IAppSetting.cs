@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace JomMalaysia.Framework.Configuration
+﻿namespace JomMalaysia.Framework.Configuration
 {
     public interface IAppSetting
     {

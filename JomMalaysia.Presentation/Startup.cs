@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Auth0.AuthenticationApi;
-using Auth0.AuthenticationApi.Models;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using JomMalaysia.Framework;
-using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.Scope;
 using JomMalaysia.Presentation.ViewModels;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,73 +44,74 @@ namespace JomMalaysia.Presentation
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             }).AddCookie(options =>
                 {
-                    options.Events = new CookieAuthenticationEvents 
-                        
-                    {
-                        OnValidatePrincipal = async context =>
-                        {
-                            //check to see if user is authenticated first
-                            var tokens = context.Principal.Identity as ClaimsIdentity;
-                            var userId = tokens?.Claims.Where(x => x.Type == ConstantHelper.Claims.userId)
-                                .FirstOrDefault()?.Value;
-                            if (context.Principal.Identity.IsAuthenticated)
-                            {
-
-                                //get the users tokens
-                                
-                                String refreshToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.refreshToken).FirstOrDefault()?.Value;
-                                String accessToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.accessToken).FirstOrDefault()?.Value;
-                                
-                                
-                                AccessTokenResponse response = null;
-                                var exp = tokens?.Claims.FirstOrDefault(x => x.Type==ConstantHelper.Claims.expiry)?.Value;
-                                if (long.TryParse(exp, out var parsed))
-                                {
-                                    var expires = DateTimeOffset.FromUnixTimeSeconds(parsed);
-                                    Console.WriteLine("has Expire:" + expires.ToLocalTime() +"Datetime now: "+ DateTime.UtcNow);
-                                    //check to see if the token has expired
-                                    
-                                    if (expires < DateTime.UtcNow)
-                                    {
-                                        AuthenticationApiClient client =
-                                            new AuthenticationApiClient(
-                                                new Uri($"https://{Configuration["Auth0:Domain"]}"));
-                                        var request = new RefreshTokenRequest
-                                        {
-                                            RefreshToken = refreshToken,
-                                            ClientId = Configuration["Auth0:ClientId"],
-                                            ClientSecret = Configuration["Auth0:ClientSecret"],
-                                            Scope = "offline_access"
-                                        };
-                                        response = await client.GetTokenAsync(request);
-                                        //check for error while renewing - any error will trigger a new login.
-                                        if (response == null)
-                                        {
-                                            //reject Principal
-                                            context.RejectPrincipal();
-                                            return;
-                                        }
-                                        tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.accessToken));
-                                        tokens.AddClaim(new Claim(ConstantHelper.Claims.accessToken,response?.AccessToken)); 
-                                        // accessToken = response?.AccessToken;
-                                        //set new expiration date
-                                        var newExpires = DateTime.UtcNow + TimeSpan.FromSeconds(response.ExpiresIn);
-                                        
-                                        tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.expiry));
-                                        tokens.AddClaim(new Claim(ConstantHelper.Claims.expiry, newExpires.Ticks.ToString()));
-                                        //trigger context to renew cookie with new token values
-                                        context.ShouldRenew = true;
-                                        return;
-                                    }
-
-                                    context.RejectPrincipal();
-                                }
-                               
-                            }
-
-                            return;
-                        }
-                    };
+                    // options.Events = new CookieAuthenticationEvents 
+                    //     
+                    // {
+                    //     OnValidatePrincipal = async context =>
+                    //     {
+                    //         //check to see if user is authenticated first
+                    //         
+                    //         if (context.Principal.Identity.IsAuthenticated)
+                    //         {
+                    //
+                    //             //get the users tokens
+                    //             var tokens = context.Principal.Identity as ClaimsIdentity;
+                    //             
+                    //             String refreshToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.refreshToken).FirstOrDefault()?.Value;
+                    //             String accessToken = tokens?.Claims.Where(x=>x.Type== ConstantHelper.Claims.accessToken).FirstOrDefault()?.Value;
+                    //             
+                    //             
+                    //             AccessTokenResponse response = null;
+                    //             var exp = tokens?.Claims.FirstOrDefault(x => x.Type==ConstantHelper.Claims.expiry)?.Value;
+                    //             if (long.TryParse(exp, out var parsed))
+                    //             {    
+                    //                 Debug.WriteLine(parsed);
+                    //                 var expires = DateTimeOffset.FromUnixTimeSeconds(parsed);
+                    //                 Console.WriteLine("has Expire:" + expires.ToLocalTime() +"Datetime now: "+ DateTime.UtcNow);
+                    //                 //check to see if the token has expired
+                    //                 
+                    //                 if (expires < DateTime.UtcNow)
+                    //                 {
+                    //                     AuthenticationApiClient client =
+                    //                         new AuthenticationApiClient(
+                    //                             new Uri($"https://{Configuration["Auth0:Domain"]}"));
+                    //                     var request = new RefreshTokenRequest
+                    //                     {
+                    //                         RefreshToken = refreshToken,
+                    //                         ClientId = Configuration["Auth0:ClientId"],
+                    //                         ClientSecret = Configuration["Auth0:ClientSecret"],
+                    //                         Scope = "offline_access"
+                    //                     };
+                    //                     response = await client.GetTokenAsync(request);
+                    //                     //check for error while renewing - any error will trigger a new login.
+                    //                     if (response == null)
+                    //                     {
+                    //                         //reject Principal
+                    //                         context.RejectPrincipal();
+                    //                         return;
+                    //                     }
+                    //                     tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.accessToken));
+                    //                     tokens.AddClaim(new Claim(ConstantHelper.Claims.accessToken,response.AccessToken)); 
+                    //                     // accessToken = response?.AccessToken;
+                    //                     //set new expiration date
+                    //                     var newExpires = DateTime.UtcNow.AddSeconds(response.ExpiresIn);
+                    //                     Debug.WriteLine("new expired: "+newExpires.Ticks);
+                    //                     
+                    //                     tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x=>x.Type== ConstantHelper.Claims.expiry));
+                    //                     tokens.AddClaim(new Claim(ConstantHelper.Claims.expiry, newExpires.Ticks.ToString()));
+                    //                     //trigger context to renew cookie with new token values
+                    //                     context.ShouldRenew = true;
+                    //                     return;
+                    //                 }
+                    //
+                    //                 context.RejectPrincipal();
+                    //             }
+                    //            
+                    //         }
+                    //
+                    //         return;
+                    //     }
+                    // };
                     
                     options.AccessDeniedPath = new PathString("/Error/AccessDeniedError");
                 }
@@ -136,12 +128,10 @@ namespace JomMalaysia.Presentation
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ClockSkew = TimeSpan.Zero,
-                        RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/roles",
+                        RoleClaimType = ClaimTypes.Role,
                         ValidateIssuer = true,
                         ValidateLifetime = true,
                     };
-                    // Configure the scope
-                    options.Scope.Clear();
                     options.Scope.Add("openid");
                     // Set the callback path, so Auth0 will call back to http://localhost:3000/callback
                     // Also ensure that you have added the URL as an Allowed Callback URL in your Auth0 dashboard
@@ -151,20 +141,15 @@ namespace JomMalaysia.Presentation
                     
                     options.Events = new OpenIdConnectEvents
                     {
+                        OnTokenValidated = context => { return Task.FromResult(0); },
+                        
                         OnRedirectToIdentityProvider = context =>
                         {
-                            context.ProtocolMessage.SetParameter("audience", "https://localhost:44368/");
+                            context.ProtocolMessage.SetParameter("audience", Configuration["Auth0:Audience"]);
 
                             return Task.FromResult(0);
-                        }
-                    };
-                    // Saves tokens to the AuthenticationProperties
-                    options.SaveTokens = true;
-                    //Logout Event
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        // handle the logout redirection
-                        OnRedirectToIdentityProviderForSignOut = (context) =>
+                        },
+                        OnRedirectToIdentityProviderForSignOut = context =>
                         {
                             var logoutUri =
                                 $"https://{Configuration["Auth0:Domain"]}/v2/logout?client_id={Configuration["Auth0:ClientId"]}";
@@ -189,16 +174,13 @@ namespace JomMalaysia.Presentation
                             return Task.CompletedTask;
                         }
                     };
+                    // Saves tokens to the AuthenticationProperties
+                    options.SaveTokens = true;
+                    //Logout Event
+                   
                 });
             
-            services.AddAuthorization(
-                options =>
-                {
-                    options.AddPolicy("read:merchant",
-                        policy => policy.Requirements.Add(new HasScopeRequirement("read:merchant",
-                            "https://jomn9.auth0.com/")));
-                }
-            );
+            services.AddAuthorization();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddHttpContextAccessor();
