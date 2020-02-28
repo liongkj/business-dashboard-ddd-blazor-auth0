@@ -96,7 +96,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
 
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Category));
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Category);
                 const Method method = Method.GET;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<ListViewModel<Category>>(req, method)

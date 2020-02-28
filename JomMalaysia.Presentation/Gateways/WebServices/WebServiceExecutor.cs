@@ -21,22 +21,33 @@ namespace JomMalaysia.Presentation.Gateways.WebServices
         public async Task<IWebServiceResponse<T>> ExecuteRequestAsync<T>(string url, Method method, 
             params object[] objects) where T : new()
         {
-            //Create Client
-            IRestClient client =  RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url), await
-                _httpContextAccessor.HttpContext.GetTokenAsync("access_token"));
-            //Create Request
-            IRestRequest request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
+            IRestResponse<T> response = null;
+            try
+            {
+                //Create Client
+                var client = RestSharpFactory.ConstructClient(NetHelper.GetBaseUrl(url), await
+                    _httpContextAccessor.HttpContext.GetTokenAsync("access_token"));
+                //Create Request
+                var request = RestSharpFactory.ConstructRequest(NetHelper.GetUrlPath(url), method, objects);
 
-            //wait response
-            IRestResponse<T> response = await client.ExecuteAsync<T>(request);
-            ThrowExceptionIfError(response);
-            return new WebServiceResponse<T>()
+                //wait response
+                 response = await client.ExecuteAsync<T>(request);
+                ThrowExceptionIfError(response);
+                if (response.Data == null) throw new GatewayException(HttpStatusCode.BadGateway, "Parse Error");
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return new WebServiceResponse<T>
             {
                 RawContent = response.Content,
                 StatusCode = response.StatusCode,
                 StatusDescription = response.StatusDescription,
                 Data = response.Data
             };
+            
         }
 
 
@@ -84,8 +95,6 @@ namespace JomMalaysia.Presentation.Gateways.WebServices
                     break;
                 }
             }
-            //others
-
             // Business Exceptions
 
             // Parse the content manually to get the error details (if any).

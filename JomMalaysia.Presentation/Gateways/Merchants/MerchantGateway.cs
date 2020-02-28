@@ -52,24 +52,23 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             IWebServiceResponse<ListViewModel<Merchant>> response;
             try
             {
-                var req = _apiBuilder.GetApi((APIConstant.API.Path.Merchant));
-                var method = Method.GET;
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Merchant>>(req, method)
+                var req = _apiBuilder.GetApi(APIConstant.API.Path.Merchant);
+                const Method method = Method.GET;
+                response = await _webServiceExecutor
+                    .ExecuteRequestAsync<ListViewModel<Merchant>>(req, method)
                     .ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var listings = response.Data.Data;
+                    result.AddRange(listings);
+                }
             }
             catch (GatewayException ex)
             {
                 throw ex;
             }
 
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var listings = response.Data.Data;
-                foreach (var list in listings)
-                {
-                    result.Add(list);
-                }
-            }
+            
 
             //handle exception
             return result;
