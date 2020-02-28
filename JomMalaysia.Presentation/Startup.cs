@@ -117,12 +117,15 @@ namespace JomMalaysia.Presentation
                                     // }
 
                                     // context.RejectPrincipal();
-
-                                  
+                                }
+                                else
+                                {
+                                    return Task.CompletedTask;
                                 }
                             }
                            context.RejectPrincipal();
-                           return Task.CompletedTask;
+                           return null;
+                           // return Task.CompletedTask;
                         }  
                     };
                     
