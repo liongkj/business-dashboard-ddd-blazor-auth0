@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Text;
-using System.Web.WebPages;
 
 namespace JomMalaysia.Presentation.Models.Listings
 {
@@ -15,11 +14,11 @@ namespace JomMalaysia.Presentation.Models.Listings
         public override string ToString()
         {
             var sb = new StringBuilder();
-            if (!En.IsEmpty()) sb.Append(En).Append("\n");
-            if (!Zh.IsEmpty()) sb.Append(Zh).Append("\n");
-            ;
-            if (!Ms.IsEmpty()) sb.Append(Ms).Append("\n");
-            ;
+            if (En !="") sb.Append(En).Append("\n");
+            if (Zh!="") sb.Append(Zh).Append("\n");
+            
+            if (Ms!="") sb.Append(Ms).Append("\n");
+            
             return sb.ToString();
         }
     }
