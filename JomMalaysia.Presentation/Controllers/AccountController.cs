@@ -119,10 +119,9 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 return Redirect(returnUrl);
             }
-            else
-            {
+            
                 return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
+            
         }
 
         #endregion
