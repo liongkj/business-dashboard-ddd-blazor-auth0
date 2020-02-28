@@ -69,7 +69,7 @@ namespace JomMalaysia.Presentation
                                 if (!long.TryParse(exp, out var parsed)) return Task.CompletedTask;
                                
                                 var expires = DateTimeOffset.FromUnixTimeSeconds(parsed);
-                                var isExpired = expires < DateTime.UtcNow;
+                                var isExpired =  DateTime.UtcNow > expires;
                                 Debug.WriteLine("has Expire:"+ isExpired +" "+ expires.ToLocalTime() + "Datetime now: " +
                                                 DateTime.Now);
                                     
