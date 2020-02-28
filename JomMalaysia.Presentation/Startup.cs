@@ -126,7 +126,7 @@ namespace JomMalaysia.Presentation
                            context.RejectPrincipal();
                            return null;
                            // return Task.CompletedTask;
-                        }  
+                    }  
                     };
                     
                     options.AccessDeniedPath = new PathString("/Error/AccessDeniedError");
@@ -157,7 +157,6 @@ namespace JomMalaysia.Presentation
                     
                     options.Events = new OpenIdConnectEvents
                     {
-                        OnTokenValidated = context => { return Task.FromResult(0); },
                         
                         OnRedirectToIdentityProvider = context =>
                         {
@@ -208,8 +207,6 @@ namespace JomMalaysia.Presentation
 
         }
         public void ConfigureContainer(ContainerBuilder builder) {
-          
-            // Use and configure Autofac
             builder.RegisterModule(new PresentationModule());
             builder.RegisterModule(new FrameworkModule());
         }
