@@ -76,6 +76,7 @@ namespace JomMalaysia.Presentation
                                 if (isExpired)
                                 {
                                     context.RejectPrincipal();
+                                    return Task.CompletedTask;
                                     // String refreshToken = (tokens?.Claims)
                                     //     .FirstOrDefault(x => x.Type == ".Token.refresh_token")?.Value;
                                     // //
@@ -121,11 +122,11 @@ namespace JomMalaysia.Presentation
                                 else
                                 {
                                     return Task.CompletedTask;
+                                    return Task.CompletedTask;
                                 }
                             }
                            context.RejectPrincipal();
-                           return null;
-                           // return Task.CompletedTask;
+                           return Task.CompletedTask;
                     }  
                     };
                     
