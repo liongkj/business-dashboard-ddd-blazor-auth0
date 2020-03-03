@@ -33,11 +33,11 @@ namespace JomMalaysia.Presentation.Controllers
         private List<Listing> ListingList { get; set; }
 
         // GET: /<controller>/
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] string categoryId,[FromQuery] string categoryName)
         {
             var listings = await GetListings().ConfigureAwait(false);
-
-            return View(listings);
+            ViewData["categoryName"] = categoryName;
+            return View(categoryId != null ? listings.Where(x => x.Category.CategoryId == categoryId) : listings);
         }
 
 

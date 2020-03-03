@@ -15,10 +15,13 @@ namespace JomMalaysia.Framework.Helper
             return HandleStatusCode(response.StatusCode, response.StatusDescription);
         }
 
-        public static Tuple<int, string> HandleStatusCode(HttpStatusCode StatusCode, string msg = null)
+        public static Tuple<int, string> HandleStatusCode(HttpStatusCode statusCode, string msg = null)
         {
-            switch (StatusCode)
+            switch (statusCode)
             {
+                case HttpStatusCode.ServiceUnavailable:
+                    return Tuple.Create(GlobalConstant.StatusCode.RESPONSE_SERVER_ERR,
+                        msg?? GlobalConstant.Message.OFFLINE);
                 case HttpStatusCode.OK:
                     return Tuple.Create(GlobalConstant.StatusCode.RESPONSE_OK, msg ?? GlobalConstant.Message.COMPLETED);
                 case HttpStatusCode.BadRequest:

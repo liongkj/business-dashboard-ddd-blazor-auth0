@@ -56,7 +56,7 @@
                     <th scope="col">@Html.DisplayNameFor(c => c.CategoryName)</th>
                     <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameMs)</th>
                     <th scope="col">@Html.DisplayNameFor(c => c.CategoryNameZh)</th>
-
+                    <th scope="col">No. of places</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
@@ -72,21 +72,33 @@
                             <td>@subitem.CategoryName</td>
                             <td>@subitem.CategoryNameMs</td>
                             <td>@subitem.CategoryNameZh</td>
+                            <td>@subitem.LstListing.Count</td>
                             <td>
                                 <a data-toggle="modal" data-target="#modal-subcategory"
                                    data-id="@subitem.CategoryId"
                                    @* href="@Url.Action("Edit", "Category", new {subitem.CategoryId})"  *@
-                                   class="btn btn-outline-info col-md-4">
+                                   class="btn btn-outline-info col-md-3">
                                     <span>
                                         <i class="fa fa-edit"></i>
                                     </span>
                                 </a>
 
                                 <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName','@Model.CategoryId')" 
-                                   id="btnDelete" class="btn btn-outline-danger col-md-4  deleteButton">
+                                   id="btnDelete" class="btn btn-outline-danger col-md-3  deleteButton">
                                     <span>
                                         <i class="fa fa-trash"></i>
                                     </span>
+                                </a>
+                                <a asp-controller="Listing" asp-action="Index" 
+                                   asp-route-categoryId="@subitem.CategoryId"
+                                   asp-route-categoryName="@subitem.CategoryName"
+                                    class="btn btn-outline-warning col-md-3"
+                                    target="_blank"
+                                   >
+                                    <span>
+                                        <i class="fa fa-building"></i>
+                                    </span>
+                                    
                                 </a>
                             </td>
                         </tr>
@@ -96,7 +108,7 @@
                 }
                 <tfoot>
                 <tr>
-                    <td colspan="5" style="text-align: left;">
+                    <td colspan="6" style="text-align: left;">
                         <input type="button" class="btn btn-lg btn-block btn-info" id="addRowBtn" onclick="addNewSubRow('@Model.CategoryId')" value="Add Subcategory"/>
                     </td>
                 </tr>
@@ -168,7 +180,7 @@
                            swal("Oops", item2, "error");
                            setLoading(false);
                        }
-                   }), error: (function (data) {
+                   }), error: (function () {
                        setLoading(false);
                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                    })
@@ -180,8 +192,8 @@
        //new subcategory
        function addNewSubRow(categoryId) {
        
-           var newRow = $("<tr id='new-sub-row'>");
-           var cols = "";
+           let newRow = $("<tr id='new-sub-row'>");
+           let cols = "";
        
            cols += '<td><input type="text" class="new-sub catCode form-control" name="CategoryCode" /></td>';
            cols += '<td><input type="text" class="new-sub catName form-control" name="CategoryName"/></td>';
@@ -238,7 +250,7 @@
        
        function editCategory() {
        
-           var data = $('#FormEdit').serialize();
+           let data = $('#FormEdit').serialize();
            setLoading(true);
            //TODO KJ - create one more for edit subcategory
            if ($("#FormEdit").valid()) {
@@ -262,7 +274,7 @@
                            swal("Oops", item2, "error");
                            setLoading(false);
                        }
-                   }), error: (function (data) {
+                   }), error: (function () {
                        setLoading(false);
                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                    })
@@ -297,7 +309,7 @@
                            swal("Oops", item2, "error");
                            setLoading(false);
                        }
-                   }), error: (function (data) {
+                   }), error: (function () {
                        setLoading(false);
                        swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                    })

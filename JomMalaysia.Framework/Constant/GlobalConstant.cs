@@ -10,6 +10,8 @@
             public const int RESPONSE_ERR_DEPENDENCY = -2;
             public const int RESPONSE_ERR_NOT_FOUND = -3;
             public const int RESPONSE_ERR_VALIDATION_FAILED = -4;
+            public const int RESPONSE_SERVER_ERR = -5;
+
         }
 
         public class Message
@@ -23,6 +25,7 @@
             public const string CONFLICT = "Please choose another username/email.";
             public const string UNKNOWN = "Unknown error occur. Please contact your administrator.";
             public const string NOTFOUND = "The record is not found. Are you selecting the correct record?";
+            public const string OFFLINE = "Server offline. Please contact your administrator";
         }
     }
 }

@@ -37,6 +37,13 @@ namespace JomMalaysia.Presentation.Models.Listings
         public string CategoryId { get; set; }
         public CategoryItem Category { get; set; }
         public CategoryItem Subcategory { get; set; }
+
+        public bool Equals(Category cat)
+        {
+            return Category.categoryName.ToLower() == cat.CategoryPath.Category.ToLower() &&
+                   Subcategory.categoryName.ToLower() == cat.CategoryPath.Subcategory.ToLower()
+                ;
+        }
     }
 
     public class CategoryItem

@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using JomMalaysia.Presentation.Models.Common;
+using JomMalaysia.Presentation.Models.Listings;
 
 namespace JomMalaysia.Presentation.Models.Categories
 {
     public class Category
     {
+        public Category()
+        {
+            LstListing = new List<Listing>();
+        }
         public string CategoryId { get; set; }
 
 
@@ -35,7 +41,7 @@ namespace JomMalaysia.Presentation.Models.Categories
         public CategoryType CategoryType { get; set; } = CategoryType.Private;
         public CategoryPath CategoryPath { get; set; }
         public List<Category> LstSubCategory { get; set; }
-
+        public List<Listing> LstListing { get; }
         public bool IsCategory()
         {
             return CategoryPath.Subcategory == null;
@@ -43,6 +49,7 @@ namespace JomMalaysia.Presentation.Models.Categories
 
         public bool IsDeleted { get; set; }
         public bool IsSelected { get; set; }
+        
     }
 
     public enum CategoryType

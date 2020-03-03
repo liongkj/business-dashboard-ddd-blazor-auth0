@@ -8,6 +8,7 @@ using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Gateways.Categories;
+using JomMalaysia.Presentation.Gateways.Listings;
 using JomMalaysia.Presentation.Models.Categories;
 using JomMalaysia.Presentation.ViewModels.Categories;
 using Microsoft.AspNetCore.Authorization;
@@ -22,13 +23,15 @@ namespace JomMalaysia.Presentation.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryGateway _gateway;
+        private readonly IListingGateway _listingGateway;
 
         private static List<Category> CategoryList { get; set; }
         private static Boolean refresh = false;
 
-        public CategoryController(ICategoryGateway gateway)
+        public CategoryController(ICategoryGateway gateway, IListingGateway listingGateway)
         {
             _gateway = gateway;
+            _listingGateway = listingGateway;
 
             Refresh();
         }
@@ -144,14 +147,21 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public async Task<ViewResult> Edit(string id)
         {
-            var vm = await _gateway.GetCategory(id).ConfigureAwait(false);
-            var categories = await GetCategories().ConfigureAwait(false);
+            var vm = await _gateway.GetCategory(id);
+            var categories = await GetCategories();
+            var listing = await _listingGateway.GetAll();
             vm.LstSubCategory = new List<Category>();
             foreach (var category in categories)
             {
-                if (!category.IsCategory())
-                    if(category.CategoryPath.Category == vm.CategoryName)
-                        vm.LstSubCategory.Add(category);
+                if (!category.IsCategory() && category.CategoryPath.Category == vm.CategoryName)
+                {
+                    
+                    category.LstListing.AddRange( listing
+                        .Where(x => x.Category.CategoryId==category.CategoryId).ToList());
+                    vm.LstSubCategory.Add(category);
+                    
+                }
+                    
             }
             return View(vm);
         }
@@ -179,17 +189,17 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
-        public async Task<Tuple<int, string>> ConfirmDelete(string CategoryId)
+        public async Task<Tuple<int, string>> ConfirmDelete(string categoryId)
         {
             IWebServiceResponse response;
-            if (string.IsNullOrEmpty(CategoryId)) return SweetDialogHelper.HandleNotFound();
+            if (string.IsNullOrEmpty(categoryId)) return SweetDialogHelper.HandleNotFound();
             try
             {
-                response = await _gateway.Delete(CategoryId).ConfigureAwait(false);
+                response = await _gateway.Delete(categoryId).ConfigureAwait(false);
             }
             catch (GatewayException e)
             {
-                return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
+                return e.Type == WebServiceExceptionType.ConnectionError ? SweetDialogHelper.HandleStatusCode(HttpStatusCode.ServiceUnavailable) : SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
 
             if (response.StatusCode == HttpStatusCode.OK) refresh = true;
