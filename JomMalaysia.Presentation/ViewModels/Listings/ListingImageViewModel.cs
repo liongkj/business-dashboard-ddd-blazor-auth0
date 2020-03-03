@@ -13,7 +13,7 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         public ListingImageViewModel()
         {
             ListingLogo = new Image();
-            CoverPhoto = new Image();
+            CoverPhoto = new Image("https://res.cloudinary.com/jomn9-com/image/upload/w_1000,ar_16:9,c_fill,g_auto,e_sharpen/v1575257964/placeholder_xtcpy8.jpg");
             Ads = new List<Image>(5) ;
         }
     }

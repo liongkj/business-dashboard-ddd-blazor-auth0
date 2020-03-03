@@ -122,7 +122,6 @@ namespace JomMalaysia.Presentation
                                 else
                                 {
                                     return Task.CompletedTask;
-                                    return Task.CompletedTask;
                                 }
                             }
                            context.RejectPrincipal();

@@ -35,7 +35,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
 
                 const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, vm)
-                    .ConfigureAwait(false);
+                    ;
             }
             catch (GatewayException ex)
             {
@@ -61,7 +61,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                     {"status", "all"}
                 };
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method)
-                    .ConfigureAwait(false);
+                    ;
                 
             }
             catch (GatewayException ex)
@@ -88,7 +88,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, id);
                 const Method method = Method.GET;
                 response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method)
-                    .ConfigureAwait(false);
+                    ;
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     result = response.Data.Data;
@@ -117,7 +117,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<Listing>(req, method, vm)
-                    .ConfigureAwait(false);
+                    ;
             }
             catch (GatewayException ex)
             {
@@ -140,7 +140,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<Listing>(req, method)
-                    .ConfigureAwait(false);
+                    ;
             }
             catch (GatewayException ex)
             {
@@ -162,7 +162,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 const Method method = Method.POST;
 
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method)
-                    .ConfigureAwait(false);
+                    ;
             }
             catch (GatewayException ex)
             {

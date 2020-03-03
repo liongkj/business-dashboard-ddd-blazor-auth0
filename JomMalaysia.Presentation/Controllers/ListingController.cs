@@ -35,7 +35,7 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index([FromQuery] string categoryId,[FromQuery] string categoryName)
         {
-            var listings = await GetListings().ConfigureAwait(false);
+            var listings = await GetListings();
             ViewData["categoryName"] = categoryName;
             return View(categoryId != null ? listings.Where(x => x.Category.CategoryId == categoryId) : listings);
         }
@@ -45,7 +45,7 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var init = await PopulateFields().ConfigureAwait(false);
+            var init = await PopulateFields();
             var _operatingHours = new List<OperatingHourViewModel>();
 
             foreach (var day in Enum.GetValues(typeof(DayOfWeek)))
@@ -89,7 +89,7 @@ namespace JomMalaysia.Presentation.Controllers
                     .Select(ad => new Image(ad.Url)));
 
                 vm.ListingImages.Ads = adsList;
-                var response = await _gateway.Add(vm).ConfigureAwait(false);
+                var response = await _gateway.Add(vm);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
                 return SweetDialogHelper.HandleResponse(response);
@@ -105,10 +105,10 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<ViewResult> Edit(string listingId)
         {
             Listing m;
-            var init = await PopulateFields().ConfigureAwait(false);
+            var init = await PopulateFields();
             try
             {
-                m = await _gateway.Detail(listingId).ConfigureAwait(false);
+                m = await _gateway.Detail(listingId);
             }
             catch (Exception e)
             {
@@ -144,12 +144,14 @@ namespace JomMalaysia.Presentation.Controllers
 
             //category
             var _categories = new List<SelectListItem>();
-            var categories = await _categoryGateway.GetCategories().ConfigureAwait(false);
+            var categories = await _categoryGateway.GetCategories();
             var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == m.CategoryType)
                 .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);
             
-            //ads image
+            //image
+            vm.ListingImages.ListingLogo ??= init.ListingImages.ListingLogo;
+            vm.ListingImages.CoverPhoto ??= init.ListingImages.CoverPhoto;
             var _adsCount = 5 - vm.ListingImages.Ads.Count;
             var _ads = vm.ListingImages.Ads;
             for (var i = 0; i < _adsCount; i++)
@@ -157,6 +159,7 @@ namespace JomMalaysia.Presentation.Controllers
                 _ads.Add(new Image());
             }
             
+            //category select
             foreach (var category in cats)
             {
                 var groups = new SelectListGroup {Name = category.Key};
@@ -199,7 +202,7 @@ namespace JomMalaysia.Presentation.Controllers
                     .Select(ad => new Image(ad.Url)));
 
                 vm.ListingImages.Ads = adsList;
-                var response = await _gateway.Edit(vm, listingId).ConfigureAwait(false);
+                var response = await _gateway.Edit(vm, listingId);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
                 return SweetDialogHelper.HandleResponse(response);
@@ -216,7 +219,7 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                var response = await _gateway.Publish(id, months).ConfigureAwait(false);
+                var response = await _gateway.Publish(id, months);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
                 return SweetDialogHelper.HandleResponse(response);
@@ -233,7 +236,7 @@ namespace JomMalaysia.Presentation.Controllers
         private async Task<RegisterListingViewModel> PopulateFields()
         {
             //merchant
-            var merchants = await _merchantGateway.GetMerchants().ConfigureAwait(false);
+            var merchants = await _merchantGateway.GetMerchants();
             var _merchants = merchants.Select(m => new SelectListItem
             {
                 Text = $"{m.CompanyRegistration.RegistrationName} ({m.CompanyRegistration.SsmId})",
@@ -253,6 +256,7 @@ namespace JomMalaysia.Presentation.Controllers
             var add = new AddressViewModel();
             var vm = new RegisterListingViewModel
             {
+                ListingImages = new ListingImageViewModel(),
                 MerchantList = _merchants,
                 CategoryTypeList = _categoryType,
                 Address = add,
@@ -269,7 +273,7 @@ namespace JomMalaysia.Presentation.Controllers
             if (string.IsNullOrEmpty(id)) return SweetDialogHelper.HandleNotFound();
             try
             {
-                response = await _gateway.Delete(id).ConfigureAwait(false);
+                response = await _gateway.Delete(id);
             }
             catch (GatewayException e)
             {
@@ -300,7 +304,7 @@ namespace JomMalaysia.Presentation.Controllers
         private async void Refresh()
         {
             if (ListingList != null && !refresh)
-                ListingList = await GetListings().ConfigureAwait(false);
+                ListingList = await GetListings();
             else
                 ListingList = new List<Listing>();
         }
@@ -309,7 +313,7 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: Listing
         private async Task<List<Listing>> GetListings()
         {
-            ListingList = await _gateway.GetAll().ConfigureAwait(false);
+            ListingList = await _gateway.GetAll();
             return ListingList;
         }
 

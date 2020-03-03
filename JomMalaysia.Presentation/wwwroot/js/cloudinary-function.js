@@ -67,8 +67,6 @@ $(function () {
                 minImageHeight: 100,
                 maxFiles: 5,
                 showSkipCropButton: true,
-                thumbnails: ".image-thumbnail",
-                thumbnailTransformation: "w_200,h_150,c_fill"
             },(error, result) => {
                 if (!error) {
                     
@@ -122,7 +120,6 @@ function uploadAdsWidget(no) {
             minImageHeight: 300,
             
             showSkipCropButton: true,
-            thumbnailTransformation: "w_250,h_300,c_fill"
         },(error, result) => {
             if (result.event === "upload-added") {
                 setLoading(true);
