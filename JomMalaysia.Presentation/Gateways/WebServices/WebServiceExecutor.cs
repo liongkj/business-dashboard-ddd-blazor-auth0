@@ -39,7 +39,7 @@ namespace JomMalaysia.Presentation.Gateways.WebServices
             {
                 throw e;
             }
-
+    
             return new WebServiceResponse<T>
             {
                 RawContent = response.Content,

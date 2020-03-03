@@ -19,7 +19,19 @@
     </div>
 </div>
 <br/>
-<form id="categoryForm" method="POST">
+
+ @if (ViewData.ContainsKey("error"))
+             {
+
+                 <div class="jumbotron">
+                     <h1 class="display-4">Opps!</h1>
+                     <p class="lead">@ViewData["error"].</p>
+           
+                 </div>
+             
+} else{
+    
+    <form id="categoryForm" method="POST">
     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
         <table id="tableData" class="table table-hover">
             <!--remain id as this, else change name in _LayoutIndex too-->
@@ -35,43 +47,40 @@
             </tr>
             </thead>
             <tbody>
+                 @foreach (var item in Model)
+                 {
+                     <tr style="cursor:pointer;" data-toggle="collapse" data-target="collapse-next-subcategory" class="parent-category" data-type="@item.CategoryType">
 
+                         <td>@item.CategoryCode</td>
+                         <td>@item.CategoryName</td>
+                         <td>@item.CategoryNameMs</td>
+                         <td>@item.CategoryNameZh</td>
+                         <td>
+                             <span class="badge badge-dark">@(item.LstSubCategory.Count)</span>
+                         </td>
+                         <td class="btn-group" role="group">
 
-            @foreach (var item in Model)
-            {
-                <tr style="cursor:pointer;" data-toggle="collapse" data-target="collapse-next-subcategory" class="parent-category" data-type="@item.CategoryType">
-                    
-                   <td>@item.CategoryCode</td>
-                    <td>@item.CategoryName</td>
-                    <td>@item.CategoryNameMs</td>
-                    <td>@item.CategoryNameZh</td>
-                    <td>
-                        <span class="badge badge-dark">@(item.LstSubCategory.Count)</span>
-                    </td>
-                    <td class="btn-group" role="group">
-                       
-                            <a href="@Url.Action("Edit", "Category", new {id=item.CategoryId})"
-                               class="btn btn-info  form-control deleteButton" type="button"
-                               data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Edit @item.CategoryName">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </a>
+                             <a href="@Url.Action("Edit", "Category", new {id = item.CategoryId})"
+                                class="btn btn-info  form-control deleteButton" type="button"
+                                data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Edit @item.CategoryName">
+                                 <i class="fa fa-edit" aria-hidden="true"></i>
+                             </a>
 
-                            <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')"
-                               class="btn btn-danger form-control deleteButton" type="button"
-                               data-toggle="tooltip" data-placement="bottom" title="" data-original-title="delete @item.CategoryName">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    
-                </tr>
-                
-                }
-            
+                             <a href="#" onclick="deleteCategory('@item.CategoryId', '@item.CategoryName')"
+                                class="btn btn-danger form-control deleteButton" type="button"
+                                data-toggle="tooltip" data-placement="bottom" title="" data-original-title="delete @item.CategoryName">
+                                 <i class="fa fa-trash" aria-hidden="true"></i>
+                             </a>
+                         </td>
 
-            </tbody>
+                     </tr>
+
+                 }
+                 </tbody>
+  
         </table>
     </div>
-</form>
+</form>}
 
 <!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
 

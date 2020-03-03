@@ -13,6 +13,7 @@ using JomMalaysia.Presentation.ViewModels.Categories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using RestSharp;
 
 
 namespace JomMalaysia.Presentation.Controllers
@@ -45,11 +46,6 @@ namespace JomMalaysia.Presentation.Controllers
 
         private async Task<List<Category>> GetCategories()
         {
-            if (CategoryList.Count > 0 && !refresh)
-            {
-                return CategoryList;
-            }
-
             try
             {
                 CategoryList = await _gateway.GetCategories().ConfigureAwait(false);
@@ -58,45 +54,58 @@ namespace JomMalaysia.Presentation.Controllers
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
-                return null;
+                throw e;
             }
         }
 
         // GET: /<controller>/
         public async Task<IActionResult> Index()
-        {
-            var categories = await GetCategories().ConfigureAwait(false);
+        { 
             var vm = new List<Category>();
-            if (categories == null) return View(vm);
-            var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
-
-            foreach (var category in cats)
+            try
             {
-                var c = category.FirstOrDefault(x => x.IsCategory());
-                if (c == null) continue;
-                c.LstSubCategory = new List<Category>();
-                foreach (var sub in category)
+                var categories = await GetCategories().ConfigureAwait(false);
+               
+
+                var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
+
+                foreach (var category in cats)
                 {
-                    if (!sub.IsCategory())
-                        c.LstSubCategory.Add(sub);
+                    var c = category.FirstOrDefault(x => x.IsCategory());
+                    if (c == null) continue;
+                    c.LstSubCategory = new List<Category>();
+                    foreach (var sub in category)
+                    {
+                        if (!sub.IsCategory())
+                            c.LstSubCategory.Add(sub);
+                    }
+
+                    vm.Add(c);
                 }
 
-                vm.Add(c);
-            } return View(vm);
+                return View(vm);
+            }
+            catch (GatewayException e)
+            {
+                if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                if(e.Type==WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
+            }
+ 
+
+            return View(vm);
         }
 
         [HttpGet]
-        public ActionResult Create(string CategoryId, string parentName)
+        public ActionResult Create(string categoryId, string parentName)
         {
-            if (string.IsNullOrEmpty(CategoryId))
+            if (string.IsNullOrEmpty(categoryId))
             {
                 ViewData["title"] = "New Category";
                 return View();
             }
 
             ViewData["title"] = $"Create new subcategory for {parentName}";
-            TempData["categoryId"] = CategoryId;
+            TempData["categoryId"] = categoryId;
             return View();
         }
 
