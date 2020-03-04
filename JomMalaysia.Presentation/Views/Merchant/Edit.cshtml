@@ -31,12 +31,12 @@
     <input type="hidden" asp-for="@Model.MerchantId" value="@Model.MerchantId"/>
     <input type="hidden" asp-for="@Model.Listings" value="@Model.Listings"/>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.EditorFor(x=>x);
+    @Html.EditorFor(x => x);
 </form>
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    
+
     <script src="~/js/Listings/ModalFunctionScripts.js"></script>
 
     <script type="text/javascript">
@@ -74,7 +74,7 @@
                         );
                     }
                 },
-                error: function (xhr, err) {
+                error: function () {
                     setLoading(false);
                     swal(
                         "Oops",

@@ -46,15 +46,15 @@
                     <td>@item.Contacts[0].ToString()</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <a type="button" class="btn btn-primary form-control" data-toggle="modal"
+                            <a  href="#" class="btn btn-primary form-control" data-toggle="modal"
                                data-target="#modal-merchant-detail" data-id="@item.MerchantId">
                                 <i class="fa fa-info" aria-hidden="true"></i>
                             </a>
-                            <a type="button" class="btn btn-info form-control" asp-controller="Merchant" 
+                            <a  class="btn btn-info form-control" asp-controller="Merchant" 
                                asp-action="Edit" asp-route-MerchantId="@item.MerchantId">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>
-                            <a type="button" class="btn btn-danger form-control"
+                            <a  href="#" class="btn btn-danger form-control"
                                onclick="deleteMerchant('@item.MerchantId','@item?.CompanyRegistration?.RegistrationName')">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                             </a>
