@@ -60,13 +60,12 @@ namespace JomMalaysia.Presentation.Gateways.Listings
                 {
                     {"status", "all"}
                 };
-                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method)
-                    ;
+                response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method);
                 
             }
             catch (GatewayException ex)
             {
-                throw;
+                throw ex;
             }
 
             if (response.StatusCode == HttpStatusCode.OK)

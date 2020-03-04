@@ -39,7 +39,7 @@ namespace JomMalaysia.Presentation.Controllers
         private async void Refresh()
         {
             if (CategoryList != null)
-                CategoryList = await GetCategories().ConfigureAwait(false);
+                CategoryList = await GetCategories();
             else
             {
                 CategoryList = new List<Category>();
@@ -51,7 +51,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             try
             {
-                CategoryList = await _gateway.GetCategories().ConfigureAwait(false);
+                CategoryList = await _gateway.GetCategories();
 
                 return CategoryList;
             }
@@ -67,7 +67,7 @@ namespace JomMalaysia.Presentation.Controllers
             var vm = new List<Category>();
             try
             {
-                var categories = await GetCategories().ConfigureAwait(false);
+                var categories = await GetCategories();
                
 
                 var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
@@ -120,7 +120,7 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                response = await _gateway.CreateCategory(vm, parentCategoryId).ConfigureAwait(false);
+                response = await _gateway.CreateCategory(vm, parentCategoryId);
             }
             catch (GatewayException e)
             {
@@ -174,7 +174,7 @@ namespace JomMalaysia.Presentation.Controllers
                 IWebServiceResponse response;
                 try
                 {
-                    response = await _gateway.EditCategory(category, categoryId).ConfigureAwait(false);
+                    response = await _gateway.EditCategory(category, categoryId);
                 }
                 catch (GatewayException e)
                 {
@@ -195,7 +195,7 @@ namespace JomMalaysia.Presentation.Controllers
             if (string.IsNullOrEmpty(categoryId)) return SweetDialogHelper.HandleNotFound();
             try
             {
-                response = await _gateway.Delete(categoryId).ConfigureAwait(false);
+                response = await _gateway.Delete(categoryId);
             }
             catch (GatewayException e)
             {
@@ -211,7 +211,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             //categories
             var _categories = new List<SelectListItem>();
-            var categories = await GetCategories().ConfigureAwait(false);
+            var categories = await GetCategories();
             var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == type)
                 .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);

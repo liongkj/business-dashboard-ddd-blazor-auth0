@@ -35,9 +35,20 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index([FromQuery] string categoryId,[FromQuery] string categoryName)
         {
-            var listings = await GetListings();
-            ViewData["categoryName"] = categoryName;
-            return View(categoryId != null ? listings.Where(x => x.Category.CategoryId == categoryId) : listings);
+            List<Listing> vm = new List<Listing>();
+            try{
+                vm = await GetListings();
+                ViewData["categoryName"] = categoryName;
+                return View(categoryId != null ? vm.Where(x => x.Category.CategoryId == categoryId) : vm);
+            }
+            catch (GatewayException e)
+            {
+                if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                if(e.Type==WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
+            }
+ 
+
+            return View(vm);
         }
 
 
@@ -77,11 +88,11 @@ namespace JomMalaysia.Presentation.Controllers
             try
             {
                 //process operating hour
-                var OperatingHours = (from days in vm.OperatingHours
+                var _operatingHours = (from days in vm.OperatingHours
                     where days.Enabled
                     select new OperatingHourViewModel
                         {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
-                vm.OperatingHours = OperatingHours;
+                vm.OperatingHours = _operatingHours;
                 //process images
                 var adsList = new List<Image>();
                 adsList.AddRange(vm.ListingImages.Ads.Where(ad => !String.Equals(ad.Url,
@@ -191,11 +202,11 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                var OperatingHours = (from days in vm.OperatingHours
+                var _operatingHours = (from days in vm.OperatingHours
                     where days.Enabled
                     select new OperatingHourViewModel
                         {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
-                vm.OperatingHours = OperatingHours;
+                vm.OperatingHours = _operatingHours;
                 var adsList = new List<Image>();
                 adsList.AddRange(vm.ListingImages.Ads.Where(ad => !String.Equals(ad.Url,
                         "https://res.cloudinary.com/jomn9-com/image/upload/c_scale,w_200/v1575257964/placeholder_xtcpy8.jpg"))
@@ -313,8 +324,14 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: Listing
         private async Task<List<Listing>> GetListings()
         {
-            ListingList = await _gateway.GetAll();
-            return ListingList;
+            try{
+                ListingList = await _gateway.GetAll();
+                return ListingList;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         #endregion

@@ -6,72 +6,86 @@
     ViewData["Title"] = "Places";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
-<form method="post">
-<div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
-    <table class="table table-hover">
-        <thead class="table-primary">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Listing</th>
-            <th scope="col">Merchant</th>
-            <th scope="col">Type</th>
-            <th scope="col">Status</th>
-            <th scope="col">Tags</th>
-            <th scope="col">Full Address</th>
-            <th scope="col">Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                </td>
-                <td>@item.ListingName</td>
-                <td>
-                    <a asp-action="Detail"
-                       asp-controller="Merchant"
-                       asp-route-id="@item.Merchant.MerchantId"
-                       target="_blank">@item.Merchant.RegistrationName</a>
-                </td>
-                <td>
-                    <strong class="line-breaks">@($"{item.CategoryType}")</strong> <br/>
-                    @($"{item.Category.Category.categoryName.CapitalizeOrConvertNullToEmptyString()}-" +
-                      $"{item.Category.Subcategory.categoryName.CapitalizeOrConvertNullToEmptyString()}")
-                </td>
-                <td>@item.PublishStatus.Status</td>
-                <td>
-                    @{
-                        foreach (var tag in item.Tags)
-                        {
-                            <span class="badge badge-info">@tag</span>
-                        }
-                    }
-                </td>
-                <td>@item.Address.ToString()</td>
-                <td>
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-success form-control" onclick="publishListing('@item.ListingId')">
-                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                        </button>
-                        <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </a>
-                        <a type="button" class="btn btn-danger form-control" onclick="deleteListing('@item.ListingId','@item.ListingName')">
-                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
-</form>
+
+@if (ViewData.ContainsKey("error"))
+             {
+
+                 <div class="jumbotron">
+                     <h1 class="display-4">Opps!</h1>
+                     <p class="lead">@ViewData["error"].</p>
+           
+                 </div>
+             
+}
+else
+{
+
+    <form method="post">
+        <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
+            <table class="table table-hover">
+                <thead class="table-primary">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Listing</th>
+                    <th scope="col">Merchant</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Tags</th>
+                    <th scope="col">Full Address</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                        </td>
+                        <td>@item.ListingName</td>
+                        <td>
+                            <a asp-action="Detail"
+                               asp-controller="Merchant"
+                               asp-route-id="@item.Merchant.MerchantId"
+                               target="_blank">@item.Merchant.RegistrationName</a>
+                        </td>
+                        <td>
+                            <strong class="line-breaks">@($"{item.CategoryType}")</strong> <br/>
+                            @($"{item.Category.Category.categoryName.CapitalizeOrConvertNullToEmptyString()}-" +
+                              $"{item.Category.Subcategory.categoryName.CapitalizeOrConvertNullToEmptyString()}")
+                        </td>
+                        <td>@item.PublishStatus.Status</td>
+                        <td>
+                            @{
+                                foreach (var tag in item.Tags)
+                                {
+                                    <span class="badge badge-info">@tag</span>
+                                }
+                            }
+                        </td>
+                        <td>@item.Address.ToString()</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-success form-control" onclick="publishListing('@item.ListingId')">
+                                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                </button>
+                                <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
+                                </a>
+                                <a type="button" class="btn btn-danger form-control" onclick="deleteListing('@item.ListingId','@item.ListingName')">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </form>
+}
+
 
 @section SpecificScripts{
-
-
     <script type="text/javascript">
     
         //publish listing
