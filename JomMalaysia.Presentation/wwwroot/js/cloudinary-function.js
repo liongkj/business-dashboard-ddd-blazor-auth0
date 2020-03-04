@@ -19,13 +19,12 @@ $(function () {
                 multiple: false,
                 showCompleted: true,
                 croppingShowBackButton: true,
+                autoMinimize:true,
                 resourceType: ["image"],
                 clientAllowedFormats: ["png", "jpg", "jpeg"],
                 minImageWidth: 100,
                 minImageHeight: 100,
                 showSkipCropButton: true,
-                thumbnails: ".image-thumbnail",
-                thumbnailTransformation: "w_150,h_150,c_fill"
             },(error, result) => {
                 if (!error) {
 
@@ -36,15 +35,14 @@ $(function () {
                 }
                 if (!error && result && result.event === "success") {
                     setLoading(false);
-
+                    
                     $(".imageUrl.listing-logo").val(result.info.secure_url);
+                    
+                    $(".img-thumbnail.listing-logo").attr("src",result.info.secure_url);
                     debugger
-                    $(".img-thumbnail.listing-logo").val(result.info.original_filename + "." + result.info.format);
-
                 }
             }
         );
-    console.log(logoWidget);
     //cover
         coverWidget = cloudinary.createUploadWidget(
             {
@@ -59,13 +57,11 @@ $(function () {
                 cropping: "server",
                 croppingShowDimensions: true,
                 multiple: false,
-                showCompleted: true,
                 croppingShowBackButton: true,
                 resourceType: ["image"],
                 clientAllowedFormats: ["png", "jpg", "jpeg"],
                 minImageWidth: 100,
                 minImageHeight: 100,
-                maxFiles: 5,
                 showSkipCropButton: true,
             },(error, result) => {
                 if (!error) {
@@ -79,7 +75,7 @@ $(function () {
                     setLoading(false);
                    
                         $(".imageUrl.listing-cover").val(result.info.secure_url);
-                        $(".img-thumbnail.listing-cover").val(result.info.original_filename + "." + result.info.format);
+                        $(".img-thumbnail.listing-cover").attr("src",result.info.secure_url);
                     
                 }
             }
@@ -116,9 +112,8 @@ function uploadAdsWidget(no) {
             croppingShowBackButton: true,
             resourceType: ["image"],
             clientAllowedFormats: ["png", "jpg", "jpeg"],
-            minImageWidth: 250,
+            minImageWidth: 512,
             minImageHeight: 300,
-            
             showSkipCropButton: true,
         },(error, result) => {
             if (result.event === "upload-added") {

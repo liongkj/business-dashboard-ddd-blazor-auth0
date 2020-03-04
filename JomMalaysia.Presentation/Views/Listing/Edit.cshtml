@@ -157,9 +157,11 @@
     <div class="col-sm-10 col-md-6">
         <div class="form-group row">
             <div class="input-group col-sm-10 col-md-12">
-                <img src="@Model.ListingImages.ListingLogo.Url" class="listing-logo img-thumbnail" alt="">
-                <img src="@Model.ListingImages.CoverPhoto.Url"  class="listing-cover img-thumbnail" alt="">
-                @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
+                <img style="width: 150px;height: 150px" 
+                     src="@Model.ListingImages.ListingLogo.Url" class="listing-logo img-thumbnail" alt="">
+                <img style="height: 150px;width: 66.66%" 
+                    src="@Model.ListingImages.CoverPhoto.Url"  class="listing-cover img-thumbnail" alt="">
+                @Html.HiddenFor(m => m.ListingImages.ListingLogo.Url, new {@class = "form-control listing-logo imageUrl", id = ""})
                 @Html.HiddenFor(m => m.ListingImages.CoverPhoto.Url, new {@class = "form-control listing-cover imageUrl", id = ""})
 
                 <div class="input">
@@ -373,7 +375,6 @@
       let data = $(this).serialize();
       parseAdsImage();
         let token = $('input[name="__RequestVerificationToken"]').val();
-                  debugger
                   if ($(this).valid()) {
                       $.ajax({
                           url: "/Listing/Edit/",

@@ -21,7 +21,8 @@ namespace JomMalaysia.Presentation.ViewModels.Listings
         [Required]
         [Display(Name = "Category")]
         public string CategoryId { get; set; }
-
+        
+        [Display(Name = "Search Keywords")]
         public IEnumerable<string> Tags { get; set; }
 
         public List<OperatingHourViewModel> OperatingHours { get; set; }

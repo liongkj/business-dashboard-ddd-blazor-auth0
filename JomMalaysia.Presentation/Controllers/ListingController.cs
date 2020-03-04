@@ -200,6 +200,7 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<Tuple<int, string>> Edit(RegisterListingViewModel vm, string listingId)
         {
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
+            var thumbnail = new Image();
             try
             {
                 var _operatingHours = (from days in vm.OperatingHours
@@ -208,8 +209,8 @@ namespace JomMalaysia.Presentation.Controllers
                         {Day = days.Day, OpenTime = days.OpenTime, CloseTime = days.CloseTime}).ToList();
                 vm.OperatingHours = _operatingHours;
                 var adsList = new List<Image>();
-                adsList.AddRange(vm.ListingImages.Ads.Where(ad => !String.Equals(ad.Url,
-                        "https://res.cloudinary.com/jomn9-com/image/upload/c_scale,w_200/v1575257964/placeholder_xtcpy8.jpg"))
+                adsList.AddRange(vm.ListingImages.Ads.Where(ad => !string.Equals(ad.Url,
+                        thumbnail.Url))
                     .Select(ad => new Image(ad.Url)));
 
                 vm.ListingImages.Ads = adsList;
