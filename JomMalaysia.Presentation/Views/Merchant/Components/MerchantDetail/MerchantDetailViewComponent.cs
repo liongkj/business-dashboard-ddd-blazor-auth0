@@ -16,14 +16,14 @@ namespace JomMalaysia.Presentation.Views.Merchant.Components.MerchantDetail
             _merchantGateway = merchantGateway;
             _listingGateway = listingGateway;
         }
-
-        public async Task<IViewComponentResult> InvokeAsync(
-            string id)
+        
+        
+        public async Task<IViewComponentResult> InvokeAsync(string id)
         {
            
             var merchant = await _merchantGateway.Detail(id).ConfigureAwait(false);
             var listings = await _listingGateway.GetAll().ConfigureAwait(false);
-            var result = listings.Where(l => merchant.Listings.Any(x => x == l.ListingId)).ToList();
+            var result = listings.Where(x => x.Merchant.MerchantId == merchant.MerchantId).ToList();
             merchant.Listing = result;
             return View(merchant);
         }

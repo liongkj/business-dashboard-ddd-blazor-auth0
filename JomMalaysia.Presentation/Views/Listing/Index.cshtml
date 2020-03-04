@@ -43,9 +43,9 @@ else
                         </td>
                         <td>@item.ListingName</td>
                         <td>
-                            <a asp-action="Detail"
+                            <a asp-action="Edit"
                                asp-controller="Merchant"
-                               asp-route-id="@item.Merchant.MerchantId"
+                               asp-route-merchantId="@item.Merchant.MerchantId"
                                target="_blank">@item.Merchant.RegistrationName</a>
                         </td>
                         <td>

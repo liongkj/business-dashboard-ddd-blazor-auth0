@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using JomMalaysia.Framework.Helper;
 using System.Net;
 using AutoMapper;
 using JomMalaysia.Framework.Interfaces;
+using JomMalaysia.Presentation.Gateways.Listings;
 
 namespace JomMalaysia.Presentation.Controllers
 {
@@ -18,7 +20,7 @@ namespace JomMalaysia.Presentation.Controllers
     public class MerchantController : Controller
     {
         private readonly IMerchantGateway _gateway;
-
+        private readonly IListingGateway _listingGateway;
         private List<Merchant> Merchants { get; set; }
         private Boolean refresh = false;
 
@@ -26,17 +28,18 @@ namespace JomMalaysia.Presentation.Controllers
 
         #region gateway helper
 
-        public MerchantController(IMerchantGateway gateway, IMapper mapper)
+        public MerchantController(IMerchantGateway gateway, IMapper mapper, IListingGateway listingGateway)
         {
             _gateway = gateway;
             _mapper = mapper;
+            _listingGateway = listingGateway;
             Refresh();
         }
 
         async void Refresh()
         {
             if (Merchants != null && !refresh)
-                Merchants = await GetMerchants().ConfigureAwait(false);
+                Merchants = await GetMerchants();
             else
             {
                 Merchants = new List<Merchant>();
@@ -53,7 +56,7 @@ namespace JomMalaysia.Presentation.Controllers
 
             try
             {
-                Merchants = await _gateway.GetMerchants().ConfigureAwait(false);
+                Merchants = await _gateway.GetMerchants();
                 return Merchants;
             }
             catch (Exception e)
@@ -67,9 +70,15 @@ namespace JomMalaysia.Presentation.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-            var merchants = await GetMerchants().ConfigureAwait(false);
-
-            return View(merchants);
+            var vm = new List<Merchant>();
+            var merchants = await GetMerchants();
+            var listings = await _listingGateway.GetAll();
+            foreach (var m in merchants)
+            {
+                m.Listing = listings.Where(x => x.Merchant.MerchantId == m.MerchantId).ToList();
+                vm.Add(m);
+            }
+            return View(vm);
         }
 
         [HttpGet]
@@ -90,7 +99,7 @@ namespace JomMalaysia.Presentation.Controllers
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
-                response = await _gateway.Add(vm).ConfigureAwait(false);
+                response = await _gateway.Add(vm);
             }
             catch (GatewayException e)
             {
@@ -105,7 +114,7 @@ namespace JomMalaysia.Presentation.Controllers
         }
 
         [HttpGet]
-        public IActionResult Detail(string id)
+        public IActionResult _Detail(string id)
         {
             var vm = new Merchant
             {
@@ -120,7 +129,7 @@ namespace JomMalaysia.Presentation.Controllers
             Merchant m;
             try
             {
-                m = await _gateway.Detail(merchantId).ConfigureAwait(false);
+                m = await _gateway.Detail(merchantId);
             }
             catch (Exception e)
             {
@@ -139,7 +148,7 @@ namespace JomMalaysia.Presentation.Controllers
 
             try
             {
-                var response = await _gateway.Edit(vm, merchantId).ConfigureAwait(false);
+                var response = await _gateway.Edit(vm, merchantId);
                 if (response.StatusCode == HttpStatusCode.OK) refresh = true;
                 return SweetDialogHelper.HandleResponse(response);
             }
