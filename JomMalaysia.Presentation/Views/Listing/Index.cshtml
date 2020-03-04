@@ -65,15 +65,19 @@ else
                         <td>@item.Address.ToString()</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <button class="btn btn-success form-control" onclick="publishListing('@item.ListingId')">
-                                    <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                </button>
-                                <a type="button" class="btn btn-info form-control" asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
+                                
+                                <a type="button" class="btn btn-info form-control" 
+                                   asp-controller="Listing" asp-action="Edit" asp-route-listingId="@item.ListingId">
                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                 </a>
-                                <a type="button" class="btn btn-danger form-control" onclick="deleteListing('@item.ListingId','@item.ListingName')">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                <a href="#" class="btn btn-danger form-control" 
+                                   onclick="deleteListing('@item.ListingId','@item.ListingName')">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                 </a>
+                                <a href="#" class="btn btn-success form-control"
+                                   onclick="publishListing('@item.ListingId')">
+                                      <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                 </a>
                             </div>
                         </td>
                     </tr>
@@ -90,22 +94,24 @@ else
     
         //publish listing
         function publishListing(ListingId) {
+            
         let token = $('input[name="__RequestVerificationToken"]').val();
             swal({
-                title: 'Do you want to publish this listing?',
-                icon: 'question',
-                type: 'input',
-                inputPlaceholder: "Duration in months. Default to 12",
-                buttons: true,
-                dangerMode: true,
-            }, function (inputValue) {
-                    if (!inputValue) { inputValue = 12;}
-                    $.ajax({
-                        //TODO add [ValidateAntiForgeryToken]
+                title: 'Publish this place?',
+                text: 'Confirm publishing? This place will be shown in the app shortly',
+                type: 'warning',
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Yes",
+                showLoaderOnConfirm: true,
+            }, 
+            function () {
+                debugger
+                  $.ajax({
                         url: "/Listing/Publish",
                         data: {
                             "id": ListingId,
-                            "months": inputValue,
+                            // "months": inputValue,
                         },
                         headers: {'RequestVerificationToken': token},
                         type: "POST",
@@ -120,15 +126,10 @@ else
                                         window.location.href = '/listing';
                                     });
                             } else {
-                                swal(
-                                "Oops",
-                                item2,
-                                "error"
-                            );
+                                swal("Oops",item2,"error");
                             }
-
                         }),
-                        error: (function (data) {
+                        error: (function () {
                             swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                         })
                     });

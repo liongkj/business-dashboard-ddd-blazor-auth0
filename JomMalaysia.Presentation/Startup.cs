@@ -196,7 +196,7 @@ namespace JomMalaysia.Presentation
                 });
             
             services.AddAuthorization();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddHttpContextAccessor();
 
