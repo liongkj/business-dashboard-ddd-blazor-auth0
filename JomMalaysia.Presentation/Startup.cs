@@ -17,6 +17,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace JomMalaysia.Presentation
 {
@@ -119,10 +121,8 @@ namespace JomMalaysia.Presentation
 
                                     // context.RejectPrincipal();
                                 }
-                                else
-                                {
-                                    return Task.CompletedTask;
-                                }
+
+                                return Task.CompletedTask;
                             }
                            context.RejectPrincipal();
                            return Task.CompletedTask;
@@ -148,7 +148,7 @@ namespace JomMalaysia.Presentation
                         ClockSkew = TimeSpan.Zero,
                         RoleClaimType = ClaimTypes.Role,
                         ValidateIssuer = true,
-                        ValidateLifetime = true,
+                        ValidateLifetime = true
                     };
                     
                     options.CallbackPath = new PathString("/success");
@@ -199,7 +199,7 @@ namespace JomMalaysia.Presentation
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddHttpContextAccessor();
-
+            services.AddResponseCaching();
             services.AddSingleton(Configuration);
             services.AddSingleton(new MapperConfiguration(cfg => { cfg.AddProfile<PresentationProfile>(); })
                 .CreateMapper());
@@ -230,6 +230,22 @@ namespace JomMalaysia.Presentation
             app.UseAuthentication();
             app.UseCookiePolicy(); 
             app.UseRouting();
+            app.UseResponseCaching();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl = 
+                    new CacheControlHeaderValue
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromSeconds(10)
+                    };
+                context.Response.Headers[HeaderNames.Vary] = 
+                    new[] { "Accept-Encoding" };
+
+                await next();
+            });
+
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

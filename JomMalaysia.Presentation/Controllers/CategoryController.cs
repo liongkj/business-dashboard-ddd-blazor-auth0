@@ -33,33 +33,9 @@ namespace JomMalaysia.Presentation.Controllers
             _gateway = gateway;
             _listingGateway = listingGateway;
 
-            Refresh();
-        }
-
-        private async void Refresh()
-        {
-            if (CategoryList != null)
-                CategoryList = await GetCategories();
-            else
-            {
-                CategoryList = new List<Category>();
-            }
         }
 
 
-        private async Task<List<Category>> GetCategories()
-        {
-            try
-            {
-                CategoryList = await _gateway.GetCategories();
-
-                return CategoryList;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
 
         // GET: /<controller>/
         public async Task<IActionResult> Index()
@@ -67,7 +43,7 @@ namespace JomMalaysia.Presentation.Controllers
             var vm = new List<Category>();
             try
             {
-                var categories = await GetCategories();
+                var categories = await _gateway.GetCategories();
                
 
                 var cats = categories.OrderBy(x => x.CategoryName).GroupBy(x => x.CategoryPath.Category);
@@ -145,25 +121,27 @@ namespace JomMalaysia.Presentation.Controllers
     
         
         [HttpGet]
-        public async Task<ViewResult> Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var vm = await _gateway.GetCategory(id);
-            var categories = await GetCategories();
+            var categories = await _gateway.GetCategories();
+            var vm = categories.FirstOrDefault(x => x.CategoryId == id);
             var listing = await _listingGateway.GetAll();
-            vm.LstSubCategory = new List<Category>();
-            foreach (var category in categories)
+            if (vm != null)
             {
-                if (!category.IsCategory() && category.CategoryPath.Category == vm.CategoryName)
+                vm.LstSubCategory = new List<Category>();
+                foreach (var category in categories)
                 {
-                    
-                    category.LstListing.AddRange( listing
-                        .Where(x => x.Category.CategoryId==category.CategoryId).ToList());
-                    vm.LstSubCategory.Add(category);
-                    
+                    if (!category.IsCategory() && category.CategoryPath.Category == vm.CategoryName)
+                    {
+                        category.LstListing = listing.Where(x => x.Category.CategoryId == category.CategoryId).ToList();
+                        vm.LstSubCategory.Add(category);
+                    }
                 }
-                    
+
+                return View(vm);
             }
-            return View(vm);
+
+            return NotFound();
         }
         
         [HttpPost]
@@ -211,7 +189,7 @@ namespace JomMalaysia.Presentation.Controllers
         {
             //categories
             var _categories = new List<SelectListItem>();
-            var categories = await GetCategories();
+            var categories = await _gateway.GetCategories();
             var cats = categories.Where(x => x.CategoryPath.Subcategory != null && x.CategoryType == type)
                 .OrderBy(x => x.CategoryName)
                 .GroupBy(x => x.CategoryPath.Category);

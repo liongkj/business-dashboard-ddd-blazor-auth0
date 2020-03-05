@@ -8,10 +8,7 @@ namespace JomMalaysia.Presentation.Models.Categories
 {
     public class Category
     {
-        public Category()
-        {
-            LstListing = new List<Listing>();
-        }
+  
         public string CategoryId { get; set; }
 
 
@@ -41,7 +38,7 @@ namespace JomMalaysia.Presentation.Models.Categories
         public CategoryType CategoryType { get; set; } = CategoryType.Private;
         public CategoryPath CategoryPath { get; set; }
         public List<Category> LstSubCategory { get; set; }
-        public List<Listing> LstListing { get; }
+        public List<Listing> LstListing { get; set; }
         public bool IsCategory()
         {
             return CategoryPath.Subcategory == null;
