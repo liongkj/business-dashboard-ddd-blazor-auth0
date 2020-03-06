@@ -44,10 +44,12 @@
 </div>
 <form asp-action="Create" method="post" id="FormNewSub">
     <input name="parentCategoryId" value="@Model.CategoryId" type="hidden"/>
+    
     <tr class="subcategory-bg subcategory collapse">
         <td colspan="6" class="no-padding">
             <br/>
             <table id="subtabledata" class="table table-hover">
+            <caption>Total subcategories: @Model.LstSubCategory.Count</caption>
                 <thead class="table-primary">
                 <tr>
 
@@ -72,26 +74,33 @@
                             <td>@subitem.CategoryNameMs</td>
                             <td>@subitem.CategoryNameZh</td>
                             <td>
-                               
-                                <a asp-controller="Listing" asp-action="Index"
-                                   asp-route-categoryId="@subitem.CategoryId"
-                                   asp-route-categoryName="@subitem.CategoryName"
-                                   class="btn btn-outline-warning col-md-10"
-                                   target="_blank">
-                                    
+                                @if (subitem.LstListing.Count > 0)
+                                {
+                                    <a asp-controller="Listing" asp-action="Index"
+                                       asp-route-categoryId="@subitem.CategoryId"
+                                       asp-route-categoryName="@subitem.CategoryName"
+                                       class="btn btn-outline-warning col-md-10"
+                                       target="_blank">
                                         <i class="fa fa-eye"></i>
-                                  View <span class="badge badge-dark">@subitem.LstListing.Count</span>
-
-                                </a>
+                                        View <span class="badge badge-dark">@subitem.LstListing.Count</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-outline-warning col-md-10 disabled">
+                                        <i class="fa fa-eye"></i>
+                                        View <span class="badge badge-dark">@subitem.LstListing.Count</span>
+                                    </a>
+                                }
                             </td>
                             <td>
                                 <a data-toggle="modal" data-target="#modal-subcategory"
                                    data-id="@subitem.CategoryId"
                                    @* href="@Url.Action("Edit", "Category", new {subitem.CategoryId})"  *@
                                    class="btn btn-outline-info col-md-3">
-                                    
-                                        <i class="fa fa-edit"></i>
-                                 
+
+                                    <i class="fa fa-edit"></i>
+
                                 </a>
 
                                 <a href="#" onclick="deleteCategory('@subitem.CategoryId', '@subitem.CategoryName','@Model.CategoryId')"
