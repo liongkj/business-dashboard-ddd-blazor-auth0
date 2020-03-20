@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using JomMalaysia.Framework.Configuration;
-using JomMalaysia.Presentation.Manager;
-using JomMalaysia.Presentation.Models.Auth0;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +10,10 @@ namespace JomMalaysia.Presentation.Controllers
     public class AccountController : Controller
     {
         private readonly IAppSetting _appSetting;
-        private readonly IAuthorizationManagers _authorizationManagers;
 
-        public AccountController(IAppSetting appSetting, IAuthorizationManagers authorizationManagers)
+        public AccountController(IAppSetting appSetting)
         {
             _appSetting = appSetting;
-            _authorizationManagers = authorizationManagers;
         }
 
         //

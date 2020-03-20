@@ -5,7 +5,6 @@ using JomMalaysia.Framework.CacheKeys;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Interfaces;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 using JomMalaysia.Presentation.ViewModels.Users;
@@ -21,7 +20,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
 
         private readonly IMemoryCache _cache;
 
-        public UserGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
+        public UserGateway(IWebServiceExecutor webServiceExecutor,
             IApiBuilder apiBuilder, IMemoryCache cache)
         {
             _webServiceExecutor = webServiceExecutor;

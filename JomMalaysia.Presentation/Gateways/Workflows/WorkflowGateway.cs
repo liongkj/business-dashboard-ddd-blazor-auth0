@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Interfaces;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.Workflows;
 using RestSharp;
 

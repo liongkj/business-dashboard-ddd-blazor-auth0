@@ -25,8 +25,6 @@ namespace JomMalaysia.Presentation.Controllers
         private readonly ICategoryGateway _gateway;
         private readonly IListingGateway _listingGateway;
 
-        private static List<Category> CategoryList { get; set; }
-        private static Boolean refresh = false;
 
         public CategoryController(ICategoryGateway gateway, IListingGateway listingGateway)
         {
@@ -102,9 +100,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
-
-            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
-
+            
             return SweetDialogHelper.HandleResponse(response);
         }
         
@@ -159,7 +155,6 @@ namespace JomMalaysia.Presentation.Controllers
                     return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
                 }
 
-                if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
                 return SweetDialogHelper.HandleResponse(response);
             }
@@ -180,7 +175,6 @@ namespace JomMalaysia.Presentation.Controllers
                 return e.Type == WebServiceExceptionType.ConnectionError ? SweetDialogHelper.HandleStatusCode(HttpStatusCode.ServiceUnavailable) : SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
 
-            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
             return SweetDialogHelper.HandleResponse(response);
         }
 

@@ -71,13 +71,23 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var vm = new List<Merchant>();
-            var merchants = await GetMerchants();
-            var listings = await _listingGateway.GetAll();
-            foreach (var m in merchants)
+            try
             {
-                m.Listing = listings.Where(x => x.Merchant.MerchantId == m.MerchantId).ToList();
-                vm.Add(m);
+                
+                var merchants = await GetMerchants();
+                var listings = await _listingGateway.GetAll();
+                foreach (var m in merchants)
+                {
+                    m.Listing = listings.Where(x => x.Merchant.MerchantId == m.MerchantId).ToList();
+                    vm.Add(m);
+                }
             }
+            catch (GatewayException e)
+            {
+                if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                if(e.Type==WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
+            }
+
             return View(vm);
         }
 

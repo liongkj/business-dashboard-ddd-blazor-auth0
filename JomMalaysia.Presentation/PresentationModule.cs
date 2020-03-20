@@ -2,7 +2,6 @@
 using Autofac;
 using JomMalaysia.Framework.Configuration;
 using JomMalaysia.Presentation.Gateways.WebServices;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Scope;
 
 namespace JomMalaysia.Presentation
@@ -19,8 +18,6 @@ namespace JomMalaysia.Presentation
 
             builder.RegisterType<ApiBuilder>().AsImplementedInterfaces().InstancePerLifetimeScope();
             
-            builder.RegisterType<AuthorizationManagers>().AsImplementedInterfaces().InstancePerLifetimeScope();
-
             builder.RegisterType<AppSetting>().AsImplementedInterfaces().SingleInstance();
 
             builder.RegisterType<HasScopeHandler>().AsImplementedInterfaces().SingleInstance();

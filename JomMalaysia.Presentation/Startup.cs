@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -7,15 +8,19 @@ using System.Threading.Tasks;
 using Autofac;
 using AutoMapper;
 using JomMalaysia.Framework;
+using JomMalaysia.Framework.Constant;
 using JomMalaysia.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
@@ -57,7 +62,7 @@ namespace JomMalaysia.Presentation
                     
                     {
                     
-                        OnValidatePrincipal =  context =>
+                        OnValidatePrincipal = context =>
                         {
                             var accessToken = context.Properties.Items[".Token.access_token"] ;
                             var handler = new JwtSecurityTokenHandler();
@@ -79,47 +84,7 @@ namespace JomMalaysia.Presentation
                                 {
                                     context.RejectPrincipal();
                                     return Task.CompletedTask;
-                                    // String refreshToken = (tokens?.Claims)
-                                    //     .FirstOrDefault(x => x.Type == ".Token.refresh_token")?.Value;
-                                    // //
-                                    // AuthenticationApiClient client =
-                                    //     new AuthenticationApiClient(
-                                    //         new Uri($"https://{Configuration["Auth0:Domain"]}"));
-                                    // var request = new RefreshTokenRequest
-                                    // {
-                                    //     RefreshToken = refreshToken,
-                                    //     ClientId = Configuration["Auth0:ClientId"],
-                                    //     ClientSecret = Configuration["Auth0:ClientSecret"],
-                                    //     Scope = "offline_access"
-                                    // };
-                                    // response = await client.GetTokenAsync(request);
-                                    // //check for error while renewing - any error will trigger a new login.
-                                    // if (response == null)
-                                    // {
-                                    //     //reject Principal
-                                    //     context.RejectPrincipal();
-                                    //     return;
-                                    // }
-                                    //
-                                    //     tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x =>
-                                    //         x.Type == ConstantHelper.Claims.accessToken));
-                                    //     tokens.AddClaim(new Claim(ConstantHelper.Claims.accessToken,
-                                    //         response.AccessToken));
-                                    //     // accessToken = response?.AccessToken;
-                                    //     //set new expiration date
-                                    //     var newExpires = DateTime.UtcNow.AddSeconds(response.ExpiresIn);
-                                    //     Debug.WriteLine("new expired: " + newExpires.Ticks);
-                                    //
-                                    //     tokens.RemoveClaim(tokens.Claims.FirstOrDefault(x =>
-                                    //         x.Type == ConstantHelper.Claims.expiry));
-                                    //     tokens.AddClaim(new Claim(ConstantHelper.Claims.expiry,
-                                    //         newExpires.Ticks.ToString()));
-                                    //     //trigger context to renew cookie with new token values
-                                    //     context.ShouldRenew = true;
-                                    //     return;
-                                    // }
-
-                                    // context.RejectPrincipal();
+                                   //if need refresh token, add here
                                 }
 
                                 return Task.CompletedTask;
@@ -142,7 +107,7 @@ namespace JomMalaysia.Presentation
                     options.Scope.Add(Configuration["Auth0:Scope"]);
                     
                     // Set response type to code
-                    options.ResponseType = "code";
+                    options.ResponseType =OpenIdConnectResponseType.Code;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ClockSkew = TimeSpan.Zero,
@@ -150,20 +115,24 @@ namespace JomMalaysia.Presentation
                         ValidateIssuer = true,
                         ValidateLifetime = true
                     };
-                    
                     options.CallbackPath = new PathString("/success");
                     // Configure the Claims Issuer to be Auth0
                     options.ClaimsIssuer = "Auth0";
-                    
+                    // Saves tokens to the AuthenticationProperties
+                    options.SaveTokens = true;
                     options.Events = new OpenIdConnectEvents
                     {
                         
-                        OnRedirectToIdentityProvider = context =>
+                        
+                       OnRedirectToIdentityProvider = context =>
                         {
+                            
                             context.ProtocolMessage.SetParameter("audience", Configuration["Auth0:Audience"]);
-
+                            
                             return Task.FromResult(0);
                         },
+
+                       //Logout Event
                         OnRedirectToIdentityProviderForSignOut = context =>
                         {
                             var logoutUri =
@@ -189,9 +158,8 @@ namespace JomMalaysia.Presentation
                             return Task.CompletedTask;
                         }
                     };
-                    // Saves tokens to the AuthenticationProperties
-                    options.SaveTokens = true;
-                    //Logout Event
+                   
+                   
                    
                 });
             
