@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
@@ -34,12 +36,11 @@ namespace JomMalaysia.Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-
-            try
-            {
-                await GetUserRole();
-                // ViewData["Role"] = ;
-                List<AppUser> users = new List<AppUser>();
+            var users = new List<AppUser>();
+           
+               var role =  await GetUserRole();
+                ViewData["Role"] = role;
+                
                 try
                 {
                     users = await _gateway.GetAll();
@@ -55,13 +56,7 @@ namespace JomMalaysia.Presentation.Controllers
                     var index = RoleHelper.AuthorityList.IndexOf(u.Role);
                     return index == -1 ? int.MaxValue : index;
                 }));
-            }
-            catch (Exception e)
-            {
-                
-            }
-
-            return View();
+          
         }
 
         [HttpGet]
@@ -158,20 +153,24 @@ namespace JomMalaysia.Presentation.Controllers
 
         private async Task<string> GetUserRole()
         {
-            if (User.Identity.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
+                throw new GatewayException(HttpStatusCode.Unauthorized, "User Not Authorized");
+            var handler = new JwtSecurityTokenHandler();
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            string role = null;
+            if (handler.ReadToken(accessToken) is JwtSecurityToken tokenS)
             {
-                string accessToken = await HttpContext.GetTokenAsync("access_token");
-                return accessToken;
+                role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
             }
 
-            throw new GatewayException(HttpStatusCode.Unauthorized,"User Not Authorized");
+            return role;
+
         } 
         
         private async Task< IEnumerable<SelectListItem>> GetAssignableRole()
         {
-            var role =  HttpContext.User.Identities;
             return RoleHelper.GetAssignableRoles(await GetUserRole())
-                .Select(role => new SelectListItem { Text = role, Value = role }).ToList();
+                .Select(s => new SelectListItem { Text = s, Value = s }).ToList();
         }
     }
 }

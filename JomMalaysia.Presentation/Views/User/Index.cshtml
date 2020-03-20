@@ -10,7 +10,7 @@
     }
 }
 
-<form id="userForm" method="POST">
+<form id="userForm" method="post">
     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
         <table id="tableData" class="table table-hover">
             <!--remain id as this, else change name in _LayoutIndex too-->
@@ -21,7 +21,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Full Name</th>
                 <th scope="col">Role</th>
-                <th scope="col">Last Login</th>"
+                <th scope="col">Last Login</th>
                 <th scope="col">Action</th>
             </tr>
             </thead>
@@ -117,12 +117,11 @@
                              type: 'GET',
                              url: '/User/Edit/' + id,
                              success: function (data) {
-                                 debugger
                                  $modal.find('.modal-title').text("User loaded successfully");
                                  $modal.find('.modal-body').html(data);
                              },
                              fail: function (error) {
-                                 debugger
+                                   $modal.find('.modal-body').html(error);
                              }
                          });
                      });
@@ -152,7 +151,7 @@
                                 $modal.find('.modal-body').html(data);
                             },
                             fail: function (error) {
-                                debugger
+                                $modal.find('.modal-body').html(error);
                             }
                         });
                     });
@@ -212,16 +211,12 @@
                                 "error"
                             );
                         }
-                        }), error: (function (data) {
+                        }), error: (function () {
                             swal("Oops", "An unknown error occured! Please contact technical support.", "error");
                         })
                     })
                 });
         }
-
-
-
-
 
     </script>
 }

@@ -96,7 +96,7 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 RedirectUri = Url.Action(nameof(Login), "Account")
             });
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme).ConfigureAwait(false);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             // return RedirectToAction(nameof(Login), "Account");
         }

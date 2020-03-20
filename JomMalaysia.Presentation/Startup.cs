@@ -70,7 +70,6 @@ namespace JomMalaysia.Presentation
                             if (handler.ReadToken(accessToken) is JwtSecurityToken tokens)
                             {
                                 //get the users tokens
-
                                 // AccessTokenResponse response = null;
                                 var exp = tokens.Claims.FirstOrDefault(x => x.Type == "exp")?.Value;
                                 if (!long.TryParse(exp, out var parsed)) return Task.CompletedTask;
