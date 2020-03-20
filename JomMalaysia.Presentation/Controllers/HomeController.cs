@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using JomMalaysia.Framework.Configuration;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 

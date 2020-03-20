@@ -34,7 +34,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.Category);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.CATEGORY);
                     const Method method = Method.GET;
                     response = await _webServiceExecutor
                         .ExecuteRequestAsync<ListViewModel<Category>>(req, method)
@@ -65,7 +65,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId, categoryId);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.CATEGORY_WITH_ID, categoryId);
                     const Method method = Method.GET;
                     IWebServiceResponse<ViewModel<Category>> response = await _webServiceExecutor
                         .ExecuteRequestAsync<ViewModel<Category>>(req, method)
@@ -89,8 +89,8 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             try
             {
                 var req = string.IsNullOrEmpty(categoryId)
-                    ? _apiBuilder.GetApi(APIConstant.API.Path.Category)
-                    : _apiBuilder.GetApi(APIConstant.API.Path.NewSubcategory, categoryId);
+                    ? _apiBuilder.GetApi(ApiConstant.Api.Path.CATEGORY)
+                    : _apiBuilder.GetApi(ApiConstant.Api.Path.NEW_SUBCATEGORY, categoryId);
 
                 const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, vm);
@@ -110,7 +110,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             IWebServiceResponse<Category> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId, categoryId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.CATEGORY_WITH_ID, categoryId);
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method, vm);
@@ -135,7 +135,7 @@ namespace JomMalaysia.Presentation.Gateways.Categories
             IWebServiceResponse<Category> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.CategoryWithId, categoryId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.CATEGORY_WITH_ID, categoryId);
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Category>(req, method);

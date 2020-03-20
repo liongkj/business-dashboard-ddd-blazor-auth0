@@ -12,7 +12,7 @@
 
         string Auth0ClientSecret { get; }
 
-        string DBConnection { get; }
+        string DbConnection { get; }
 
         string Scope { get; }
         string Audience { get; }

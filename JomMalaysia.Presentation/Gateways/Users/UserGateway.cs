@@ -5,7 +5,6 @@ using JomMalaysia.Framework.CacheKeys;
 using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Interfaces;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.Models.Auth0;
 using JomMalaysia.Presentation.ViewModels.Users;
@@ -21,7 +20,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
 
         private readonly IMemoryCache _cache;
 
-        public UserGateway(IWebServiceExecutor webServiceExecutor, IAuthorizationManagers authorizationManagers,
+        public UserGateway(IWebServiceExecutor webServiceExecutor,
             IApiBuilder apiBuilder, IMemoryCache cache)
         {
             _webServiceExecutor = webServiceExecutor;
@@ -37,7 +36,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.User);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.USER);
                     const Method method = Method.GET;
                     response = await _webServiceExecutor
                         .ExecuteRequestAsync<UserListResponse>(req, method)
@@ -63,7 +62,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
             IWebServiceResponse<RegisterUserViewModel> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.User);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.USER);
                 const Method method = Method.POST;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<RegisterUserViewModel>(req, method, vm)
@@ -89,7 +88,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.UserWithId, id);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.USER_WITH_ID, id);
                     const Method method = Method.GET;
                     response = await _webServiceExecutor
                         .ExecuteRequestAsync<ViewModel<AppUser>>(req, method)
@@ -113,7 +112,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
             IWebServiceResponse response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.UserWithId, userId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.USER_WITH_ID, userId);
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor
@@ -133,7 +132,7 @@ namespace JomMalaysia.Presentation.Gateways.Users
             IWebServiceResponse response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.UserWithId, userId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.USER_WITH_ID, userId);
 
                 const Method method = Method.PATCH;
                 response = await _webServiceExecutor

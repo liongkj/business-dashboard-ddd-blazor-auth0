@@ -80,7 +80,7 @@ namespace JomMalaysia.Presentation.Controllers
             var total = 0;
             foreach (WorkflowStatusEnum x in Enum.GetValues(typeof(WorkflowStatusEnum)))
             {
-                if (x != WorkflowStatusEnum.all)
+                if (x != WorkflowStatusEnum.All)
                 {
                     var status = new WorkflowStatus(x.ToString());
                     var count = 0;

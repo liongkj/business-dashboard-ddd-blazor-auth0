@@ -4,33 +4,33 @@
     {
         public enum PublishStatusEnum
         {
-            pending,
-            published,
-            unpublished
+            Pending,
+            Published,
+            Unpublished
         }
 
         public enum WorkflowStatusEnum
         {
-            all,
-            pending,
-            level1,
-            level2,
-            completed,
-            rejected
+            All,
+            Pending,
+            Level1,
+            Level2,
+            Completed,
+            Rejected
         }
 
         public enum WorkflowTypeEnum
         {
-            publish,
-            edit,
-            unpublish,
-            delete
+            Publish,
+            Edit,
+            Unpublish,
+            Delete
         }
 
         public enum WorkflowActionEnum
         {
-            approve,
-            reject
+            Approve,
+            Reject
         }
     }
 }

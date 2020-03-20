@@ -16,6 +16,6 @@ namespace JomMalaysia.Framework.CacheKeys
 
         public static readonly MemoryCacheEntryOptions CacheEntryOptions = new MemoryCacheEntryOptions()
             // Keep in cache for this time, reset time if accessed.
-            .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+            .SetSlidingExpiration(TimeSpan.FromMinutes(3));
     }
 }

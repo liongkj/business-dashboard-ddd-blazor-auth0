@@ -21,8 +21,6 @@ namespace JomMalaysia.Presentation.Controllers
     {
         private readonly IMerchantGateway _gateway;
         private readonly IListingGateway _listingGateway;
-        private List<Merchant> Merchants { get; set; }
-        private Boolean refresh = false;
 
         private readonly IMapper _mapper;
 
@@ -33,37 +31,9 @@ namespace JomMalaysia.Presentation.Controllers
             _gateway = gateway;
             _mapper = mapper;
             _listingGateway = listingGateway;
-            Refresh();
         }
 
-        async void Refresh()
-        {
-            if (Merchants != null && !refresh)
-                Merchants = await GetMerchants();
-            else
-            {
-                Merchants = new List<Merchant>();
-            }
-        }
-
-        // GET: Merchant
-        async Task<List<Merchant>> GetMerchants()
-        {
-            if (Merchants.Count > 0)
-            {
-                return Merchants;
-            }
-
-            try
-            {
-                Merchants = await _gateway.GetMerchants();
-                return Merchants;
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
-        }
+   
 
         #endregion
 
@@ -71,13 +41,23 @@ namespace JomMalaysia.Presentation.Controllers
         public async Task<IActionResult> Index()
         {
             var vm = new List<Merchant>();
-            var merchants = await GetMerchants();
-            var listings = await _listingGateway.GetAll();
-            foreach (var m in merchants)
+            try
             {
-                m.Listing = listings.Where(x => x.Merchant.MerchantId == m.MerchantId).ToList();
-                vm.Add(m);
+                
+                var merchants = await _gateway.GetMerchants();
+                var listings = await _listingGateway.GetAll();
+                foreach (var m in merchants)
+                {
+                    m.Listing = listings.Where(x => x.Merchant.MerchantId == m.MerchantId).ToList();
+                    vm.Add(m);
+                }
             }
+            catch (GatewayException e)
+            {
+                if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                if(e.Type==WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
+            }
+
             return View(vm);
         }
 
@@ -93,9 +73,8 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpPost]
         public async Task<Tuple<int, string>> Create(RegisterMerchantViewModel vm)
         {
-            IWebServiceResponse response = null;
-
-
+            IWebServiceResponse response;
+            
             if (!ModelState.IsValid) return SweetDialogHelper.HandleResponse(null);
             try
             {
@@ -105,10 +84,6 @@ namespace JomMalaysia.Presentation.Controllers
             {
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
-
-            if (response.StatusCode == HttpStatusCode.OK)
-
-                refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
@@ -126,17 +101,17 @@ namespace JomMalaysia.Presentation.Controllers
         [HttpGet]
         public async Task<ViewResult> Edit(string merchantId)
         {
-            Merchant m;
+            RegisterMerchantViewModel vm = null;
             try
             {
-                m = await _gateway.Detail(merchantId);
+                var m = await _gateway.Detail(merchantId);
+                vm = _mapper.Map<RegisterMerchantViewModel>(m);
             }
-            catch (Exception e)
+            catch (GatewayException e)
             {
-                throw;
+                if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                if(e.Type==WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
             }
-
-            var vm = _mapper.Map<RegisterMerchantViewModel>(m);
             return View(vm);
         }
 
@@ -149,7 +124,6 @@ namespace JomMalaysia.Presentation.Controllers
             try
             {
                 var response = await _gateway.Edit(vm, merchantId);
-                if (response.StatusCode == HttpStatusCode.OK) refresh = true;
                 return SweetDialogHelper.HandleResponse(response);
             }
             catch (GatewayException e)

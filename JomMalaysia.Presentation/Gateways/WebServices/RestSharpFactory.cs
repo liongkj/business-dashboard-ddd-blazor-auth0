@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using JomMalaysia.Framework.Constant;
 using JomMalaysia.Framework.Helper;
-using JomMalaysia.Presentation.Manager;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using RestSharp;
 
 
@@ -44,6 +37,7 @@ namespace  JomMalaysia.Presentation.Gateways.WebServices
         /// Constructs a RestSharp client.
         /// </summary>
         /// <param name="baseUrl">Base URL of web service to connect. (Example: http://api.google.com)</param>
+        /// <param name="auth"></param>
         /// <returns>A RestSharp client.</returns>
         public static  IRestClient ConstructClient(string baseUrl, string auth)
         {

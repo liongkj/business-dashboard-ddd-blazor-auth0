@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using JomMalaysia.Framework.Exceptions;
 using JomMalaysia.Framework.Helper;
 using JomMalaysia.Framework.Interfaces;
 using JomMalaysia.Presentation.Gateways.Users;
-using JomMalaysia.Presentation.Manager;
 using JomMalaysia.Presentation.Models.AppUsers;
 using JomMalaysia.Presentation.ViewModels.Users;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -21,66 +23,48 @@ namespace JomMalaysia.Presentation.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private readonly IAuthorizationManagers _auth;
 
         private readonly IUserGateway _gateway;
 
-        private bool refresh;
 
-        public UserController(IUserGateway userGateway, IAuthorizationManagers authorization)
+        public UserController(IUserGateway userGateway)
         {
             _gateway = userGateway;
-            _auth = authorization;
-            Refresh();
+            
         }
-
-        private List<AppUser> UserList { get; set; }
-
-        private async void Refresh()
-        {
-            if (UserList != null && !refresh)
-                UserList = await GetUsers();
-            else
-                UserList = new List<AppUser>();
-        }
-
-        private async Task<List<AppUser>> GetUsers()
-        {
-            try
-            {
-                UserList = await _gateway.GetAll().ConfigureAwait(false);
-                return UserList;
-            }
-            catch (GatewayException e)
-            {
-                if (e.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                   
-                }
-                throw e;
-            }
-        }
-
         // GET: /<controller>/
 
         public async Task<IActionResult> Index()
         {
-            ViewData["Role"] = _auth.LoginInfo.Role;
-            var users = await GetUsers().ConfigureAwait(false);
+            var users = new List<AppUser>();
+           
+               var role =  await GetUserRole();
+                ViewData["Role"] = role;
+                
+                try
+                {
+                    users = await _gateway.GetAll();
+                }
+                catch (GatewayException e)
+                {
+                    if (e.StatusCode == HttpStatusCode.Unauthorized) RedirectToAction("Login", "Account");
+                    if (e.Type == WebServiceExceptionType.ConnectionError) ViewData["error"] = e.Message;
+                }
 
-            return View(users.OrderBy(u =>
-            {
-                var index = RoleHelper.AuthorityList.IndexOf(u.Role);
-                return index == -1 ? int.MaxValue : index;
-            }));
+                return View(users.OrderBy(u =>
+                {
+                    var index = RoleHelper.AuthorityList.IndexOf(u.Role);
+                    return index == -1 ? int.MaxValue : index;
+                }));
+          
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var vm = new RegisterUserViewModel
             {
-                RoleList = GetAssignableRole(),
+                RoleList = await GetAssignableRole(),
 
                 Role = "editor"
             };
@@ -102,18 +86,17 @@ namespace JomMalaysia.Presentation.Controllers
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
 
-            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
 
         [HttpGet]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             var vm = new RegisterUserViewModel
             {
                 UserId = id,
-                RoleList = GetAssignableRole(),
+                RoleList =await GetAssignableRole(),
                 Role = "editor"
             };
             return PartialView("_Edit", vm);
@@ -121,21 +104,20 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<Tuple<int, string>> Edit(string UserId, RegisterUserViewModel vm)
+        public async Task<Tuple<int, string>> Edit(string userId, RegisterUserViewModel vm)
         {
             IWebServiceResponse response;
 
 
             try
             {
-                response = await _gateway.UpdateRole(UserId, vm).ConfigureAwait(false);
+                response = await _gateway.UpdateRole(userId, vm).ConfigureAwait(false);
             }
             catch (GatewayException e)
             {
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
 
-            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
 
             return SweetDialogHelper.HandleResponse(response);
         }
@@ -152,29 +134,43 @@ namespace JomMalaysia.Presentation.Controllers
 
         [HttpPost]
         //TODO [ValidateAntiForgeryToken]
-        public async Task<Tuple<int, string>> ConfirmDelete(string UserId)
+        public async Task<Tuple<int, string>> ConfirmDelete(string userId)
         {
             IWebServiceResponse response;
 
-            if (UserId == null) return SweetDialogHelper.HandleNotFound();
+            if (userId == null) return SweetDialogHelper.HandleNotFound();
             try
             {
-                response = await _gateway.Delete(UserId).ConfigureAwait(false);
+                response = await _gateway.Delete(userId).ConfigureAwait(false);
             }
             catch (GatewayException e)
             {
                 return SweetDialogHelper.HandleStatusCode(e.StatusCode, e.Message);
             }
-
-            if (response.StatusCode == HttpStatusCode.OK) refresh = true;
-
+            
             return SweetDialogHelper.HandleResponse(response);
         }
 
-        private List<SelectListItem> GetAssignableRole()
+        private async Task<string> GetUserRole()
         {
-            return RoleHelper.GetAssignableRoles(_auth.LoginInfo.Role)
-                .Select(role => new SelectListItem { Text = role, Value = role }).ToList();
+            if (!User.Identity.IsAuthenticated)
+                throw new GatewayException(HttpStatusCode.Unauthorized, "User Not Authorized");
+            var handler = new JwtSecurityTokenHandler();
+            var accessToken = await HttpContext.GetTokenAsync("access_token");
+            string role = null;
+            if (handler.ReadToken(accessToken) is JwtSecurityToken tokenS)
+            {
+                role = tokenS.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).FirstOrDefault();
+            }
+
+            return role;
+
+        } 
+        
+        private async Task< IEnumerable<SelectListItem>> GetAssignableRole()
+        {
+            return RoleHelper.GetAssignableRoles(await GetUserRole())
+                .Select(s => new SelectListItem { Text = s, Value = s }).ToList();
         }
     }
 }

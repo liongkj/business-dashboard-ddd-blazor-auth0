@@ -70,7 +70,6 @@ namespace JomMalaysia.Presentation.Gateways.WebServices
                     return;
                 // Business Exceptions
                 case HttpStatusCode.Unauthorized:
-                    dynamic content = null;
                     
                     throw new GatewayException(response.StatusCode,response.ErrorMessage);
                 case HttpStatusCode.Conflict:
