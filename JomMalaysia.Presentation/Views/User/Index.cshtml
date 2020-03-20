@@ -2,14 +2,23 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
-    ViewData["Title"] = ViewData["Role"];
+    ViewData["Title"] = "User Management";
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 
     if (TempData["Message"] != null)
     {
     }
 }
+@if (ViewData.ContainsKey("error"))
+             {
 
+                 <div class="jumbotron">
+                     <h1 class="display-4">Opps!</h1>
+                     <p class="lead">@ViewData["error"].</p>
+           
+                 </div>
+             
+} else{
 <form id="userForm" method="post">
     <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
         <table id="tableData" class="table table-hover">
@@ -26,6 +35,8 @@
             </tr>
             </thead>
             <tbody>
+            
+            
             @foreach (var item in Model)
             {
                 <tr class="@(item.HasAuthority ? "" : "table-light disabled")" data-toggle="modal" data-target="@(item.HasAuthority ? "#EditUserModal" : "#UserModal")" data-id="@item.UserId">
@@ -100,7 +111,7 @@
         </div>
     </div>
 </div>
-
+}
 <!--Other Commmon Scripts are in _LayoutIndex.cshtml-->
 
 @section SpecificScripts{

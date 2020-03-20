@@ -33,7 +33,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             if (!_cache.TryGetValue(CacheKeys<Listing>.Entry, out result))
             {
                 
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.Listing);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.LISTING);
                     const Method method = Method.GET;
                     
                     response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method);
@@ -57,7 +57,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         {
             IWebServiceResponse<Listing> response;
            
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.Listing);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.LISTING);
 
                 const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, vm);
@@ -77,7 +77,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
             if (!_cache.TryGetValue(CacheKeys<Listing>.EntryItem + id, out Listing result))
             {
                
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, id);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.LISTING_DETAIL, id);
                     const Method method = Method.GET;
                     var response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Listing>>(req, method);
                     if (response.StatusCode == HttpStatusCode.OK)
@@ -94,7 +94,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         {
             IWebServiceResponse<Listing> response;
             
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, listingId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.LISTING_DETAIL, listingId);
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method, vm);
@@ -107,7 +107,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         {
             IWebServiceResponse<Listing> response;
             
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.ListingDetail, listingId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.LISTING_DETAIL, listingId);
 
                 const Method method = Method.DELETE;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Listing>(req, method);
@@ -126,7 +126,7 @@ namespace JomMalaysia.Presentation.Gateways.Listings
         {
             IWebServiceResponse<ListViewModel<Listing>> response;
             
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.Publish, listingId, months.ToString());
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.PUBLISH, listingId, months.ToString());
                 const Method method = Method.POST;
 
                 response = await _webServiceExecutor.ExecuteRequestAsync<ListViewModel<Listing>>(req, method);

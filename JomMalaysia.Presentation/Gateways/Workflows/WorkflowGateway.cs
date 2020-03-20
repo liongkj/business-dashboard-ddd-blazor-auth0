@@ -27,7 +27,7 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             IWebServiceResponse<ViewModel<WorkflowModel>> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.WorkflowDetail, id);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.WORKFLOW_DETAIL, id);
                 var method = Method.GET;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<ViewModel<WorkflowModel>>(req, method)
@@ -54,7 +54,7 @@ namespace JomMalaysia.Presentation.Gateways.Workflows
             IWebServiceResponse<ListViewModel<WorkflowModel>> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.Workflow);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.WORKFLOW);
                 const Method method = Method.GET;
                 response = await _webServiceExecutor
                     .ExecuteRequestAsync<ListViewModel<WorkflowModel>>(req, method)

@@ -36,7 +36,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.Merchant);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.MERCHANT);
                     const Method method = Method.GET;
                     response = await _webServiceExecutor
                         .ExecuteRequestAsync<ListViewModel<Merchant>>(req, method)
@@ -63,7 +63,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             IWebServiceResponse<Merchant> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.Merchant);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.MERCHANT);
 
                 const Method method = Method.POST;
                 response = await _webServiceExecutor.ExecuteRequestAsync<Merchant>(req, method, vm)
@@ -90,7 +90,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             {
                 try
                 {
-                    var req = _apiBuilder.GetApi(APIConstant.API.Path.MerchantDetail, id);
+                    var req = _apiBuilder.GetApi(ApiConstant.Api.Path.MERCHANT_DETAIL, id);
                     const Method method = Method.GET;
                     response = await _webServiceExecutor.ExecuteRequestAsync<ViewModel<Merchant>>(req, method)
                         .ConfigureAwait(false);
@@ -120,7 +120,7 @@ namespace JomMalaysia.Presentation.Gateways.Merchants
             IWebServiceResponse<Merchant> response;
             try
             {
-                var req = _apiBuilder.GetApi(APIConstant.API.Path.MerchantDetail, merchantId);
+                var req = _apiBuilder.GetApi(ApiConstant.Api.Path.MERCHANT_DETAIL, merchantId);
 
                 const Method method = Method.PUT;
                 response = await _webServiceExecutor
