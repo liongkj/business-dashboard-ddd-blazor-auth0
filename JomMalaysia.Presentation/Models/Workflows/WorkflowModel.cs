@@ -20,7 +20,7 @@ namespace JomMalaysia.Presentation.Models.Workflows
 
         public bool IsCompleted()
         {
-            return Status == WorkflowStatusEnum.rejected || Status == WorkflowStatusEnum.completed;
+            return Status == WorkflowStatusEnum.Rejected || Status == WorkflowStatusEnum.Completed;
         }
     }
 }
