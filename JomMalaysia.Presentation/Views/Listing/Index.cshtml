@@ -19,6 +19,13 @@
 }
 else
 {
+    
+    <a href="#" class="col-md-1 offset-md-11 btn btn-info form-control"
+       id="btnSync" type="button"
+       onclick="syncListing()">
+        <i class="fa fa-refresh" aria-hidden="true"></i> Sync
+    </a>
+    <br/>
     <form method="post">
         <div class="col-md-12 col-sm-12 no-padding" style="overflow-x:auto !important">
             <table class="table table-hover">
@@ -90,7 +97,7 @@ else
 
 @section SpecificScripts{
     <script type="text/javascript">
-    
+        
         //publish listing
         function publishListing(ListingId) {
             
@@ -135,6 +142,47 @@ else
             })
         }
         
+         function syncListing() {
+                     
+                 let token = $('input[name="__RequestVerificationToken"]').val();
+                     swal({
+                         title: 'Sync places to server?',
+                         text: 'Users will be search for your changes shortly',
+                         type: 'warning',
+                         showCancelButton: true,
+                         closeOnConfirm: false,
+                         confirmButtonText: "Yes",
+                         showLoaderOnConfirm: true,
+                     }, 
+                     function () {
+                         debugger
+                           $.ajax({
+                                 url: "/Index/Sync",
+                                 data: {
+                                 },
+                                 headers: {'RequestVerificationToken': token},
+                                 type: "POST",
+                                 success: (function ({ item1, item2 }) {
+                                     if (item1 === 1) {
+                                         sweetAlert({
+                                             title: "Changes are live",
+                                             text: "User will be able to search for the changes shortly.",
+                                             type: "success"
+                                         },
+                                             function () {
+                                                 window.location.href = '/listing';
+                                             });
+                                     } else {
+                                         swal("Oops",item2,"error");
+                                     }
+                                 }),
+                                 error: (function () {
+                                     swal("Oops", "An unknown error occured! Please contact technical support.", "error");
+                                 })
+                             });
+                     })
+                 }
+                  
         //delete listing
                 function deleteListing(ListingId, ListingName) {
                 let token = $('input[name="__RequestVerificationToken"]').val();

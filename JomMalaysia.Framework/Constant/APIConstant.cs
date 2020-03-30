@@ -29,6 +29,10 @@
                 public const string PUBLISH = "api/Listings/{0}/Publish/{1}";
                 public const string LISTING = "api/Listings";
                 public const string LISTING_DETAIL = "api/Listings/{0}";
+                
+                //index
+                internal const string INDEX = "api/algolia";
+                public const string PLACE_INDEX = INDEX +"/places/batch";
             }
         }
     }
