@@ -1,6 +1,7 @@
 # JomMalaysiaWebFrontend
 
 Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
+Practice project for Domain Driven Design, Auth0 APIS, REST APIS
 
 ![Build Status](https://dev.azure.com/busylikedog/biscat/_apis/build/status/portal-jommalaysia%20-%20CI)
 
