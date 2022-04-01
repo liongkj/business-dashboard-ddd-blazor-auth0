@@ -2,7 +2,7 @@
 
 Front End for Jomamalaysia API https://github.com/liongkj/jommalaysiaportal
 
-Practice project for Domain Driven Design, Auth0 APIS, REST APIS
+Practice project for [Domain Driven Design / Clean Architecture] (https://mastanca.medium.com/clean-architecture-ddd-a-mixed-approach-773ab4623e14), [Auth0](https://auth0.com/) APIS, REST APIS, Google Maps API, and [DevOps](https://azure.microsoft.com/en-us/services/devops/)
 
 ![Build Status](https://dev.azure.com/busylikedog/biscat/_apis/build/status/portal-jommalaysia%20-%20CI)
 
